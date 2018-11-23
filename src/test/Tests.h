@@ -5,8 +5,10 @@
 #ifndef VDS_PROJECT_GTESTS_H
 #define VDS_PROJECT_GTESTS_H
 
-#include "gtest/gtest.h"
-#include "../Fraction.hpp"
 
+double square_root (const double n)
+{
+	return n*n;
+}
 
 #endif //VDS_PROJECT_TESTS_H
