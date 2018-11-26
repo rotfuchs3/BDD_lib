@@ -1,6 +1,6 @@
 /** 
- * \defgroup Manager
- * \brief ManagerInterface is a parent class that supplies function decleratuons to the Manager.
+ * \defgroup bddPkg
+ * \brief ManagerInterface is an abstract base class that supplies function decleratuons to the Manager derived class.
  * \file ManagerInterface.h
  * \author vdscp_8
 */
@@ -61,6 +61,16 @@ public:
 */
 class ManagerInterface {
 public:
+  //! Constructor
+    /*!
+      Abstract class, not much to do here yet
+    */
+  ManagerInterface(void);
+  //! Destructor
+    /*!
+      The destructor
+    */
+  ~ManagerInterface(void);
   //! True
   /*!
     Returns the ID of the node representing True
