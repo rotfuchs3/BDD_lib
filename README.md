@@ -17,7 +17,13 @@ git submodule update
 ---
 
 ## BUILD
+cd build
 cmake CMakeLists.txt
 make
 
 This builds googletest into a library used by this repo. It also builds all relevant code for the BDD package.
+
+---
+
+## Execute
+./bin/bddTests.bin
