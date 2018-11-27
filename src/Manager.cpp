@@ -1,3 +1,10 @@
+/**
+ * \defgroup bddPkg
+ * \brief Manager is a derived class implementing all ManagerInterface's methods.
+ * \file Manager.cpp
+ * \author vdscp_8
+*/
+/// Header
 include "Manager.h"
 //! True
 /*!
@@ -5,7 +12,7 @@ include "Manager.h"
 */
 const BDD_ID Manager::&True(void)
 {
-
+  return trueId;
 }
 //! False
 /*!
@@ -13,7 +20,7 @@ const BDD_ID Manager::&True(void)
 */
 const BDD_ID Manager::&False(void)
 {
-
+  return falseId;
 }
 //! isConstant
 /*!
@@ -21,7 +28,10 @@ const BDD_ID Manager::&False(void)
 */
 bool Manager::isConstant(const BDD_ID x)
 {
-
+  if(x == trueId || x == falseId) {
+    return true;
+  }
+  return false;
 }
 //! isVariable
 /*!
@@ -29,5 +39,8 @@ bool Manager::isConstant(const BDD_ID x)
 */
 bool Manager::isVariable(const BDD_ID x)
 {
-
+  if(x == trueId || x == falseId) {
+    return false;
+  }
+  return true;
 }

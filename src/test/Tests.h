@@ -7,10 +7,6 @@
 #ifndef __TESTS_H__
 #define __TESTS_H__
 
-
-double square_root (const double n)
-{
-	return n*n;
-};
+// PLACE HOLDER AS IT'S NOT NEEDED YET
 
 #endif /* __TESTS_H__ */

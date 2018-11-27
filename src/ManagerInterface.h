@@ -41,7 +41,7 @@ public:
     /*!
       The node's string label
     */
-    string label;
+  std::string label;
   
   //! Constructor
     /*!
@@ -52,8 +52,7 @@ public:
     /*!
       The destructor
     */
-   ~Node();
-    
+   ~Node(); 
 }
 //!  ManagerInterface class
 /*!
@@ -63,14 +62,9 @@ class ManagerInterface {
 public:
   //! Constructor
     /*!
-      Abstract class, not much to do here yet
+      Abstract class, not much to do here yet, maybe there will be private vars
     */
   ManagerInterface(void);
-  //! Destructor
-    /*!
-      The destructor
-    */
-  ~ManagerInterface(void);
   //! True
   /*!
     Returns the ID of the node representing True

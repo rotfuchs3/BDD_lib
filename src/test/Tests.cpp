@@ -6,34 +6,33 @@
 */
 #include <gtest/gtest.h>
 #include "Manager.h"
-Manager manager;
+/// Global manager instance used for tests
+Manager g_manager;
 /** 
- * \brief At init, BDD_ID for true nodes is set to '1'
+ * \brief Test for trueId = 1
  */
-TEST(True, trueId) { 
-  ASSERT_EQ(1, True());
+TEST(True, trueIdTest) {
+  ASSERT_EQ(1, g_manager.True());
 }
 /**
- * \brief At init, BDD_ID for false nodes is set to '0'
+ * \brief Test falseId = 0
  */
-TEST(False, falseId) {
-  ASSERT_EQ(0, False());
+TEST(False, falseIdTest) {
+  ASSERT_EQ(0, g_manager.False());
 }
 /**
  * \brief Should return true if provided a leaf node, false and true nodes are terminal by default
  */
 TEST(isConstant, isNodeLeaf) {
-  ASSERT_EQ(true, isConstant(0));
-  ASSERT_EQ(true, isConstsnt(1));
+  ASSERT_EQ(true, g_manager.isConstant(0));
+  ASSERT_EQ(true, g_manager.isConstsnt(1));
 }
 /**
- * \brief Should return true if provided a variable node, 
+ * \brief Should return true if provided a variable BDD_ID
  */
 TEST(isVariable, isNodeVariable) {
-  Node var1(2, 0, 1, 3, "var1");
-  Node var2(3, 0, 1, 4, "var2");
-  ASSERT_EQ(true, isVariable(var1.myId));
-  ASSERT_EQ(true, isVariable(var2.myId));
+  ASSERT_EQ(true, g_manager.isVariable(2));
+  ASSERT_EQ(true, g_manager.isVariable(9000));
 }
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
