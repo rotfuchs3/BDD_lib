@@ -1,12 +1,12 @@
 # Locate GTest and include
-set(GTEST_INCLUDE "../../googletest/googletest/include")
-set(GTEST_LIBRARY "../../build/lib")
+set(GTEST_INCLUDE "../googletest/googletest/include")
+set(LIBRARIES "../lib")
 include_directories(${GTEST_INCLUDE})
-link_directories(${GTEST_LIBRARY})
+link_directories(${LIBRARIES})
 
 # Locate bdd package
-set(BDD_INCLUDE "../")
-set(BDD_LIBRARY "../../build/lib")
+set(BDD_INCLUDE "../../src")
+include_directories(${BDD_INCLUDE})
 
 # Define application
 set(TEST_APP_NAME bddTestSuite)
@@ -18,7 +18,7 @@ set_target_properties (
    PROPERTIES
       VERSION ${TST_VERSION}
       SUFFIX ".bin"
-      RUNTIME_OUTPUT_DIRECTORY "../../build/bin"
+      RUNTIME_OUTPUT_DIRECTORY "../bin"
 )
 
 # Link with gtest and bdd lib

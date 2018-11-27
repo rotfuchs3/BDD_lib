@@ -25,7 +25,7 @@ TEST(False, falseIdTest) {
  */
 TEST(isConstant, isNodeLeaf) {
   ASSERT_EQ(true, g_manager.isConstant(0));
-  ASSERT_EQ(true, g_manager.isConstsnt(1));
+  ASSERT_EQ(true, g_manager.isConstant(1));
 }
 /**
  * \brief Should return true if provided a variable BDD_ID

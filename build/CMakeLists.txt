@@ -13,12 +13,12 @@ file(MAKE_DIRECTORY "lib")
 # VERSION_MAJOR: Overall code version, both bdd and tests have the same major
 set(VERSION_MAJOR "0")
 set(PKG_VERSION_MAJOR "0")
-set(PKG_VERSION_MINOR "0")
+set(PKG_VERSION_MINOR "1")
 set(PKG_VERSION ${VERSION_MAJOR}.${PKG_VERSION_MAJOR}.${PKG_VERSION_MINOR})
 
 # Set the bdd tests version number
 set(TST_VERSION_MAJOR "0")
-set(TST_VERSION_MINOR "0")
+set(TST_VERSION_MINOR "4")
 set(TST_VERSION ${VERSION_MAJOR}.${TST_VERSION_MAJOR}.${TST_VERSION_MINOR})
 
 # Generate version files

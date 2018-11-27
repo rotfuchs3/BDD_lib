@@ -4,25 +4,22 @@ set(LIB_HEADERS
   Manager.h
 )
 set(LIB_SOURCES
-  ManagerInterface.cpp
   Manager.cpp
 )
 set(APP_SOURCES
   main.cpp
 )
-
 # Define library
 set(LIBRARY_NAME bddPkg)
 add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
-
 # Set lib properties
 set_target_properties(
   ${LIBRARY_NAME}
   PROPERTIES
      VERSION ${PKG_VERSION}
      SUFFIX ".a"
-     ARCHIVE_OUTPUT_DIRECTORY "../build/lib"
-     LIBRARY_OUTPUT_DIRECTORY "../build/lib"
+     ARCHIVE_OUTPUT_DIRECTORY "../lib"
+     LIBRARY_OUTPUT_DIRECTORY "../lib"
 )
 
 # Define application
@@ -34,8 +31,13 @@ set_target_properties (
    PROPERTIES
       VERSION ${PKG_VERSION}
       SUFFIX ".bin"
-      RUNTIME_OUTPUT_DIRECTORY "../build/bin"
+      RUNTIME_OUTPUT_DIRECTORY "../bin"
 )
+# Locate BDD package
+set(BDD_INCLUDE "../../src")
+set(BDD_LIBRARY "../lib")
+include_directories(${BDD_INCLUDE})
+link_directories(${BDD_LIBRARY})
 
-# Links the target exe (bddpkgMain) against the library (bddPkg)
+# Links target exe (bddpkgMain) with library (bddPkg)
 target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME})

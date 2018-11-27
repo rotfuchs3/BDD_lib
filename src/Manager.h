@@ -7,7 +7,7 @@
 #ifndef __MANAGER_H__
 #define __MANAGER_H__
 /// Base class
-include "ManagerInterface.h"
+#include "ManagerInterface.h"
 //!  Manager class
 /*!
   This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.
@@ -40,5 +40,5 @@ private:
   const BDD_ID trueId  = 1;
   /// Terminal false BDD_ID
   const BDD_ID falseId = 0;
-}
+};
 #endif /* __MANAGER_H__ */

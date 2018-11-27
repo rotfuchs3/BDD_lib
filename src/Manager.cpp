@@ -5,12 +5,12 @@
  * \author vdscp_8
 */
 /// Header
-include "Manager.h"
+#include "Manager.h"
 //! True
 /*!
   Returns the ID of the node representing True
 */
-const BDD_ID Manager::&True(void)
+const BDD_ID &Manager::True(void)
 {
   return trueId;
 }
@@ -18,7 +18,7 @@ const BDD_ID Manager::&True(void)
 /*!
   Returns the ID of the node representing False
 */
-const BDD_ID Manager::&False(void)
+const BDD_ID &Manager::False(void)
 {
   return falseId;
 }

@@ -6,6 +6,8 @@
 */
 #ifndef __MANAGER_INTERFACE_H__
 #define __MANAGER_INTERFACE_H__
+/// Standard Lib
+#include <string>
 
 /// Typedef Integer representing of the ID for BDD Node
 typedef int BDD_ID;
@@ -47,13 +49,13 @@ public:
     /*!
       Sets all values to default
     */
-  Node(BDD_ID myId, BDD_ID trueId, BDD_ID falseId, BDD_ID topVar, string label) : myId(myId), trueId(trueId), falseId(falseId), topVar(topVar), lable(label) {}
+  Node(BDD_ID myId, BDD_ID trueId, BDD_ID falseId, BDD_ID topVar, std::string label) : myId(myId), trueId(trueId), falseId(falseId), topVar(topVar), label(label) {}
   //! Destructor
     /*!
       The destructor
     */
    ~Node(); 
-}
+};
 //!  ManagerInterface class
 /*!
   This class defines the methods to be used by the Manager and that interface directly with the nodes.
@@ -64,7 +66,7 @@ public:
     /*!
       Abstract class, not much to do here yet, maybe there will be private vars
     */
-  ManagerInterface(void);
+  //ManagerInterface(void);
   //! True
   /*!
     Returns the ID of the node representing True
@@ -85,5 +87,5 @@ public:
     Returns true if x is a variable
   */
   virtual bool isVariable(const BDD_ID x) = 0;	  
-}
-#endif /* __MANAGER_INTERFACE_H__
+};
+#endif /* __MANAGER_INTERFACE_H__ */
