@@ -31,6 +31,7 @@ TEST(isConstant, isNodeLeaf) {
  * \brief Should return true if provided a variable BDD_ID
  */
 TEST(isVariable, isNodeVariable) {
+  ASSERT_FALSE(g_manager.isVariable(0));
   ASSERT_EQ(true, g_manager.isVariable(2));
   ASSERT_EQ(true, g_manager.isVariable(9000));
 }

@@ -49,12 +49,13 @@ public:
     /*!
       Sets all values to default
     */
-  Node(BDD_ID myId, BDD_ID trueId, BDD_ID falseId, BDD_ID topVar, std::string label) : myId(myId), trueId(trueId), falseId(falseId), topVar(topVar), label(label) {}
+  Node(BDD_ID myId, BDD_ID trueId, BDD_ID falseId, BDD_ID topVar, std::string label)
+  : myId(myId), trueId(trueId), falseId(falseId), topVar(topVar), label(label) {}
   //! Destructor
     /*!
       The destructor
     */
-   ~Node(); 
+   ~Node(){}
 };
 //!  ManagerInterface class
 /*!

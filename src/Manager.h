@@ -8,6 +8,7 @@
 #define __MANAGER_H__
 /// Base class
 #include "ManagerInterface.h"
+#include <unordered_map>
 //!  Manager class
 /*!
   This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.
@@ -35,10 +36,45 @@ public:
   */
   bool isVariable(const BDD_ID x);
 
+  void insert(BDD_ID key,Node value){
+	  uniqueTable.insert({key,value});
+  }
+
+  int size(){
+	  return uniqueTable.size();
+  }
+
+
+  Manager(){
+	  uniqueTable=std::unordered_map<BDD_ID,Node>();
+  }
+
 private:
   /// Terminal true BDD_ID
   const BDD_ID trueId  = 1;
   /// Terminal false BDD_ID
   const BDD_ID falseId = 0;
+
+  struct Key{
+	  BDD_ID id;
+  };
+
+  struct KeyHash{
+  	std::size_t operator()(const BDD_ID& k) const{
+  		return k%31;
+  	}
+  };
+
+  	struct KeyEqual{
+  		bool operator()(const BDD_ID& first, const BDD_ID& second)	const{
+  			return first==second;
+  		}
+  	};
+
+  	/*!
+  	 * private version of the unique table. choosen a hashmap for performance
+  	 */
+  	//std::unordered_map::unordered_map<Key ,Node > uniqueTable;
+  	std::unordered_map<BDD_ID,Node> uniqueTable;
 };
 #endif /* __MANAGER_H__ */
