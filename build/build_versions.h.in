@@ -1,0 +1,13 @@
+/*
+ *  @file    build_versions.h
+ *  @brief   Report the version for this package.
+ *  @author  vdscp_8
+*/
+ifndef __VERSIONS_H__
+#define __VERSIONS_H__
+
+/// The current code versions
+#define PKG_VERSION @PKG_VERSION@
+#define TST_VERSION @TST_VERSION@
+
+#endif /* __VERSIONS_H__ */

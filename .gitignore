@@ -4,8 +4,9 @@
 *.lib
 *.exe
 *.out
-gtest/
 CMakeFiles/
 *.cmake
-CMakeCache.txt
+*~
 Makefile
+CMakeCache.txt
+build_versions.h
