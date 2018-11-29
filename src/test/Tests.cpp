@@ -35,6 +35,12 @@ TEST(isVariable, isNodeVariable) {
   ASSERT_EQ(true, g_manager.isVariable(2));
   ASSERT_EQ(true, g_manager.isVariable(9000));
 }
+/**
+ * \brief Test for createVar from label, return BDD_ID
+ */
+TEST(createVar, createVarRetBDD) {
+
+}
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
