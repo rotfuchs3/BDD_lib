@@ -8,6 +8,7 @@
 #define __MANAGER_H__
 /// Base class
 #include "ManagerInterface.h"
+/// Container
 #include <unordered_map>
 //!  Manager class
 /*!
@@ -15,6 +16,11 @@
 */
 class Manager : ManagerInterface {
 public:
+  //! Constructor
+  /*!
+    Initializes uniqueTable
+  */
+  Manager(void);
   //! True
   /*!
     Returns the ID of the node representing True
@@ -44,17 +50,14 @@ public:
 	  return uniqueTable.size();
   }
 
-
-  Manager(){
-	  uniqueTable=std::unordered_map<BDD_ID,Node>();
-  }
-
 private:
   /// Terminal true BDD_ID
   const BDD_ID trueId  = 1;
   /// Terminal false BDD_ID
   const BDD_ID falseId = 0;
-
+  /// uniqueTable, hashmap for performance
+  std::unordered_map<BDD_ID, Node> uniqueTable;
+  
   struct Key{
 	  BDD_ID id;
   };
@@ -70,11 +73,5 @@ private:
   			return first==second;
   		}
   	};
-
-  	/*!
-  	 * private version of the unique table. choosen a hashmap for performance
-  	 */
-  	//std::unordered_map::unordered_map<Key ,Node > uniqueTable;
-  	std::unordered_map<BDD_ID,Node> uniqueTable;
 };
 #endif /* __MANAGER_H__ */

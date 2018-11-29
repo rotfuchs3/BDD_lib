@@ -67,7 +67,7 @@ public:
     /*!
       Abstract class, not much to do here yet, maybe there will be private vars
     */
-  //ManagerInterface(void);
+  //ManagerInterface(void) {}
   //! True
   /*!
     Returns the ID of the node representing True

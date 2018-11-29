@@ -5,6 +5,8 @@
 *.exe
 *.out
 CMakeFiles/
+bin/
+lib/
 *.cmake
 *~
 Makefile

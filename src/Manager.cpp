@@ -6,6 +6,14 @@
 */
 /// Header
 #include "Manager.h"
+//! Constructor
+/*!
+  Initializes uniqueTable
+*/
+Manager::Manager(void)
+{
+  uniqueTable = std::unordered_map<BDD_ID, Node>();
+}
 //! True
 /*!
   Returns the ID of the node representing True
