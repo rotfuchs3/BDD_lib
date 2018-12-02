@@ -85,5 +85,5 @@ std::size_t Manager::uniqueTableSize(void)
     */
 BDD_ID Manager::topVar(const BDD_ID f)
 {
-    return -1;
+    return uniqueTable[f]->topVar;
 }
