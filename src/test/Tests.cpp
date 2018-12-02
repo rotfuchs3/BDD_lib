@@ -62,6 +62,14 @@ TEST(uniqueTableSize, tableSize) {
     manager.createVar("varC");
     ASSERT_EQ(5, manager.uniqueTableSize());
 }
+/**
+* \brief Test for topVar, should return the top variable for a given BDD_ID
+*/
+TEST(topVar, retTopVariable) {
+    Manager manager;
+    ASSERT_EQ(0, manager.topVar(0));
+    ASSERT_EQ(1, manager.topVar(1));
+}
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
