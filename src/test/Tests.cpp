@@ -49,7 +49,19 @@ TEST(createVar, createVarRetBDD) {
     ASSERT_EQ(3, manager.createVar("varB"));
     ASSERT_EQ(4, manager.createVar("varC"));
 }
-
+/**
+* \brief Test for uniqueTableSize()
+*/
+TEST(uniqueTableSize, tableSize) {
+    Manager manager;
+    // initial table size should be 2 due to the false and true nodes.
+    ASSERT_EQ(2, manager.uniqueTableSize());
+    // insert something, size of 5 after this
+    manager.createVar("varA");
+    manager.createVar("varB");
+    manager.createVar("varC");
+    ASSERT_EQ(5, manager.uniqueTableSize());
+}
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
