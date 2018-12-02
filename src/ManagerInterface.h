@@ -6,6 +6,7 @@
 */
 #ifndef __MANAGER_INTERFACE_H__
 #define __MANAGER_INTERFACE_H__
+
 /// Standard Lib
 #include <string>
 
@@ -18,44 +19,45 @@ typedef int BDD_ID;
 */
 class Node {
 public:
-  //! myId
+    //! myId
     /*!
-      ID that identifies this node
+        ID that identifies this node
     */
     BDD_ID myId;
-  //! trueId
+    //! trueId
     /*!
-      ID for the node for '1' evaluation, right node
+        ID for the node for '1' evaluation, right node
     */
-    BDD_ID trueId;
-  //! falseId
+    BDD_ID highId;
+    //! falseId
     /*!
-      ID for the node for '0' evaluation, left node
+        ID for the node for '0' evaluation, left node
     */
-    BDD_ID falseId;
-  //! topVar
+    BDD_ID lowId;
+    //! topVar
     /*!
-      Current nodes top variable
+        Current nodes top variable
     */
     BDD_ID topVar;
-  //! label
-  
+    //! label
     /*!
-      The node's string label
+        The node's string label
     */
-  std::string label;
-  
-  //! Constructor
+    std::string label;
+
+    //! Constructor
     /*!
-      Sets all values to default
+        Sets all values to default
     */
-  Node(BDD_ID myId, BDD_ID trueId, BDD_ID falseId, BDD_ID topVar, std::string label)
-  : myId(myId), trueId(trueId), falseId(falseId), topVar(topVar), label(label) {}
-  //! Destructor
+    Node(BDD_ID myId, BDD_ID highId, BDD_ID lowId, BDD_ID topVar, std::string label)
+            : myId(myId), highId(highId), lowId(lowId), topVar(topVar), label(label) 
+    {}
+    //! Destructor
     /*!
-      The destructor
+        The destructor
     */
-   ~Node(){}
+    ~Node()
+    {}
 };
 //!  ManagerInterface class
 /*!
@@ -63,30 +65,40 @@ public:
 */
 class ManagerInterface {
 public:
-  //! Constructor
+    //! True
     /*!
-      Abstract class, not much to do here yet, maybe there will be private vars
+        Returns the ID of the node representing True
     */
-  //ManagerInterface(void) {}
-  //! True
-  /*!
-    Returns the ID of the node representing True
-  */
-  virtual const BDD_ID &True() = 0;
-  //! False
-  /*!
-    Returns the ID of the node representing False
-  */
-  virtual const BDD_ID &False() = 0;
-  //! isConstant
-  /*!
-    Returns true if x is a leaf node
-  */
-  virtual bool isConstant(const BDD_ID x) = 0;
-  //! isVariable
-  /*!
-    Returns true if x is a variable
-  */
-  virtual bool isVariable(const BDD_ID x) = 0;	  
+    virtual const BDD_ID &True() = 0;
+    //! False
+    /*!
+        Returns the ID of the node representing False
+    */
+    virtual const BDD_ID &False() = 0;
+    //! isConstant
+    /*!
+        Returns true if x is a leaf node
+    */
+    virtual bool isConstant(const BDD_ID x) = 0;
+    //! isVariable
+    /*!
+        Returns true if x is a variable
+    */
+    virtual bool isVariable(const BDD_ID x) = 0;
+    //! createVar
+    /*! 
+        Creates a new variable for the BDD
+    */
+    virtual BDD_ID createVar(const std::string &label) = 0;
+    //! uniqueTableSize
+    /*!
+        Returns the number of the nodes currently exist in the unique table
+    */
+    virtual std::size_t uniqueTableSize(void) = 0;
+    //! topVar
+    /*!
+        Returns the ID of top variable of the BDD node f
+    */
+    virtual BDD_ID topVar(const BDD_ID f) = 0;
 };
 #endif /* __MANAGER_INTERFACE_H__ */
