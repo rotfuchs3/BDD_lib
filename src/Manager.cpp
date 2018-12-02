@@ -77,7 +77,7 @@ BDD_ID Manager::createVar(const std::string &label)
 */
 std::size_t Manager::uniqueTableSize(void)
 {
-  return 0;
+    return uniqueTable.size();
 }
 //! topVar
     /*!
