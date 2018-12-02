@@ -13,6 +13,16 @@
 Manager::Manager(void)
 {
     uniqueTable = std::unordered_map<BDD_ID, Node*>();
+    // Insert 0 and configure
+    createVar("0");
+    uniqueTable[0]->highId = 0;
+    uniqueTable[0]->lowId  = 0;
+    uniqueTable[0]->topVar = 0;
+    // Insert 1 and configure
+    createVar("1");
+    uniqueTable[1]->highId = 1;
+    uniqueTable[1]->lowId  = 1;
+    uniqueTable[1]->topVar = 1;
 }
 //! True
 /*!
@@ -57,7 +67,10 @@ bool Manager::isVariable(const BDD_ID x)
 */
 BDD_ID Manager::createVar(const std::string &label)
 {
-  return -1;
+    Node *newNode = new Node(currentId, 0, 0, 0, label);
+    // Insert new node to map
+    uniqueTable.insert({currentId, newNode});
+    return currentId++;
 }
 /*! uniqueTableSize
     Returns the number of the nodes currently exist in the unique table
