@@ -8,6 +8,7 @@
 #define __MANAGER_H__
 /// Base class
 #include "ManagerInterface.h"
+/// Container
 #include <unordered_map>
 //!  Manager class
 /*!
@@ -15,52 +16,63 @@
 */
 class Manager : ManagerInterface {
 public:
-  //! True
-  /*!
-    Returns the ID of the node representing True
-  */
-  const BDD_ID &True(void);
-  //! False
-  /*!
-    Returns the ID of the node representing False
-  */
-  const BDD_ID &False(void);
-  //! isConstant
-  /*!
-    Returns true if x is a leaf node
-  */
-  bool isConstant(const BDD_ID x);
-  //! isVariable
-  /*!
-    Returns true if x is a variable
-  */
-  bool isVariable(const BDD_ID x);
-
-  void insert(BDD_ID key,Node value){
-	  uniqueTable.insert({key,value});
-  }
-
-  int size(){
-	  return uniqueTable.size();
-  }
-
-
-  Manager(){
-	  uniqueTable=std::unordered_map<BDD_ID,Node>();
-  }
+    //! Constructor
+    /*!
+        Initializes uniqueTable
+    */
+    Manager(void);
+    //! True
+    /*!
+        Returns the ID of the node representing True
+    */
+    const BDD_ID &True(void);
+    //! False
+    /*!
+        Returns the ID of the node representing False
+    */
+    const BDD_ID &False(void);
+    //! isConstant
+    /*!
+        Returns true if x is a leaf node
+    */
+    bool isConstant(const BDD_ID x);
+    //! isVariable
+    /*!
+        Returns true if x is a variable
+    */
+    bool isVariable(const BDD_ID x);
+    /*! createVar
+        Creates a new variable for the BDD
+    */
+    BDD_ID createVar(const std::string &label);
+    //! uniqueTableSize
+    /*!
+        Returns the number of the nodes currently exist in the unique table
+    */
+    std::size_t uniqueTableSize(void);
+    //! topVar
+    /*!
+        Returns the ID of top variable of the BDD node f
+    */
+    BDD_ID topVar(const BDD_ID f);
 
 private:
-  /// Terminal true BDD_ID
-  const BDD_ID trueId  = 1;
-  /// Terminal false BDD_ID
-  const BDD_ID falseId = 0;
-
+    /// Terminal true BDD_ID
+    const BDD_ID trueId  = 1;
+    /// Terminal false BDD_ID
+    const BDD_ID falseId = 0;
+    /// Keep track of current BDD_ID, start off at 2 since IDs 0 and 1 are for true and false
+    BDD_ID currentId = 0;
+    /// uniqueTable, hashmap for performance
+    std::unordered_map<BDD_ID, Node*> uniqueTable;
+    std::unordered_map<std::string, BDD_ID> lookUpTable;
+	
   struct Key{
 	  BDD_ID id;
   };
 
   struct KeyHash{
-  	std::size_t operator()(const BDD_ID& k) const{
+  	std::size_t operator()(const BDD_ID& k) const {
   		return k%31;
   	}
   };
@@ -70,11 +82,5 @@ private:
   			return first==second;
   		}
   	};
-
-  	/*!
-  	 * private version of the unique table. choosen a hashmap for performance
-  	 */
-  	//std::unordered_map::unordered_map<Key ,Node > uniqueTable;
-  	std::unordered_map<BDD_ID,Node> uniqueTable;
 };
 #endif /* __MANAGER_H__ */

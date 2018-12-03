@@ -10,21 +10,21 @@ Part I: Develop a BDD Package following a TDD (test driven development) approach
 ---
 
 ## SETUP
-GoogleTest is required for compile and has been added as a submodule. After cloning repo, run the following commands:
-git submodule init
+GoogleTest is required for compile and has been added as a submodule. After cloning repo, run the following commands:<br/>
+git submodule init<br/>
 git submodule update
 
 ---
 
 ## BUILD
-cd build
-cmake CMakeLists.txt
+cd build<br/>
+cmake CMakeLists.txt<br/>
 make all
 
 OR
 
-make bddPkg
-make bddPkgMain (bddPkg dependent)
+make bddPkg<br/>
+make bddPkgMain (bddPkg dependent)<br/>
 make bddTestSuite (bddPkg & googletest dependent)
 
 This builds googletest into a library used by this repo. It also builds all relevant code for the BDD package.
@@ -32,7 +32,7 @@ This builds googletest into a library used by this repo. It also builds all rele
 ---
 
 ## Execute
-./bin/bddTestSuite.bin
+./bin/bddTestSuite.bin<br/>
 ./bin/bddPkgMain.bin
 
 ---
