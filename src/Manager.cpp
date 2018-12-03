@@ -13,6 +13,7 @@
 Manager::Manager(void)
 {
     uniqueTable = std::unordered_map<BDD_ID, Node*>();
+    lookUpTable = std::unordered_map<std::string,BDD_ID>();
     // Insert 0 and configure
     createVar("0");
     uniqueTable[0]->highId = 0;
@@ -67,10 +68,17 @@ bool Manager::isVariable(const BDD_ID x)
 */
 BDD_ID Manager::createVar(const std::string &label)
 {
-    Node *newNode = new Node(currentId, 0, 0, 0, label);
-    // Insert new node to map
-    uniqueTable.insert({currentId, newNode});
-    return currentId++;
+	std::unordered_map<std::string,BDD_ID>::const_iterator item=lookUpTable.find(label);
+	//when label is not in the hashmap
+	if(item == lookUpTable.end()){
+		Node *newNode = new Node(currentId, 0, 0, 0, label);
+		// Insert new node to map
+		uniqueTable.insert({currentId, newNode});
+		lookUpTable.insert({label,currentId});
+		return currentId++;
+	}else{
+		return item->second;
+	}
 }
 /*! uniqueTableSize
     Returns the number of the nodes currently exist in the unique table

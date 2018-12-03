@@ -65,6 +65,7 @@ private:
     BDD_ID currentId = 0;
     /// uniqueTable, hashmap for performance
     std::unordered_map<BDD_ID, Node*> uniqueTable;
+    std::unordered_map<std::string, BDD_ID> lookUpTable;
 	
   struct Key{
 	  BDD_ID id;
