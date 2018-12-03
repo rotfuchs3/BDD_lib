@@ -48,6 +48,7 @@ TEST(createVar, createVarRetBDD) {
     ASSERT_EQ(2, manager.createVar("varA"));
     ASSERT_EQ(3, manager.createVar("varB"));
     ASSERT_EQ(4, manager.createVar("varC"));
+    ASSERT_EQ(4, manager.createVar("varC"));
 }
 /**
 * \brief Test for uniqueTableSize()
