@@ -51,7 +51,7 @@ if(NOT GTEST_FOUND)
     set(GTEST_INCLUDE "{TOP_LEVEL}/googletest/googletest/include")
     set(GTEST_LIB "{TOP_LEVEL}/build/lib")
  else()
-    message("${Green}Found ${COLOR_GTEST}${Green} in ${GTEST_ROOT}${ColourReset}")
+    message("${Green}Found ${COLOR_GTEST}${Green} libraries in ${GTEST_BOTH_LIBRARIES}${ColourReset}")
     set(GTEST_INCLUDE "${GTEST_INCLUDE_DIRS}")
     set(GTEST_LIB "${GTEST_BOTH_LIBRARIES}")
 endif()
@@ -59,7 +59,7 @@ endif()
 ##################################
 # BUILD THE BDD LIBRARY AND MAIN
 ##################################
-message("${Green}BDD PACKAGE v${PKG_VERSION}${ColourReset}")
+message("${Cyan}BDD PACKAGE v${PKG_VERSION}${ColourReset}")
 
 # Set sources
 set(LIB_HEADERS  "${TOP_LEVEL}/src/ManagerInterface.h"  "${TOP_LEVEL}/src/Manager.h")
@@ -102,7 +102,7 @@ target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} pthread)
 ############################
 # BUILD THE BDD TEST SUITE
 ############################
-message("${Green}BDD TEST SUITE v${TST_VERSION}${ColourReset}")
+message("${Cyan}BDD TEST SUITE v${TST_VERSION}${ColourReset}")
 
 # Locate GTest and include
 include_directories(${GTEST_INCLUDE})
