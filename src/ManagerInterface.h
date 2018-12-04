@@ -100,5 +100,12 @@ public:
         Returns the ID of top variable of the BDD node f
     */
     virtual BDD_ID topVar(const BDD_ID f) = 0;
+    //! ite
+    /*!
+      Implements the if-then-else algorithm.
+	  Returns the new node that represents the ITE.
+    */
+    virtual BDD_ID ite(const BDD_ID i,const BDD_ID t, const BDD_ID e) = 0;
+
 };
 #endif /* __MANAGER_INTERFACE_H__ */

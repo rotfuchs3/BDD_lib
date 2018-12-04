@@ -71,6 +71,39 @@ TEST(topVar, retTopVariable) {
     ASSERT_EQ(0, manager.topVar(0));
     ASSERT_EQ(1, manager.topVar(1));
 }
+
+/**
+ * \brief Test for ITE, terminal case, already constained,
+ */
+TEST(ite,terminalCases){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	ASSERT_EQ(a,manager.ite(1,a,b));
+	ASSERT_EQ(b,manager.ite(0,a,b));
+	ASSERT_EQ(a,manager.ite(c,a,a));
+}
+
+/**
+ * \brief Test for ITE, terminal case, already constained,
+ */
+TEST(ite,retNewNodes){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	ASSERT_EQ(c+1,manager.ite(a,1,b));
+	//already the node contained
+	ASSERT_EQ(c+1,manager.ite(a,1,b));
+	ASSERT_EQ(c+1,manager.ite(a,a,b));
+	ASSERT_EQ(c+2,manager.ite(c,a,b));
+}
+
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

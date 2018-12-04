@@ -95,3 +95,13 @@ BDD_ID Manager::topVar(const BDD_ID f)
 {
     return uniqueTable[f]->topVar;
 }
+
+//! ite
+/*!
+ Implements the if-then-else algorithm.
+ Returns the new node that represents the ITE.
+*/
+BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
+{
+	return BDD_ID(-1);
+}

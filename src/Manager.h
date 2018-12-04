@@ -55,6 +55,13 @@ public:
         Returns the ID of top variable of the BDD node f
     */
     BDD_ID topVar(const BDD_ID f);
+    //! ite
+    /*!
+     Implements the if-then-else algorithm.
+     Returns the new node that represents the ITE.
+    */
+    BDD_ID ite(const BDD_ID i,const BDD_ID t, const BDD_ID e);
+
 
 private:
     /// Terminal true BDD_ID
