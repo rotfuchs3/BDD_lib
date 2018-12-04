@@ -97,6 +97,7 @@ TEST(ite,retNewNodes){
 	const BDD_ID b=manager.createVar("b");
 	const BDD_ID c=manager.createVar("c");
 
+	ASSERT_EQ(-2,manager.ite(a,b,-10));
 	ASSERT_EQ(c+1,manager.ite(a,1,b));
 	//already the node contained
 	ASSERT_EQ(c+1,manager.ite(a,1,b));

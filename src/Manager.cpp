@@ -105,3 +105,24 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 {
 	return BDD_ID(-1);
 }
+
+bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)
+{
+	//check for corrupted input
+		if(i>=currentId||i<0)
+		{
+			std::cout<<"arg1 of the method is not a actual BDD_ID in the uniquetable"<<std::endl;
+			return false;
+		}
+		if(t>=currentId||t<0)
+		{
+				std::cout<<"arg2 of the method is not a actual BDD_ID in the uniquetable"<<std::endl;
+				return false;
+		}
+		if(e>=currentId||e<0)
+		{
+				std::cout<<"arg3 of the method BDD_ID in the uniquetable"<<std::endl;
+				return false;
+		}
+		return true;
+}

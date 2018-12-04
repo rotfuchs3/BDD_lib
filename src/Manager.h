@@ -8,6 +8,7 @@
 #define __MANAGER_H__
 /// Base class
 #include "ManagerInterface.h"
+#include <iostream>
 /// Container
 #include <unordered_map>
 //!  Manager class
@@ -74,6 +75,8 @@ private:
     std::unordered_map<BDD_ID, Node*> uniqueTable;
     std::unordered_map<std::string, BDD_ID> lookUpTable;
 	
+    bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
+
   struct Key{
 	  BDD_ID id;
   };
