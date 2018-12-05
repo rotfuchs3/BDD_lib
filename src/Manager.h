@@ -11,6 +11,7 @@
 #include <iostream>
 /// Container
 #include <unordered_map>
+#include <iterator>
 //!  Manager class
 /*!
   This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.
@@ -76,6 +77,7 @@ private:
     std::unordered_map<std::string, BDD_ID> lookUpTable;
 	
     bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
+    BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
 
   struct Key{
 	  BDD_ID id;

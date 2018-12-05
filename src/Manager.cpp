@@ -17,13 +17,14 @@ Manager::Manager(void)
     // Insert 0 and configure
     createVar("0");
     uniqueTable[0]->highId = 0;
-    uniqueTable[0]->lowId  = 0;
-    uniqueTable[0]->topVar = 0;
+    //uniqueTable[0]->lowId  = 0;
+    //uniqueTable[0]->topVar = 0;
+
     // Insert 1 and configure
     createVar("1");
-    uniqueTable[1]->highId = 1;
+    //uniqueTable[1]->highId = 1;
     uniqueTable[1]->lowId  = 1;
-    uniqueTable[1]->topVar = 1;
+    //uniqueTable[1]->topVar = 1;
 }
 //! True
 /*!
@@ -71,11 +72,7 @@ BDD_ID Manager::createVar(const std::string &label)
 	std::unordered_map<std::string,BDD_ID>::const_iterator item=lookUpTable.find(label);
 	//when label is not in the hashmap
 	if(item == lookUpTable.end()){
-		Node *newNode = new Node(currentId, 0, 0, 0, label);
-		// Insert new node to map
-		uniqueTable.insert({currentId, newNode});
-		lookUpTable.insert({label,currentId});
-		return currentId++;
+		return insertInUniquetable(True(),False(),currentId,label);
 	}else{
 		return item->second;
 	}
@@ -103,9 +100,12 @@ BDD_ID Manager::topVar(const BDD_ID f)
 */
 BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 {
-	return BDD_ID(-1);
+
+	return -1;
 }
 
+//---------------------------------------------------------------------------------------------------------
+//private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)
 {
 	//check for corrupted input
@@ -121,8 +121,18 @@ bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)
 		}
 		if(e>=currentId||e<0)
 		{
-				std::cout<<"arg3 of the method BDD_ID in the uniquetable"<<std::endl;
+				std::cout<<"arg3 of the method is not a actual BDD_ID in the uniquetable"<<std::endl;
 				return false;
 		}
 		return true;
+}
+
+BDD_ID Manager::insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label)
+{
+	Node *newNode = new Node(currentId, highID, lowID, topVar, label);
+	// Insert new node to map
+	uniqueTable.insert({currentId, newNode});
+	lookUpTable.insert({label,currentId});
+
+	return currentId++;
 }
