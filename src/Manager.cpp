@@ -100,7 +100,6 @@ BDD_ID Manager::topVar(const BDD_ID f)
 */
 BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 {
-	std::cout<<"Beginn:ite("<<i<<","<<t<<","<<e<<")"<<std::endl;
 	if(!isValidID(i,t,e)){
 			return -2;
 	}
@@ -119,7 +118,6 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 			BDD_ID topVar=iterateNode->topVar;
 			BDD_ID highId=iterateNode->highId;
 			BDD_ID lowId=iterateNode->lowId;
-			std::cout<<"Node(begin): (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
 			// there is a node already in the unique table
 
 			if(topVar==i && highId==t && lowId==e){
@@ -142,15 +140,12 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 		BDD_ID min=currentId;
 		if(topVarI!=-1){
 			min=topVarI;
-			std::cout<<"if: min= "<<min<<std::endl;
 		}
 		if(topVarT!=-1 && topVarT<min){
 			min=topVarT;
-			std::cout<<"then: min= "<<min<<std::endl;
 		}
 		if(topVarE!=-1 && topVarE<min){
 			min=topVarE;
-			std::cout<<"else: min= "<<min<<std::endl;
 		}
 		//new nodes?
 		BDD_ID rHigh=ite(coFactorTrue(i,min),coFactorTrue(t,min),coFactorTrue(e,min));
@@ -170,7 +165,6 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 				BDD_ID topVar=iterateNode->topVar;
 				BDD_ID highId=iterateNode->highId;
 				BDD_ID lowId=iterateNode->lowId;
-				std::cout<<"Node: (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
 				// there is a node already in the unique table
 				if(topVar==min && highId==rHigh && lowId==rLow){
 					return it->first;
@@ -178,7 +172,6 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 			}
 		}
 		BDD_ID newNode= insertInUniquetable(rHigh,rLow,min,"");
-		std::cout<<"  return newNode("<<rHigh<<","<<rLow<<","<<min<<")ID: "<<newNode<<std::endl;
 		return newNode;
 }
 
