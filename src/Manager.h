@@ -63,7 +63,26 @@ public:
      Returns the new node that represents the ITE.
     */
     BDD_ID ite(const BDD_ID i,const BDD_ID t, const BDD_ID e);
-
+    //! coFactorTrue
+    /*!
+     Returns the positive cofactor of the function defined by f with respect to function x set to true.
+    */
+    BDD_ID coFactorTrue(const BDD_ID f,BDD_ID x);
+    //! coFactorTrue
+    /*!
+     Returns the positive cofactor of the function defined by f.
+    */
+    BDD_ID coFactorTrue(const BDD_ID f);
+    //! coFactorFalse
+    /*!
+      Returns the negativ cofactor of the function defined by f with respect to function x set to false.
+    */
+    BDD_ID coFactorFalse(const BDD_ID f,BDD_ID x);
+    //! coFactorFalse
+    /*!
+      Returns the negativ cofactor of the function defined by f.
+    */
+    BDD_ID coFactorFalse(const BDD_ID f) ;
 
 private:
     /// Terminal true BDD_ID

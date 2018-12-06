@@ -106,6 +106,27 @@ public:
 	  Returns the new node that represents the ITE.
     */
     virtual BDD_ID ite(const BDD_ID i,const BDD_ID t, const BDD_ID e) = 0;
+    //! coFactorTrue
+    /*!
+      Returns the positive cofactor of the function defined by f with respect to function x set to true.
+    */
+    virtual BDD_ID coFactorTrue(const BDD_ID f,BDD_ID x) = 0;
+    //! coFactorTrue
+    /*!
+      Returns the positive cofactor of the function defined by f.
+    */
+    virtual BDD_ID coFactorTrue(const BDD_ID f) = 0;
+    //! coFactorFalse
+    /*!
+      Returns the negativ cofactor of the function defined by f with respect to function x set to false.
+    */
+    virtual BDD_ID coFactorFalse(const BDD_ID f,BDD_ID x) = 0;
+    //! coFactorFalse
+    /*!
+      Returns the negativ cofactor of the function defined by f.
+    */
+    virtual BDD_ID coFactorFalse(const BDD_ID f) = 0;
+
 
 };
 #endif /* __MANAGER_INTERFACE_H__ */
