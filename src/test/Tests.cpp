@@ -140,6 +140,19 @@ TEST(coFactorTrue,retCofacTrue){
 	ASSERT_EQ(0,manager.coFactorTrue(0));
 }
 
+TEST(coFactorFalseX,retCofacTrueX){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	ASSERT_EQ(-2,manager.coFactorFalse(-10,a));
+	ASSERT_EQ(1,manager.coFactorFalse(1,b));
+	ASSERT_EQ(b,manager.coFactorFalse(b,a));
+	ASSERT_EQ(0,manager.coFactorFalse(a,a));
+}
+
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
