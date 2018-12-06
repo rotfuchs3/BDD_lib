@@ -140,7 +140,7 @@ TEST(coFactorTrue,retCofacTrue){
 	ASSERT_EQ(0,manager.coFactorTrue(0));
 }
 
-TEST(coFactorFalseX,retCofacTrueX){
+TEST(coFactorFalseX,retCofacFalseX){
 	Manager manager;
 
 	const BDD_ID a=manager.createVar("a");
@@ -151,6 +151,18 @@ TEST(coFactorFalseX,retCofacTrueX){
 	ASSERT_EQ(1,manager.coFactorFalse(1,b));
 	ASSERT_EQ(b,manager.coFactorFalse(b,a));
 	ASSERT_EQ(0,manager.coFactorFalse(a,a));
+}
+
+TEST(coFactorFalse,retCofacFalse){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	ASSERT_EQ(-2,manager.coFactorFalse(-10));
+	ASSERT_EQ(0,manager.coFactorFalse(b));
+	ASSERT_EQ(1,manager.coFactorFalse(1));
 }
 
 /// main
