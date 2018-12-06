@@ -254,7 +254,9 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 		return -2;
 	}
 
-
+	if(isConstant(x)){
+			return coFactorFalse(f);
+	}
 
 	if(!isVariable(x)){
 		x=topVar(x);
@@ -305,7 +307,10 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
   Returns the negativ cofactor of the function defined by f.
 */
 BDD_ID Manager::coFactorFalse(const BDD_ID f) {
-	return -1;
+	if(!isValidID(f)){
+		return -2;
+	}
+	return uniqueTable.find(f)->second->lowId;
 }
 
 //---------------------------------------------------------------------------------------------------------
