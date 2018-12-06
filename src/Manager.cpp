@@ -184,6 +184,10 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
 			return -2;
 	}
 
+	if(isConstant(x)){
+		return coFactorTrue(f);
+	}
+
 	if(!isVariable(x)){
 		x=topVar(x);
 	}
@@ -235,7 +239,10 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
  Returns the positive cofactor of the function defined by f.
 */
 BDD_ID Manager::coFactorTrue(const BDD_ID f){
-	return -1;
+	if(!isValidID(f)){
+			return -2;
+	}
+	return uniqueTable.find(f)->second->highId;
 }
 
 //! coFactorFalse
@@ -246,6 +253,8 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 	if(!isValidID(f,x)){
 		return -2;
 	}
+
+
 
 	if(!isVariable(x)){
 		x=topVar(x);
