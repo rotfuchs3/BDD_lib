@@ -115,6 +115,19 @@ TEST(ite,InternalNode){
 	ASSERT_EQ(c+5,manager.ite(c,a,b));
 	ASSERT_EQ(c+8,manager.ite(c,b,a));
 }
+
+TEST(coFactorTrueX,retCofacTrueX){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	ASSERT_EQ(-2,manager.coFactorTrue(-10,a));
+	ASSERT_EQ(0,manager.coFactorTrue(0,b));
+	ASSERT_EQ(b,manager.coFactorTrue(b,a));
+	ASSERT_EQ(1,manager.coFactorTrue(a,a));
+}
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
