@@ -83,20 +83,24 @@ public:
       Returns the negativ cofactor of the function defined by f.
     */
     BDD_ID coFactorFalse(const BDD_ID f) ;
-
     //! coFactorFalse
 	/*!
 	  Returns the set of BDD nodes which are reachable
 	  from the BDD node root(including itself).
 	*/
 	void findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root);
-
 	//! findVars
 	/*!
 	  Returns the set of variables which are either top variable of the BDD node root
 	   or the reachable nodes from root.
 	*/
 	void findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root);
+	//! neg
+	/*!
+	  Returns BDD_ID of the negation of A if needed creats this node
+	*/
+	BDD_ID neg(const BDD_ID a);
+
 
 private:
     /// Terminal true BDD_ID

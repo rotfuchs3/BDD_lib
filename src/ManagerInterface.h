@@ -139,6 +139,12 @@ public:
 	   or the reachable nodes from root.
 	*/
 	virtual void findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root) = 0;
+	//! neg
+	/*!
+	  Returns BDD_ID of the negation of A if needed creats this node
+	*/
+	virtual BDD_ID neg(const BDD_ID a) = 0;
+
 
 };
 #endif /* __MANAGER_INTERFACE_H__ */

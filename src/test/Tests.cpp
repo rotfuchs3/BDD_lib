@@ -232,6 +232,26 @@ TEST(findVars,checkSetOfNodes){
 	ASSERT_EQ(complex,vars_of_root);
 }
 
+TEST(neg,retNegNot){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(-2,manager.neg(-20));
+
+	ASSERT_EQ(0,manager.neg(1));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(0,manager.coFactorTrue(notB));
+	ASSERT_EQ(1,manager.coFactorFalse(notB));
+
+	//the BDD for a and b
+	BDD_ID AandB = manager.ite(a,b,0);
+	BDD_ID notAandB = manager.ite(a,notB,1);
+	ASSERT_EQ(notAandB,manager.neg(AandB));
+
+}
 
 
 /// main
