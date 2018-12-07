@@ -372,7 +372,10 @@ BDD_ID Manager::neg(const BDD_ID a){
   Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
 */
 BDD_ID Manager::and2(const BDD_ID a,const BDD_ID b){
-	return -1;
+	if(!isValidID(a)){
+		return -2;
+	}
+	return ite(a,b,0);
 }
 
 

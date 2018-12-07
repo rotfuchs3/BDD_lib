@@ -291,8 +291,8 @@ TEST(and2,distributive){
 
 	BDD_ID AorB=manager.ite(a,1,b);
 	BDD_ID AorC=manager.ite(a,1,c);
-	BDD_ID BorC=manager.ite(b,1,c);
-	BDD_ID erg=manager.ite(a,BorC,0);
+	BDD_ID BandC=manager.ite(b,c,0);
+	BDD_ID erg=manager.ite(a,1,BandC);
 
 	ASSERT_EQ(erg,manager.and2(AorB,AorC));
 }
