@@ -383,7 +383,10 @@ BDD_ID Manager::and2(const BDD_ID a,const BDD_ID b){
   Returns BDD_ID of the NAND with A and B. if needed creates this node
 */
 BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
-	return -1;
+	if(!isValidID(a,b)){
+		return -2;
+	}
+	return ite(a,ite(b,0,1),1);
 }
 //---------------------------------------------------------------------------------------------------------
 //private Methodes

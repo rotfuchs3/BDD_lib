@@ -308,8 +308,8 @@ TEST(nand2,Constants){
 	ASSERT_EQ(1,manager.nand2(1,0));
 	ASSERT_EQ(0,manager.nand2(1,1));
 
-	ASSERT_EQ(manager.ite(a,0,1),manager.and2(1,a));
-	ASSERT_EQ(1,manager.and2(0,a));
+	ASSERT_EQ(manager.ite(a,0,1),manager.nand2(1,a));
+	ASSERT_EQ(1,manager.nand2(0,a));
 }
 
 TEST(nand2,assoitiv){
