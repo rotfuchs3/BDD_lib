@@ -105,6 +105,11 @@ public:
 	  Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
 	*/
 	BDD_ID and2(const BDD_ID a,const BDD_ID b);
+	//! and
+	/*!
+	  Returns BDD_ID of the NAND with A and B. if needed creates this node
+	*/
+	BDD_ID nand2(const BDD_ID a,const BDD_ID b);
 
 
 private:

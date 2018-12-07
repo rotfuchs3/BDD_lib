@@ -149,7 +149,11 @@ public:
 	  Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
 	*/
 	virtual BDD_ID and2(const BDD_ID a,const BDD_ID b) = 0;
-
+	//! and
+	/*!
+	  Returns BDD_ID of the NAND with A and B. if needed creates this node
+	*/
+	virtual BDD_ID nand2(const BDD_ID a,const BDD_ID b) = 0;
 
 
 };

@@ -297,7 +297,52 @@ TEST(and2,distributive){
 	ASSERT_EQ(erg,manager.and2(AorB,AorC));
 }
 
+TEST(nand2,Constants){
+	Manager manager;
 
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(-2,manager.nand2(-20,1));
+
+	ASSERT_EQ(1,manager.nand2(1,0));
+	ASSERT_EQ(0,manager.nand2(1,1));
+
+	ASSERT_EQ(manager.ite(a,0,1),manager.and2(1,a));
+	ASSERT_EQ(1,manager.and2(0,a));
+}
+
+TEST(nand2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AnandB=manager.nand2(a,b);
+	BDD_ID BnandA=manager.nand2(b,a);
+	ASSERT_EQ(AnandB,BnandA);
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(1,manager.nand2(b,notB));
+}
+
+TEST(nand2,distributive){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+	const BDD_ID c = manager.createVar("c");
+
+	BDD_ID AorB=manager.ite(a,1,b);
+	BDD_ID AorC=manager.ite(a,1,c);
+	BDD_ID negA=manager.ite(a,0,1);
+	BDD_ID negB=manager.ite(b,0,1);
+	BDD_ID negC=manager.ite(c,0,1);
+
+	BDD_ID erg=manager.and2(negA,manager.ite(negB,1,negC));
+
+	ASSERT_EQ(erg,manager.nand2(AorB,AorC));
+}
 
 /// main
 int main(int argc, char **argv) {

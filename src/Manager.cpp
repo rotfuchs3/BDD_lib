@@ -372,13 +372,19 @@ BDD_ID Manager::neg(const BDD_ID a){
   Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
 */
 BDD_ID Manager::and2(const BDD_ID a,const BDD_ID b){
-	if(!isValidID(a)){
+	if(!isValidID(a,b)){
 		return -2;
 	}
 	return ite(a,b,0);
 }
 
-
+//! and
+/*!
+  Returns BDD_ID of the NAND with A and B. if needed creates this node
+*/
+BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
+	return -1;
+}
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)
