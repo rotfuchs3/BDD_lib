@@ -204,6 +204,34 @@ TEST(findNodes,checkSetOfNodes){
 	ASSERT_EQ(complex,nodes_of_root);
 }
 
+TEST(findVars,checkSetOfNodes){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	std::set<BDD_ID> vars_of_root=std::set<BDD_ID>();
+	const std::set<BDD_ID> empty=std::set<BDD_ID>();
+	std::set<BDD_ID> One=std::set<BDD_ID>();
+	One.insert(1);
+	//5 is root node of ite(b,1,c)
+	int content[]={0,1,2,4};
+	std::set<BDD_ID> complex=std::set<BDD_ID>(content,content+4);
+	BDD_ID root=manager.ite(a,c,1);
+
+
+	manager.findVars(-10,vars_of_root);
+	ASSERT_EQ(empty,vars_of_root);
+
+	manager.findVars(1,vars_of_root);
+	ASSERT_EQ(One,vars_of_root);
+
+	vars_of_root=std::set<BDD_ID>();
+	manager.findVars(root,vars_of_root);
+	ASSERT_EQ(complex,vars_of_root);
+}
+
 
 
 /// main

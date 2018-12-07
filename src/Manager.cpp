@@ -334,6 +334,14 @@ void Manager::findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root){
 	}
 }
 
+//! findVars
+/*!
+  Returns the set of variables which are either top variable of the BDD node root
+   or the reachable nodes from root.
+*/
+void Manager::findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root){
+
+}
 
 
 //---------------------------------------------------------------------------------------------------------
