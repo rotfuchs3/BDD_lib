@@ -253,6 +253,51 @@ TEST(neg,retNegNot){
 
 }
 
+TEST(and2,Constants){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(-2,manager.and2(-20,1));
+
+	ASSERT_EQ(0,manager.and2(1,0));
+	ASSERT_EQ(1,manager.and2(1,1));
+
+	ASSERT_EQ(0,manager.and2(0,a));
+}
+
+TEST(and2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AandB=manager.and2(a,b);
+	BDD_ID BandA=manager.and2(b,a);
+	ASSERT_EQ(AandB,BandA);
+	ASSERT_EQ(a,manager.and2(1,a));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(0,manager.and2(b,notB));
+}
+
+TEST(and2,distributive){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+	const BDD_ID c = manager.createVar("c");
+
+	BDD_ID AorB=manager.ite(a,1,b);
+	BDD_ID AorC=manager.ite(a,1,c);
+	BDD_ID BorC=manager.ite(b,1,c);
+	BDD_ID erg=manager.ite(a,BorC,0);
+
+	ASSERT_EQ(erg,manager.and2(AorB,AorC));
+}
+
+
 
 /// main
 int main(int argc, char **argv) {

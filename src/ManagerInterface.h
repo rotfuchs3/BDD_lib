@@ -144,6 +144,12 @@ public:
 	  Returns BDD_ID of the negation of A if needed creats this node
 	*/
 	virtual BDD_ID neg(const BDD_ID a) = 0;
+	//! and
+	/*!
+	  Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
+	*/
+	virtual BDD_ID and2(const BDD_ID a,const BDD_ID b) = 0;
+
 
 
 };
