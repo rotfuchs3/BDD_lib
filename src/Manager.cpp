@@ -361,7 +361,10 @@ void Manager::findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root){
   Returns BDD_ID of the negation of A if needed creats this node
 */
 BDD_ID Manager::neg(const BDD_ID a){
-	return -1;
+	if(!isValidID(a)){
+		return -2;
+	}
+	return ite(a,0,1);
 }
 
 
