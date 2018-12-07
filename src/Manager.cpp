@@ -340,7 +340,20 @@ void Manager::findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root){
    or the reachable nodes from root.
 */
 void Manager::findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root){
-
+	if(!isValidID(root)){
+			return ;
+	}
+	if(isConstant(root)){
+		vars_of_root.insert(root);
+		return;
+	}else{
+		Node* rootNode=uniqueTable.find(root)->second;
+		vars_of_root.insert(rootNode->topVar);
+		BDD_ID high_of_root = rootNode->highId;
+		BDD_ID low_of_root = rootNode->lowId;
+		findVars(high_of_root,vars_of_root);
+		findVars(low_of_root,vars_of_root);
+	}
 }
 
 
