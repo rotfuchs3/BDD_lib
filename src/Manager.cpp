@@ -318,9 +318,23 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
   Returns the set of BDD nodes which are reachable
   from the BDD node root(including itself).
 */
-void Manager::findNodes(BDD_ID root,std::set<BDD_ID> nodes_of_root){
-
+void Manager::findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root){
+	if(!isValidID(root)){
+			return ;
+	}
+	nodes_of_root.insert(root);
+	if(isConstant(root)){
+		return;
+	}else{
+		Node* rootNode=uniqueTable.find(root)->second;
+		BDD_ID high_of_root = rootNode->highId;
+		BDD_ID low_of_root = rootNode->lowId;
+		findNodes(high_of_root,nodes_of_root);
+		findNodes(low_of_root,nodes_of_root);
+	}
 }
+
+
 
 //---------------------------------------------------------------------------------------------------------
 //private Methodes

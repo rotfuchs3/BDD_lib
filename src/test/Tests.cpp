@@ -190,7 +190,7 @@ TEST(findNodes,checkSetOfNodes){
 	std::set<BDD_ID> One=std::set<BDD_ID>();
 	One.insert(1);
 	//5 is root node of ite(b,1,c)
-	int content[]={0,1,5,3};
+	int content[]={0,1,5,4};
 	std::set<BDD_ID> complex=std::set<BDD_ID>(content,content+4);
 	BDD_ID root=manager.ite(c,a,b);
 
@@ -203,6 +203,7 @@ TEST(findNodes,checkSetOfNodes){
 	manager.findNodes(5,nodes_of_root);
 	ASSERT_EQ(complex,nodes_of_root);
 }
+
 
 
 /// main
