@@ -184,12 +184,12 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
 			return -2;
 	}
 
-	if(isConstant(x)){
-		return coFactorTrue(f);
-	}
-
 	if(!isVariable(x)){
 		x=topVar(x);
+	}
+
+	if(isConstant(f)){
+		return f;
 	}
 
 	Node* nodeF=uniqueTable.find(f)->second;
@@ -200,7 +200,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
 		if(topVarF>x){
 			return nodeF->myId;
 		}
-		if(topVarF=x){
+		if(topVarF==x){
 			return nodeF->highId;
 		}else{//topVarF<x so x is more down in the BDD
 
