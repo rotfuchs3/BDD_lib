@@ -84,6 +84,13 @@ public:
     */
     BDD_ID coFactorFalse(const BDD_ID f) ;
 
+    //! coFactorFalse
+	/*!
+	  Returns the set of BDD nodes which are reachable
+	  from the BDD node root(including itself).
+	*/
+	void findNodes(BDD_ID root,std::set<BDD_ID> nodes_of_root);
+
 private:
     /// Terminal true BDD_ID
     const BDD_ID trueId  = 1;

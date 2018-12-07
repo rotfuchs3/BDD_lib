@@ -313,6 +313,15 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
 	return uniqueTable.find(f)->second->lowId;
 }
 
+//! coFactorFalse
+/*!
+  Returns the set of BDD nodes which are reachable
+  from the BDD node root(including itself).
+*/
+void Manager::findNodes(BDD_ID root,std::set<BDD_ID> nodes_of_root){
+
+}
+
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)

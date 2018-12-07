@@ -9,6 +9,7 @@
 
 /// Standard Lib
 #include <string>
+#include <set>
 
 /// Typedef Integer representing of the ID for BDD Node
 typedef int BDD_ID;
@@ -126,6 +127,12 @@ public:
       Returns the negativ cofactor of the function defined by f.
     */
     virtual BDD_ID coFactorFalse(const BDD_ID f) = 0;
+    //! coFactorFalse
+	/*!
+	  Returns the set of BDD nodes which are reachable
+	  from the BDD node root(including itself).
+	*/
+	virtual void findNodes(BDD_ID root,std::set<BDD_ID> nodes_of_root) = 0;
 
 
 };

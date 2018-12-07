@@ -177,6 +177,34 @@ TEST(coFactorFalse,retCofacFalse){
 	ASSERT_EQ(7,manager.coFactorFalse(root));
 }
 
+
+TEST(findNodes,checkSetOfNodes){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	std::set<BDD_ID> nodes_of_root=std::set<BDD_ID>();
+	const std::set<BDD_ID> empty=std::set<BDD_ID>();
+	std::set<BDD_ID> One=std::set<BDD_ID>();
+	One.insert(1);
+	//5 is root node of ite(b,1,c)
+	int content[]={0,1,5,3};
+	std::set<BDD_ID> complex=std::set<BDD_ID>(content,content+4);
+	BDD_ID root=manager.ite(c,a,b);
+
+
+	manager.findNodes(-10,nodes_of_root);
+	ASSERT_EQ(empty,nodes_of_root);
+	manager.findNodes(1,nodes_of_root);
+	ASSERT_EQ(One,nodes_of_root);
+	nodes_of_root=std::set<BDD_ID>();
+	manager.findNodes(5,nodes_of_root);
+	ASSERT_EQ(complex,nodes_of_root);
+}
+
+
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
