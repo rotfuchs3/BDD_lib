@@ -151,6 +151,9 @@ TEST(coFactorFalseX,retCofacFalseX){
 	ASSERT_EQ(1,manager.coFactorFalse(1,b));
 	ASSERT_EQ(b,manager.coFactorFalse(b,a));
 	ASSERT_EQ(0,manager.coFactorFalse(a,a));
+
+	BDD_ID root=manager.ite(c,a,b);
+	ASSERT_EQ(3,manager.coFactorFalse(root,c));
 }
 
 TEST(coFactorFalse,retCofacFalse){

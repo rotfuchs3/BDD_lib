@@ -270,11 +270,11 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 		if(topVarF>x){
 			return nodeF->myId;
 		}
-		if(topVarF=x){
+		if(topVarF==x){
 			return nodeF->lowId;
 		}else{//topVarF<x so x is more down in the BDD
-			BDD_ID coFacHigh=coFactorTrue(nodeF->highId,x);
-			BDD_ID coFacLow=coFactorTrue(nodeF->lowId,x);
+			BDD_ID coFacHigh=coFactorFalse(nodeF->highId,x);
+			BDD_ID coFacLow=coFactorFalse(nodeF->lowId,x);
 
 			//same child so the topVar topVarF can be skipped
 			if(coFacHigh==coFacLow){
