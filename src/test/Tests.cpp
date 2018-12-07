@@ -127,6 +127,9 @@ TEST(coFactorTrueX,retCofacTrueX){
 	ASSERT_EQ(0,manager.coFactorTrue(0,b));
 	ASSERT_EQ(b,manager.coFactorTrue(b,a));
 	ASSERT_EQ(1,manager.coFactorTrue(a,a));
+
+	BDD_ID root=manager.ite(c,a,b);
+	ASSERT_EQ(a,manager.coFactorTrue(root,c));
 }
 TEST(coFactorTrue,retCofacTrue){
 	Manager manager;
@@ -138,6 +141,9 @@ TEST(coFactorTrue,retCofacTrue){
 	ASSERT_EQ(-2,manager.coFactorTrue(-10));
 	ASSERT_EQ(1,manager.coFactorTrue(b));
 	ASSERT_EQ(0,manager.coFactorTrue(0));
+
+	BDD_ID root=manager.ite(c,a,b);
+	ASSERT_EQ(5,manager.coFactorTrue(root));
 }
 
 TEST(coFactorFalseX,retCofacFalseX){
@@ -153,7 +159,7 @@ TEST(coFactorFalseX,retCofacFalseX){
 	ASSERT_EQ(0,manager.coFactorFalse(a,a));
 
 	BDD_ID root=manager.ite(c,a,b);
-	ASSERT_EQ(3,manager.coFactorFalse(root,c));
+	ASSERT_EQ(b,manager.coFactorFalse(root,c));
 }
 
 TEST(coFactorFalse,retCofacFalse){
@@ -166,6 +172,9 @@ TEST(coFactorFalse,retCofacFalse){
 	ASSERT_EQ(-2,manager.coFactorFalse(-10));
 	ASSERT_EQ(0,manager.coFactorFalse(b));
 	ASSERT_EQ(1,manager.coFactorFalse(1));
+
+	BDD_ID root=manager.ite(c,a,b);
+	ASSERT_EQ(7,manager.coFactorFalse(root));
 }
 
 /// main
