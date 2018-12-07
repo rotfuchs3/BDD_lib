@@ -254,53 +254,53 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 		return -2;
 	}
 
-	if(isConstant(x)){
-			return coFactorFalse(f);
-	}
-
 	if(!isVariable(x)){
 		x=topVar(x);
 	}
 
+	if(isConstant(f)){
+		return f;
+	}
+
 	Node* nodeF=uniqueTable.find(f)->second;
-		BDD_ID topVarF=nodeF->topVar;
+	BDD_ID topVarF=nodeF->topVar;
 
-		//if x> topvariable then x will never be a topVar in f because x is higher in the VarOrder
-		//therefor x hasn't a effect.
-		if(topVarF>x){
-			return nodeF->myId;
-		}
-		if(topVarF==x){
-			return nodeF->lowId;
-		}else{//topVarF<x so x is more down in the BDD
-			BDD_ID coFacHigh=coFactorFalse(nodeF->highId,x);
-			BDD_ID coFacLow=coFactorFalse(nodeF->lowId,x);
+	//if x> topvariable then x will never be a topVar in f because x is higher in the VarOrder
+	//therefor x hasn't a effect.
+	if(topVarF>x){
+		return nodeF->myId;
+	}
+	if(topVarF==x){
+		return nodeF->lowId;
+	}else{//topVarF<x so x is more down in the BDD
+		BDD_ID coFacHigh=coFactorFalse(nodeF->highId,x);
+		BDD_ID coFacLow=coFactorFalse(nodeF->lowId,x);
 
-			//same child so the topVar topVarF can be skipped
-			if(coFacHigh==coFacLow){
-				return coFacHigh;
+		//same child so the topVar topVarF can be skipped
+		if(coFacHigh==coFacLow){
+			return coFacHigh;
+		}else{
+			//check if the to return coFactor would be a constant
+			if(coFacHigh==1 && coFacLow==0){
+				return topVarF;
 			}else{
-				//check if the to return coFactor would be a constant
-				if(coFacHigh==1 && coFacLow==0){
-					return topVarF;
-				}else{
-					for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
-						Node* iterateNode=it->second;
-						BDD_ID topVar=iterateNode->topVar;
-						BDD_ID highId=iterateNode->highId;
-						BDD_ID lowId=iterateNode->lowId;
-						//std::cout<<"Node: (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
-						// there is a node already in the unique table
-						if(topVar==topVarF && highId==coFacHigh && lowId==coFacLow){
-							return it->first;
-						}
+				for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
+					Node* iterateNode=it->second;
+					BDD_ID topVar=iterateNode->topVar;
+					BDD_ID highId=iterateNode->highId;
+					BDD_ID lowId=iterateNode->lowId;
+					//std::cout<<"Node: (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
+					// there is a node already in the unique table
+					if(topVar==topVarF && highId==coFacHigh && lowId==coFacLow){
+						return it->first;
 					}
-					//when no node found
-					std::string newLabel="coFactorFalse("+nodeF->label+","+uniqueTable.find(x)->second->label+")";
-					return insertInUniquetable(coFacHigh,coFacLow,topVarF,newLabel);
 				}
+				//when no node found
+				std::string newLabel="coFactorFalse("+nodeF->label+","+uniqueTable.find(x)->second->label+")";
+				return insertInUniquetable(coFacHigh,coFacLow,topVarF,newLabel);
 			}
 		}
+	}
 }
 //! coFactorFalse
 /*!
@@ -320,17 +320,14 @@ bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)
 	//check for corrupted input
 		if(i>=currentId||i<0)
 		{
-			std::cout<<"arg1 of the method is not a actual BDD_ID in the uniquetable"<<std::endl;
 			return false;
 		}
 		if(t>=currentId||t<0)
 		{
-				std::cout<<"arg2 of the method is not a actual BDD_ID in the uniquetable"<<std::endl;
 				return false;
 		}
 		if(e>=currentId||e<0)
 		{
-				std::cout<<"arg3 of the method is not a actual BDD_ID in the uniquetable"<<std::endl;
 				return false;
 		}
 		return true;
