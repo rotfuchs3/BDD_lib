@@ -12,19 +12,16 @@
 */
 Manager::Manager(void)
 {
-    uniqueTable = std::unordered_map<BDD_ID, Node*>();
-    lookUpTable = std::unordered_map<std::string,BDD_ID>();
+    uniqueTable = uniqueTable_t();
+    lookUpTable = lookUpTable_t();
+    
     // Insert 0 and configure
     createVar("0");
     uniqueTable[0]->highId = 0;
-    //uniqueTable[0]->lowId  = 0;
-    //uniqueTable[0]->topVar = 0;
 
     // Insert 1 and configure
     createVar("1");
-    //uniqueTable[1]->highId = 1;
     uniqueTable[1]->lowId  = 1;
-    //uniqueTable[1]->topVar = 1;
 }
 //! True
 /*!
@@ -59,17 +56,21 @@ bool Manager::isConstant(const BDD_ID x)
 */
 bool Manager::isVariable(const BDD_ID x)
 {
-    if(x == trueId || x == falseId) {
-        return false;
+    // check if BDD_ID exists and if it's not 0 or 1
+    if( (searchUniTable(x) != MANAGER_FAIL) && !isConstant(x) ) {
+        // check highId - check if highId and lowId is either 1 or 0
+        if( (uniqueTable[x]->highId <= trueId) && (uniqueTable[x]->lowId <= trueId) ) {
+            return true;
+        }
     }
-    return true;
+    return false;
 }
 /*! createVar
     Creates a new variable for the BDD
 */
 BDD_ID Manager::createVar(const std::string &label)
 {
-	std::unordered_map<std::string,BDD_ID>::const_iterator item=lookUpTable.find(label);
+	lookUpTable_t::const_iterator item=lookUpTable.find(label);
 	//when label is not in the hashmap
 	if(item == lookUpTable.end()){
 		return insertInUniquetable(True(),False(),currentId,label);
@@ -416,4 +417,12 @@ BDD_ID Manager::insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std
 	lookUpTable.insert({label,currentId});
 
 	return currentId++;
+}
+BDD_ID Manager::searchUniTable(const BDD_ID id)
+{
+    uniqueTable_t::const_iterator found = uniqueTable.find(id);
+    if(found != uniqueTable.end()) {
+        return found->first;
+    }
+    return MANAGER_FAIL;
 }

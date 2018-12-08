@@ -30,7 +30,7 @@ set(PKG_VERSION ${VERSION_MAJOR}.${PKG_VERSION_MAJOR}.${PKG_VERSION_MINOR})
 
 # Set the bdd tests version number
 set(TST_VERSION_MAJOR "0")
-set(TST_VERSION_MINOR "7")
+set(TST_VERSION_MINOR "18")
 set(TST_VERSION ${VERSION_MAJOR}.${TST_VERSION_MAJOR}.${TST_VERSION_MINOR})
 
 # Generate version files
