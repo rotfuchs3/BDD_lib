@@ -12,6 +12,10 @@
 /// Container
 #include <unordered_map>
 #include <iterator>
+/// Manager typedef
+typedef std::unordered_map<BDD_ID, Node*>        uniqueTable_t;
+typedef std::unordered_map<std::string, BDD_ID>  lookUpTable_t;
+#define     MANAGER_FAIL    -1
 //!  Manager class
 /*!
   This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.
@@ -120,12 +124,12 @@ private:
     /// Keep track of current BDD_ID, start off at 2 since IDs 0 and 1 are for true and false
     BDD_ID currentId = 0;
     /// uniqueTable, hashmap for performance
-    std::unordered_map<BDD_ID, Node*> uniqueTable;
-    std::unordered_map<std::string, BDD_ID> lookUpTable;
+    uniqueTable_t uniqueTable;
+    lookUpTable_t lookUpTable;
 	
     bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
-
+    BDD_ID searchUniTable(const BDD_ID id);
   struct Key{
 	  BDD_ID id;
   };

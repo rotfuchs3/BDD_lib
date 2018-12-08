@@ -44,11 +44,9 @@ TEST(isVariable, isNodeVariable) {
     const BDD_ID b = manager.createVar("b");
     ASSERT_EQ(true, manager.isVariable(a));
     ASSERT_EQ(true, manager.isVariable(b));
-    // insert new nodes that are NOT variables - FALSE
-    const BDD_ID nVar1 = manager.createVar("and");
-    const BDD_ID nVar2 = manager.createVar("or");
+    // insert new node that are NOT variables - FALSE
+    const BDD_ID nVar1 = manager.and2(a, b);
     ASSERT_EQ(false, manager.isVariable(nVar1));
-    ASSERT_EQ(false, manager.isVariable(nVar2));
     //  non-existent variable
     ASSERT_EQ(false, manager.isVariable(9000));
     ASSERT_EQ(false, manager.isVariable(-4));   
