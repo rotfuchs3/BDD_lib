@@ -313,6 +313,81 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f) {
 	return uniqueTable.find(f)->second->lowId;
 }
 
+//! coFactorFalse
+/*!
+  Returns the set of BDD nodes which are reachable
+  from the BDD node root(including itself).
+*/
+void Manager::findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root){
+	if(!isValidID(root)){
+			return ;
+	}
+	nodes_of_root.insert(root);
+	if(isConstant(root)){
+		return;
+	}else{
+		Node* rootNode=uniqueTable.find(root)->second;
+		BDD_ID high_of_root = rootNode->highId;
+		BDD_ID low_of_root = rootNode->lowId;
+		findNodes(high_of_root,nodes_of_root);
+		findNodes(low_of_root,nodes_of_root);
+	}
+}
+
+//! findVars
+/*!
+  Returns the set of variables which are either top variable of the BDD node root
+   or the reachable nodes from root.
+*/
+void Manager::findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root){
+	if(!isValidID(root)){
+			return ;
+	}
+	if(isConstant(root)){
+		vars_of_root.insert(root);
+		return;
+	}else{
+		Node* rootNode=uniqueTable.find(root)->second;
+		vars_of_root.insert(rootNode->topVar);
+		BDD_ID high_of_root = rootNode->highId;
+		BDD_ID low_of_root = rootNode->lowId;
+		findVars(high_of_root,vars_of_root);
+		findVars(low_of_root,vars_of_root);
+	}
+}
+
+//! neg
+/*!
+  Returns BDD_ID of the negation of A if needed creats this node
+*/
+BDD_ID Manager::neg(const BDD_ID a){
+	if(!isValidID(a)){
+		return -2;
+	}
+	return ite(a,0,1);
+}
+
+//! and
+/*!
+  Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
+*/
+BDD_ID Manager::and2(const BDD_ID a,const BDD_ID b){
+	if(!isValidID(a,b)){
+		return -2;
+	}
+	return ite(a,b,0);
+}
+
+//! and
+/*!
+  Returns BDD_ID of the NAND with A and B. if needed creates this node
+*/
+BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
+	if(!isValidID(a,b)){
+		return -2;
+	}
+	return ite(a,ite(b,0,1),1);
+}
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)

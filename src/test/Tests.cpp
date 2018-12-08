@@ -177,6 +177,173 @@ TEST(coFactorFalse,retCofacFalse){
 	ASSERT_EQ(7,manager.coFactorFalse(root));
 }
 
+
+TEST(findNodes,checkSetOfNodes){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	std::set<BDD_ID> nodes_of_root=std::set<BDD_ID>();
+	const std::set<BDD_ID> empty=std::set<BDD_ID>();
+	std::set<BDD_ID> One=std::set<BDD_ID>();
+	One.insert(1);
+	//5 is root node of ite(b,1,c)
+	int content[]={0,1,5,4};
+	std::set<BDD_ID> complex=std::set<BDD_ID>(content,content+4);
+	BDD_ID root=manager.ite(c,a,b);
+
+
+	manager.findNodes(-10,nodes_of_root);
+	ASSERT_EQ(empty,nodes_of_root);
+	manager.findNodes(1,nodes_of_root);
+	ASSERT_EQ(One,nodes_of_root);
+	nodes_of_root=std::set<BDD_ID>();
+	manager.findNodes(5,nodes_of_root);
+	ASSERT_EQ(complex,nodes_of_root);
+}
+
+TEST(findVars,checkSetOfNodes){
+	Manager manager;
+
+	const BDD_ID a=manager.createVar("a");
+	const BDD_ID b=manager.createVar("b");
+	const BDD_ID c=manager.createVar("c");
+
+	std::set<BDD_ID> vars_of_root=std::set<BDD_ID>();
+	const std::set<BDD_ID> empty=std::set<BDD_ID>();
+	std::set<BDD_ID> One=std::set<BDD_ID>();
+	One.insert(1);
+	//5 is root node of ite(b,1,c)
+	int content[]={0,1,2,4};
+	std::set<BDD_ID> complex=std::set<BDD_ID>(content,content+4);
+	BDD_ID root=manager.ite(a,c,1);
+
+
+	manager.findVars(-10,vars_of_root);
+	ASSERT_EQ(empty,vars_of_root);
+
+	manager.findVars(1,vars_of_root);
+	ASSERT_EQ(One,vars_of_root);
+
+	vars_of_root=std::set<BDD_ID>();
+	manager.findVars(root,vars_of_root);
+	ASSERT_EQ(complex,vars_of_root);
+}
+
+TEST(neg,retNegNot){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(-2,manager.neg(-20));
+
+	ASSERT_EQ(0,manager.neg(1));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(0,manager.coFactorTrue(notB));
+	ASSERT_EQ(1,manager.coFactorFalse(notB));
+
+	//the BDD for a and b
+	BDD_ID AandB = manager.ite(a,b,0);
+	BDD_ID notAandB = manager.ite(a,notB,1);
+	ASSERT_EQ(notAandB,manager.neg(AandB));
+
+}
+
+TEST(and2,Constants){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(-2,manager.and2(-20,1));
+
+	ASSERT_EQ(0,manager.and2(1,0));
+	ASSERT_EQ(1,manager.and2(1,1));
+
+	ASSERT_EQ(0,manager.and2(0,a));
+}
+
+TEST(and2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AandB=manager.and2(a,b);
+	BDD_ID BandA=manager.and2(b,a);
+	ASSERT_EQ(AandB,BandA);
+	ASSERT_EQ(a,manager.and2(1,a));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(0,manager.and2(b,notB));
+}
+
+TEST(and2,distributive){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+	const BDD_ID c = manager.createVar("c");
+
+	BDD_ID AorB=manager.ite(a,1,b);
+	BDD_ID AorC=manager.ite(a,1,c);
+	BDD_ID BandC=manager.ite(b,c,0);
+	BDD_ID erg=manager.ite(a,1,BandC);
+
+	ASSERT_EQ(erg,manager.and2(AorB,AorC));
+}
+
+TEST(nand2,Constants){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(-2,manager.nand2(-20,1));
+
+	ASSERT_EQ(1,manager.nand2(1,0));
+	ASSERT_EQ(0,manager.nand2(1,1));
+
+	ASSERT_EQ(manager.ite(a,0,1),manager.nand2(1,a));
+	ASSERT_EQ(1,manager.nand2(0,a));
+}
+
+TEST(nand2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AnandB=manager.nand2(a,b);
+	BDD_ID BnandA=manager.nand2(b,a);
+	ASSERT_EQ(AnandB,BnandA);
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(1,manager.nand2(b,notB));
+}
+
+TEST(nand2,distributive){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+	const BDD_ID c = manager.createVar("c");
+
+	BDD_ID AorB=manager.ite(a,1,b);
+	BDD_ID AorC=manager.ite(a,1,c);
+	BDD_ID negA=manager.ite(a,0,1);
+	BDD_ID negB=manager.ite(b,0,1);
+	BDD_ID negC=manager.ite(c,0,1);
+
+	BDD_ID erg=manager.and2(negA,manager.ite(negB,1,negC));
+
+	ASSERT_EQ(erg,manager.nand2(AorB,AorC));
+}
+
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
