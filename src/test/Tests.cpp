@@ -36,9 +36,22 @@ TEST(isConstant, isNodeLeaf) {
 */
 TEST(isVariable, isNodeVariable) {
     Manager manager;
-    ASSERT_FALSE(manager.isVariable(0));
-    ASSERT_EQ(true, manager.isVariable(2));
-    ASSERT_EQ(true, manager.isVariable(9000));
+    // check when constants 0 and 1 are given - FALSE
+    ASSERT_EQ(false, manager.isVariable(0));
+    ASSERT_EQ(false, manager.isVariable(1));
+    // insert new VARIABLE nodes - TRUE
+    const BDD_ID a = manager.createVar("a");
+    const BDD_ID b = manager.createVar("b");
+    ASSERT_EQ(true, manager.isVariable(a));
+    ASSERT_EQ(true, manager.isVariable(b));
+    // insert new nodes that are NOT variables - FALSE
+    const BDD_ID nVar1 = manager.createVar("and");
+    const BDD_ID nVar2 = manager.createVar("or");
+    ASSERT_EQ(false, manager.isVariable(nVar1));
+    ASSERT_EQ(false, manager.isVariable(nVar2));
+    //  non-existent variable
+    ASSERT_EQ(false, manager.isVariable(9000));
+    ASSERT_EQ(false, manager.isVariable(-4));   
 }
 /**
 * \brief Test for createVar from label, return BDD_ID, 0 and 1 are false and true BDD_IDs, so next should be 2, 3, 4, etc...
