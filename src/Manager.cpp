@@ -375,7 +375,10 @@ std::string Manager::getTopVarName(const BDD_ID f){
   Returns BDD_ID of the disjunction of A and B. if needed creates this node
 */
 BDD_ID Manager::or2(const BDD_ID a,const BDD_ID b) {
-	return -2;
+	if(!isValidID(a,b)){
+		return MANAGER_FAIL;
+	}
+	return ite(a,1,b);
 }
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
