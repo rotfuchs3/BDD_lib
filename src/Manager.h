@@ -119,6 +119,11 @@ public:
 	  Returns the label of top variable of the BDD node f
 	*/
 	std::string getTopVarName(const BDD_ID f) ;
+	//! or2
+	/*!
+	  Returns BDD_ID of the disjunction of A and B. if needed creates this node
+	*/
+	BDD_ID or2(const BDD_ID a,const BDD_ID b);
 
 private:
     /// Terminal true BDD_ID

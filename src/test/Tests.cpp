@@ -355,6 +355,36 @@ TEST(nand2,distributive){
 	ASSERT_EQ(erg,manager.nand2(AorB,AorC));
 }
 
+TEST(or2,Constants){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(MANAGER_FAIL,manager.or2(-20,1));
+
+	ASSERT_EQ(1,manager.or2(1,0));
+	ASSERT_EQ(1,manager.or2(1,1));
+	ASSERT_EQ(0,manager.or2(0,0));
+
+	ASSERT_EQ(a,manager.or2(0,a));
+}
+
+TEST(or2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AorB=manager.or2(a,b);
+	BDD_ID BorA=manager.or2(b,a);
+	ASSERT_EQ(AorB,BorA);
+	ASSERT_EQ(1,manager.or2(1,a));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(1,manager.or2(b,notB));
+}
+
 TEST(getTopVarName, reString){
 	Manager manager;
 

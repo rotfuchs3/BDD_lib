@@ -370,6 +370,13 @@ std::string Manager::getTopVarName(const BDD_ID f){
 	return uniqueTable.find(topVar(f))->second->label;
 }
 
+//! or2
+/*!
+  Returns BDD_ID of the disjunction of A and B. if needed creates this node
+*/
+BDD_ID Manager::or2(const BDD_ID a,const BDD_ID b) {
+	return -2;
+}
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)
