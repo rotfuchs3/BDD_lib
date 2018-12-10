@@ -12,3 +12,4 @@ lib/
 Makefile
 CMakeCache.txt
 build_versions.h
+codeBlocks/

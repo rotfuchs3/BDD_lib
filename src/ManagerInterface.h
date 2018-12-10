@@ -146,7 +146,7 @@ public:
 	virtual BDD_ID neg(const BDD_ID a) = 0;
 	//! and
 	/*!
-	  Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
+	  Returns BDD_ID of the conjunction of A and B. if needed creates this node
 	*/
 	virtual BDD_ID and2(const BDD_ID a,const BDD_ID b) = 0;
 	//! and
@@ -154,7 +154,25 @@ public:
 	  Returns BDD_ID of the NAND with A and B. if needed creates this node
 	*/
 	virtual BDD_ID nand2(const BDD_ID a,const BDD_ID b) = 0;
-
-
+	//! getTopVarName
+	/*!
+	  Returns the label of top variable of the BDD node f
+	*/
+	virtual std::string getTopVarName(const BDD_ID f) = 0;
+	//! or2
+	/*!
+	  Returns BDD_ID of the disjunction of A and B. if needed creates this node
+	*/
+	virtual BDD_ID or2(const BDD_ID a,const BDD_ID b) = 0;
+	//! xor2
+	/*!
+	  Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
+	*/
+	virtual BDD_ID xor2(const BDD_ID a,const BDD_ID b) = 0;
+	//! nor2
+	/*!
+	  Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
+	*/
+	virtual BDD_ID nor2(const BDD_ID a,const BDD_ID b) = 0;
 };
 #endif /* __MANAGER_INTERFACE_H__ */

@@ -114,8 +114,31 @@ public:
 	  Returns BDD_ID of the NAND with A and B. if needed creates this node
 	*/
 	BDD_ID nand2(const BDD_ID a,const BDD_ID b);
-
-
+	//! getTopVarName
+	/*!
+	  Returns the label of top variable of the BDD node f
+	*/
+	std::string getTopVarName(const BDD_ID f) ;
+	//! or2
+	/*!
+	  Returns BDD_ID of the disjunction of A and B. if needed creates this node
+	*/
+	BDD_ID or2(const BDD_ID a,const BDD_ID b);
+	//! xor2
+	/*!
+	  Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
+	*/
+	BDD_ID xor2(const BDD_ID a,const BDD_ID b);
+	//! nor2
+	/*!
+	  Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
+	*/
+	BDD_ID nor2(const BDD_ID a,const BDD_ID b);
+  //! printUniqueTable
+  /*!
+      Prints unique table
+  */
+void printUniqueTable(void);
 private:
     /// Terminal true BDD_ID
     const BDD_ID trueId  = 1;
@@ -123,6 +146,7 @@ private:
     const BDD_ID falseId = 0;
     /// Keep track of current BDD_ID, start off at 2 since IDs 0 and 1 are for true and false
     BDD_ID currentId = 0;
+
     /// uniqueTable, hashmap for performance
     uniqueTable_t uniqueTable;
     lookUpTable_t lookUpTable;
@@ -130,20 +154,12 @@ private:
     bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
     BDD_ID searchUniTable(const BDD_ID id);
+    BDD_ID searchForNode(const BDD_ID _highId,const BDD_ID _lowId, const BDD_ID _topVar);
+
   struct Key{
 	  BDD_ID id;
   };
 
-  struct KeyHash{
-  	std::size_t operator()(const BDD_ID& k) const {
-  		return k%31;
-  	}
-  };
 
-  	struct KeyEqual{
-  		bool operator()(const BDD_ID& first, const BDD_ID& second)	const{
-  			return first==second;
-  		}
-  	};
 };
 #endif /* __MANAGER_H__ */
