@@ -125,7 +125,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
     return alreadyExist;
 
   //termine highest topvariable depending on the variable order
-  BDD_ID topVarI = -1, topVarT = -1, topVarE = -1;
+  BDD_ID topVarI = MANAGER_FAIL, topVarT = MANAGER_FAIL, topVarE = MANAGER_FAIL;
   //Constant have topVar 1/0 but this is no variable
   //so it should not be considered by the highest topVariable depending on the variable order
   //missing this leads to
@@ -138,15 +138,15 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
 
   //minimal variable are the highest in the variable order
   BDD_ID min = currentId;
-  if (topVarI != -1)
+  if (topVarI != MANAGER_FAIL)
   {
     min = topVarI;
   }
-  if (topVarT != -1 && topVarT < min)
+  if (topVarT != MANAGER_FAIL && topVarT < min)
   {
     min = topVarT;
   }
-  if (topVarE != -1 && topVarE < min)
+  if (topVarE != MANAGER_FAIL && topVarE < min)
   {
     min = topVarE;
   }
@@ -474,7 +474,7 @@ BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b)
 }
 //! printUniqueTable
 /*!
-    Prints table
+    Prints unique table
 */
 void Manager::printUniqueTable(void)
 {
@@ -486,7 +486,7 @@ void Manager::printUniqueTable(void)
     std::cout << " - Low:    " << uniqueTable[i]->lowId << std::endl;
     std::cout << " - Top:    " << uniqueTable[i]->topVar << std::endl;
   }
-
+}
   //---------------------------------------------------------------------------------------------------------
   //private Methodes
   bool Manager::isValidID(BDD_ID i, BDD_ID t, BDD_ID e)
