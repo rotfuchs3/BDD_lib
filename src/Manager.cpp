@@ -356,7 +356,7 @@ BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
 	if(!isValidID(a,b)){
 		return MANAGER_FAIL;
 	}
-	return ite(a,ite(b,0,1),1);
+	return neg(and2(a,b));
 }
 
 //! getTopVarName
@@ -389,7 +389,7 @@ BDD_ID Manager::xor2(const BDD_ID a,const BDD_ID b){
 	if(!isValidID(a,b)){
 		return MANAGER_FAIL;
 	}
-	return ite(a,ite(b,0,1),b);
+	return ite(a,neg(b),b);
 }
 
 //! nor2
@@ -397,7 +397,10 @@ BDD_ID Manager::xor2(const BDD_ID a,const BDD_ID b){
   Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
 */
 BDD_ID Manager::nor2(const BDD_ID a,const BDD_ID b) {
-	return -2;
+	if(!isValidID(a,b)){
+		return MANAGER_FAIL;
+	}
+	return neg(or2(a,b));
 }
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
