@@ -358,6 +358,15 @@ BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
 	}
 	return ite(a,ite(b,0,1),1);
 }
+
+//! getTopVarName
+/*!
+  Returns the label of top variable of the BDD node f
+*/
+std::string Manager::getTopVarName(const BDD_ID f){
+	return "";
+}
+
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)

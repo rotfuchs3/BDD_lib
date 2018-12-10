@@ -355,6 +355,22 @@ TEST(nand2,distributive){
 	ASSERT_EQ(erg,manager.nand2(AorB,AorC));
 }
 
+TEST(getTopVarName, reString){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+	const BDD_ID c = manager.createVar("c");
+
+	ASSERT_EQ("",manager.getTopVarName(-2));
+	ASSERT_EQ("a",manager.getTopVarName(a));
+
+	BDD_ID root = manager.ite(c,b,0);
+	ASSERT_EQ("b",manager.getTopVarName(root));
+
+
+}
+
 /// main
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

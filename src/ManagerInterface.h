@@ -154,7 +154,11 @@ public:
 	  Returns BDD_ID of the NAND with A and B. if needed creates this node
 	*/
 	virtual BDD_ID nand2(const BDD_ID a,const BDD_ID b) = 0;
-
+	//! getTopVarName
+	/*!
+	  Returns the label of top variable of the BDD node f
+	*/
+	virtual std::string getTopVarName(const BDD_ID f) = 0;
 
 };
 #endif /* __MANAGER_INTERFACE_H__ */
