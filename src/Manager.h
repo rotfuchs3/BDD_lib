@@ -124,6 +124,11 @@ public:
 	  Returns BDD_ID of the disjunction of A and B. if needed creates this node
 	*/
 	BDD_ID or2(const BDD_ID a,const BDD_ID b);
+	//! xor2
+	/*!
+	  Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
+	*/
+	BDD_ID xor2(const BDD_ID a,const BDD_ID b);
 
 private:
     /// Terminal true BDD_ID

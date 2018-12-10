@@ -380,6 +380,14 @@ BDD_ID Manager::or2(const BDD_ID a,const BDD_ID b) {
 	}
 	return ite(a,1,b);
 }
+
+//! xor2
+/*!
+  Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
+*/
+BDD_ID Manager::xor2(const BDD_ID a,const BDD_ID b){
+	return -2;
+}
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)

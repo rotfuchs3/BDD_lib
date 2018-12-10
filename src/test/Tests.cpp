@@ -385,6 +385,38 @@ TEST(or2,assoitiv){
 	ASSERT_EQ(1,manager.or2(b,notB));
 }
 
+TEST(xor2,Constants){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(MANAGER_FAIL,manager.xor2(-20,1));
+
+	ASSERT_EQ(1,manager.xor2(1,0));
+	ASSERT_EQ(0,manager.xor2(1,1));
+	ASSERT_EQ(0,manager.xor2(0,0));
+
+	ASSERT_EQ(a,manager.xor2(0,a));
+}
+
+TEST(xor2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AxorB=manager.xor2(a,b);
+	BDD_ID BxorA=manager.xor2(b,a);
+	ASSERT_EQ(AxorB,BxorA);
+
+	BDD_ID notA = manager.neg(a);
+	ASSERT_EQ(notA,manager.xor2(1,a));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(1,manager.xor2(b,notB));
+}
+
 TEST(getTopVarName, reString){
 	Manager manager;
 
