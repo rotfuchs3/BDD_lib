@@ -169,6 +169,10 @@ public:
 	  Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
 	*/
 	virtual BDD_ID xor2(const BDD_ID a,const BDD_ID b) = 0;
-
+	//! nor2
+	/*!
+	  Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
+	*/
+	virtual BDD_ID nor2(const BDD_ID a,const BDD_ID b) = 0;
 };
 #endif /* __MANAGER_INTERFACE_H__ */

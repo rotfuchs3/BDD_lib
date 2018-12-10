@@ -391,6 +391,14 @@ BDD_ID Manager::xor2(const BDD_ID a,const BDD_ID b){
 	}
 	return ite(a,ite(b,0,1),b);
 }
+
+//! nor2
+/*!
+  Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
+*/
+BDD_ID Manager::nor2(const BDD_ID a,const BDD_ID b) {
+	return -2;
+}
 //---------------------------------------------------------------------------------------------------------
 //private Methodes
 bool Manager::isValidID(BDD_ID i,BDD_ID t, BDD_ID e)

@@ -242,7 +242,8 @@ TEST(findVars,checkSetOfNodes){
 	manager.findVars(root,vars_of_root);
 	ASSERT_EQ(complex,vars_of_root);
 }
-
+//--------------------------------------------------
+//boolean function
 TEST(neg,retNegNot){
 	Manager manager;
 
@@ -263,7 +264,8 @@ TEST(neg,retNegNot){
 	ASSERT_EQ(notAandB,manager.neg(AandB));
 
 }
-
+//----------------------------------------------
+//and's functions
 TEST(and2,Constants){
 	Manager manager;
 
@@ -355,6 +357,18 @@ TEST(nand2,distributive){
 	ASSERT_EQ(erg,manager.nand2(AorB,AorC));
 }
 
+TEST(nand2,deMorgan){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID notA = manager.neg(a);
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(manager.or2(notA,notB),manager.nand2(a,b));
+}
+//----------------------------------------------------------
+//or's functions
 TEST(or2,Constants){
 	Manager manager;
 
@@ -415,6 +429,49 @@ TEST(xor2,assoitiv){
 
 	BDD_ID notB = manager.neg(b);
 	ASSERT_EQ(1,manager.xor2(b,notB));
+}
+
+TEST(nor2,Constants){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	ASSERT_EQ(MANAGER_FAIL,manager.nor2(-20,1));
+
+	ASSERT_EQ(0,manager.nor2(1,0));
+	ASSERT_EQ(0,manager.nor2(1,1));
+	ASSERT_EQ(1,manager.nor2(0,0));
+
+	BDD_ID notA = manager.neg(a);
+	ASSERT_EQ(notA,manager.nor2(0,a));
+}
+
+TEST(nor2,assoitiv){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID AnorB=manager.nor2(a,b);
+	BDD_ID BnorA=manager.nor2(b,a);
+	ASSERT_EQ(AnorB,BnorA);
+
+	ASSERT_EQ(0,manager.nor2(1,a));
+
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(0,manager.nor2(b,notB));
+}
+
+TEST(nor2,deMorgan){
+	Manager manager;
+
+	const BDD_ID a = manager.createVar("a");
+	const BDD_ID b = manager.createVar("b");
+
+	BDD_ID notA = manager.neg(a);
+	BDD_ID notB = manager.neg(b);
+	ASSERT_EQ(manager.and2(notA,notB),manager.nor2(a,b));
 }
 
 TEST(getTopVarName, reString){
