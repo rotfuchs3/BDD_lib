@@ -102,7 +102,7 @@ BDD_ID Manager::topVar(const BDD_ID f)
 BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 {
 	if(!isValidID(i,t,e)){
-			return -2;
+			return MANAGER_FAIL;
 	}
 		//terminal cases
 		if(t==e||i==1)
@@ -113,18 +113,10 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 		{
 			return e;
 		}
+		BDD_ID alreadyExist = searchForNode(t,e, i);
+		if (alreadyExist !=MANAGER_FAIL)
+			return alreadyExist;
 
-		for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
-			Node* iterateNode=it->second;
-			BDD_ID topVar=iterateNode->topVar;
-			BDD_ID highId=iterateNode->highId;
-			BDD_ID lowId=iterateNode->lowId;
-			// there is a node already in the unique table
-
-			if(topVar==i && highId==t && lowId==e){
-				return it->first;
-			}
-		}
 		//termine highest topvariable depending on the variable order
 		BDD_ID topVarI=-1,topVarT=-1,topVarE=-1;
 		//Constant have topVar 1/0 but this is no variable
@@ -161,16 +153,9 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 			return min;
 		}else{
 			// check if already an internal node (rHigh,rLow,min) is in the UniqueTable
-			for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
-				Node* iterateNode=it->second;
-				BDD_ID topVar=iterateNode->topVar;
-				BDD_ID highId=iterateNode->highId;
-				BDD_ID lowId=iterateNode->lowId;
-				// there is a node already in the unique table
-				if(topVar==min && highId==rHigh && lowId==rLow){
-					return it->first;
-				}
-			}
+			BDD_ID alreadyExist = searchForNode(rHigh,rLow, min);
+			if (alreadyExist !=MANAGER_FAIL)
+				return alreadyExist;
 		}
 		BDD_ID newNode= insertInUniquetable(rHigh,rLow,min,"");
 		return newNode;
@@ -182,7 +167,7 @@ BDD_ID Manager::ite(const BDD_ID i,const BDD_ID t, const BDD_ID e)
 */
 BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
 	if(!isValidID(f,x)){
-			return -2;
+			return MANAGER_FAIL;
 	}
 
 	if(!isVariable(x)){
@@ -216,17 +201,9 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
 				if(coFacHigh==1 && coFacLow==0){
 					return topVarF;
 				}else{
-					for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
-						Node* iterateNode=it->second;
-						BDD_ID topVar=iterateNode->topVar;
-						BDD_ID highId=iterateNode->highId;
-						BDD_ID lowId=iterateNode->lowId;
-						//std::cout<<"Node: (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
-						// there is a node already in the unique table
-						if(topVar==topVarF && highId==coFacHigh && lowId==coFacLow){
-							return it->first;
-						}
-					}
+					BDD_ID alreadyExist = searchForNode(coFacHigh,coFacLow, topVarF);
+					if (alreadyExist !=MANAGER_FAIL)
+						return alreadyExist;
 					//when no node fond
 					std::string newLabel="coFactorTrue("+nodeF->label+","+uniqueTable.find(x)->second->label+")";
 					return insertInUniquetable(coFacHigh,coFacLow,topVarF,newLabel);
@@ -241,7 +218,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f,BDD_ID x){
 */
 BDD_ID Manager::coFactorTrue(const BDD_ID f){
 	if(!isValidID(f)){
-			return -2;
+			return MANAGER_FAIL;
 	}
 	return uniqueTable.find(f)->second->highId;
 }
@@ -252,7 +229,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f){
 */
 BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 	if(!isValidID(f,x)){
-		return -2;
+		return MANAGER_FAIL;
 	}
 
 	if(!isVariable(x)){
@@ -285,17 +262,9 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 			if(coFacHigh==1 && coFacLow==0){
 				return topVarF;
 			}else{
-				for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
-					Node* iterateNode=it->second;
-					BDD_ID topVar=iterateNode->topVar;
-					BDD_ID highId=iterateNode->highId;
-					BDD_ID lowId=iterateNode->lowId;
-					//std::cout<<"Node: (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
-					// there is a node already in the unique table
-					if(topVar==topVarF && highId==coFacHigh && lowId==coFacLow){
-						return it->first;
-					}
-				}
+				BDD_ID alreadyExist = searchForNode(coFacHigh,coFacLow, topVarF);
+				if (alreadyExist !=MANAGER_FAIL)
+					return alreadyExist;
 				//when no node found
 				std::string newLabel="coFactorFalse("+nodeF->label+","+uniqueTable.find(x)->second->label+")";
 				return insertInUniquetable(coFacHigh,coFacLow,topVarF,newLabel);
@@ -309,7 +278,7 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f,BDD_ID x){
 */
 BDD_ID Manager::coFactorFalse(const BDD_ID f) {
 	if(!isValidID(f)){
-		return -2;
+		return MANAGER_FAIL;
 	}
 	return uniqueTable.find(f)->second->lowId;
 }
@@ -363,7 +332,7 @@ void Manager::findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root){
 */
 BDD_ID Manager::neg(const BDD_ID a){
 	if(!isValidID(a)){
-		return -2;
+		return MANAGER_FAIL;
 	}
 	return ite(a,0,1);
 }
@@ -374,7 +343,7 @@ BDD_ID Manager::neg(const BDD_ID a){
 */
 BDD_ID Manager::and2(const BDD_ID a,const BDD_ID b){
 	if(!isValidID(a,b)){
-		return -2;
+		return MANAGER_FAIL;
 	}
 	return ite(a,b,0);
 }
@@ -385,7 +354,7 @@ BDD_ID Manager::and2(const BDD_ID a,const BDD_ID b){
 */
 BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
 	if(!isValidID(a,b)){
-		return -2;
+		return MANAGER_FAIL;
 	}
 	return ite(a,ite(b,0,1),1);
 }
@@ -425,4 +394,19 @@ BDD_ID Manager::searchUniTable(const BDD_ID id)
         return found->first;
     }
     return MANAGER_FAIL;
+}
+
+BDD_ID Manager::searchForNode(const BDD_ID _highId,const BDD_ID _lowId, const BDD_ID _topVar){
+	for(auto it=uniqueTable.begin(); it != uniqueTable.end()&&it->first<currentId; ++it ){
+		Node* iterateNode=it->second;
+		BDD_ID topVar=iterateNode->topVar;
+		BDD_ID highId=iterateNode->highId;
+		BDD_ID lowId=iterateNode->lowId;
+		//std::cout<<"Node: (key,highId,lowId,topVar): ("<<iterateNode->myId<<","<<highId<<","<<lowId<<","<<topVar<<")"<<std::endl;
+		// there is a node already in the unique table
+		if(topVar==_topVar && highId==_highId && lowId==_lowId){
+			return it->first;
+		}
+	}
+	return MANAGER_FAIL;
 }

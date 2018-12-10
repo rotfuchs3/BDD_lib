@@ -123,6 +123,7 @@ private:
     const BDD_ID falseId = 0;
     /// Keep track of current BDD_ID, start off at 2 since IDs 0 and 1 are for true and false
     BDD_ID currentId = 0;
+
     /// uniqueTable, hashmap for performance
     uniqueTable_t uniqueTable;
     lookUpTable_t lookUpTable;
@@ -130,20 +131,12 @@ private:
     bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
     BDD_ID searchUniTable(const BDD_ID id);
+    BDD_ID searchForNode(const BDD_ID _highId,const BDD_ID _lowId, const BDD_ID _topVar);
+
   struct Key{
 	  BDD_ID id;
   };
 
-  struct KeyHash{
-  	std::size_t operator()(const BDD_ID& k) const {
-  		return k%31;
-  	}
-  };
 
-  	struct KeyEqual{
-  		bool operator()(const BDD_ID& first, const BDD_ID& second)	const{
-  			return first==second;
-  		}
-  	};
 };
 #endif /* __MANAGER_H__ */
