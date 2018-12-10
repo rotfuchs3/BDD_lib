@@ -364,7 +364,10 @@ BDD_ID Manager::nand2(const BDD_ID a,const BDD_ID b){
   Returns the label of top variable of the BDD node f
 */
 std::string Manager::getTopVarName(const BDD_ID f){
-	return "";
+	if(!isValidID(f)){
+		return "";
+	}
+	return uniqueTable.find(topVar(f))->second->label;
 }
 
 //---------------------------------------------------------------------------------------------------------
