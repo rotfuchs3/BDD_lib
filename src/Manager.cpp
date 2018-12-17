@@ -93,13 +93,24 @@ std::size_t Manager::uniqueTableSize(void)
 }
 //! topVar
 /*!
-        Returns the ID of top variable of the BDD node f
-    */
+   Returns the ID of top variable of the BDD node f
+*/
 BDD_ID Manager::topVar(const BDD_ID f)
 {
   return uniqueTable[f]->topVar;
 }
-
+//! getTopVarName
+/*!
+  Returns the label of top variable of the BDD node f
+*/
+std::string Manager::getTopVarName(const BDD_ID f)
+{
+  if (!isValidID(f))
+  {
+    return "";
+  }
+  return uniqueTable.find(topVar(f))->second->label;
+}
 //! ite
 /*!
  Implements the if-then-else algorithm.
@@ -419,19 +430,6 @@ BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b)
     return MANAGER_FAIL;
   }
   return neg(and2(a, b));
-}
-
-//! getTopVarName
-/*!
-  Returns the label of top variable of the BDD node f
-*/
-std::string Manager::getTopVarName(const BDD_ID f)
-{
-  if (!isValidID(f))
-  {
-    return "";
-  }
-  return uniqueTable.find(topVar(f))->second->label;
 }
 
 //! or2

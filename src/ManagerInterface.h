@@ -68,75 +68,96 @@ class ManagerInterface {
 public:
     //! True
     /*!
-        Returns the ID of the node representing True
+        \return the ID of the node representing True
     */
     virtual const BDD_ID &True() = 0;
     //! False
     /*!
-        Returns the ID of the node representing False
+        \return the ID of the node representing False
     */
     virtual const BDD_ID &False() = 0;
     //! isConstant
     /*!
-        Returns true if x is a leaf node
+     * 	\param x is the BDD_ID that should be checked
+        \return true if x is a leaf node
     */
     virtual bool isConstant(const BDD_ID x) = 0;
     //! isVariable
     /*!
-        Returns true if x is a variable
+     * 	\param x is the BDD_ID that should be checked
+        \return true if x is a variable
     */
     virtual bool isVariable(const BDD_ID x) = 0;
     //! createVar
     /*! 
-        Creates a new variable for the BDD
+        \brief Creates a new variable for the BDD with string &label in the unique table
+        \param &label the label that got created and inserted in the unique table
+        \return the BDD_ID if it is a new label. When it is inserted before it returns the ID of the first Variable with label &label
     */
     virtual BDD_ID createVar(const std::string &label) = 0;
     //! uniqueTableSize
     /*!
-        Returns the number of the nodes currently exist in the unique table
+        \return the number of the nodes + variables currently exist in the unique table
     */
     virtual std::size_t uniqueTableSize(void) = 0;
     //! topVar
     /*!
-        Returns the ID of top variable of the BDD node f
+     * 	\param f the ID of the node which topVariable is requested
+        \return the ID of top variable of the BDD node f
     */
     virtual BDD_ID topVar(const BDD_ID f) = 0;
+    //! getTopVarName
+    /*!
+     *  \param f the ID of the node which topVariable-label is requested
+    	\return the label of top variable of the BDD node f
+    */
+    virtual std::string getTopVarName(const BDD_ID f) = 0;
     //! ite
     /*!
-      Implements the if-then-else algorithm.
-	  Returns the new node that represents the ITE.
+     *\param i is the ID for the If node of the If-then-else expression
+      \param t is the ID for the Then node of the If-then-else expression
+      \param e is the ID for the Else node of the If-then-else expression
+      \return the new node ID that represents the ITE. If it didn't exist it will be inserted to the uniqueTable
     */
     virtual BDD_ID ite(const BDD_ID i,const BDD_ID t, const BDD_ID e) = 0;
     //! coFactorTrue
     /*!
-      Returns the positive cofactor of the function defined by f with respect to function x set to true.
+     *\param f is the ID which the positive coFactor of variable x is requested
+     *\param x is the ID which f should be the CoFactor in the positiv way
+      \return the positive cofactor of the function defined by f with respect to function x set to true.
     */
     virtual BDD_ID coFactorTrue(const BDD_ID f,BDD_ID x) = 0;
     //! coFactorTrue
     /*!
-      Returns the positive cofactor of the function defined by f.
+     *\param f is the ID which the positive coFactor the topVar of f is requested
+      \return the positive cofactor of the function defined by f.
     */
     virtual BDD_ID coFactorTrue(const BDD_ID f) = 0;
     //! coFactorFalse
     /*!
-      Returns the negativ cofactor of the function defined by f with respect to function x set to false.
-    */
+	 *\param f is the ID which the negativ coFactor of variable x is requested
+	 *\param x is the ID which f should be the CoFactor in the negativ way
+	  \return the negativ cofactor of the function defined by f with respect to function x set to true.
+	*/
     virtual BDD_ID coFactorFalse(const BDD_ID f,BDD_ID x) = 0;
     //! coFactorFalse
     /*!
-      Returns the negativ cofactor of the function defined by f.
-    */
+	*\param f is the ID which the negativ coFactor the topVar of f is requested
+	 \return the negativ cofactor of the function defined by f.
+	*/
     virtual BDD_ID coFactorFalse(const BDD_ID f) = 0;
     //! findNodes
 	/*!
-	  Returns the set of BDD nodes which are reachable
-	  from the BDD node root(including itself).
+	 * \param root is the ID which is the root where all reachable nodes are requested.
+	 * \param the set where all different node IDs should be saved in
+	   \return the set of nodes which are either the root itself or the reachable nodes from root.
 	*/
 	virtual void findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root) = 0;
     //! findVars
 	/*!
-	  Returns the set of variables which are either top variable of the BDD node root
-	   or the reachable nodes from root.
+	 * \param root is the ID which is the root where all reachable nodes top variable are requested.
+	 * \param the set where all different variable IDs should be saved in
+	   \return the set of variables which are either top variable of the BDD node root or the reachable nodes from root.
 	*/
 	virtual void findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root) = 0;
 	//! neg
@@ -154,11 +175,6 @@ public:
 	  Returns BDD_ID of the NAND with A and B. if needed creates this node
 	*/
 	virtual BDD_ID nand2(const BDD_ID a,const BDD_ID b) = 0;
-	//! getTopVarName
-	/*!
-	  Returns the label of top variable of the BDD node f
-	*/
-	virtual std::string getTopVarName(const BDD_ID f) = 0;
 	//! or2
 	/*!
 	  Returns BDD_ID of the disjunction of A and B. if needed creates this node
