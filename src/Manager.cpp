@@ -60,8 +60,8 @@ bool Manager::isVariable(const BDD_ID x)
   // check if BDD_ID exists and if it's not 0 or 1
   if ((searchUniTable(x) != MANAGER_FAIL) && !isConstant(x))
   {
-    // check highId - check if highId and lowId is either 1 or 0
-    if ((uniqueTable[x]->highId <= trueId) && (uniqueTable[x]->lowId <= trueId))
+    // check highId == 1 and  check lowId == 0
+    if ((uniqueTable[x]->highId == True()) && (uniqueTable[x]->lowId == False()))
     {
       return true;
     }
@@ -89,7 +89,7 @@ BDD_ID Manager::createVar(const std::string &label)
 */
 std::size_t Manager::uniqueTableSize(void)
 {
-  return uniqueTable.size();
+  return uniqueTable.size()-2;
 }
 //! topVar
 /*!

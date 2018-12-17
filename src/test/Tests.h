@@ -52,6 +52,7 @@ TEST(isVariable, isNodeVariable)
   // insert new node that are NOT variables - FALSE
   const BDD_ID nVar1 = manager.and2(a, b);
   ASSERT_EQ(false, manager.isVariable(nVar1));
+  ASSERT_TRUE(!manager.isVariable( manager.neg(manager.createVar("b"))) );
   //  non-existent variable
   ASSERT_EQ(false, manager.isVariable(9000));
   ASSERT_EQ(false, manager.isVariable(-4));
@@ -74,12 +75,12 @@ TEST(uniqueTableSize, tableSize)
 {
   Manager manager;
   // initial table size should be 2 due to the false and true nodes.
-  ASSERT_EQ(2, manager.uniqueTableSize());
+  ASSERT_EQ(0, manager.uniqueTableSize());
   // insert something, size of 5 after this
   manager.createVar("varA");
   manager.createVar("varB");
   manager.createVar("varC");
-  ASSERT_EQ(5, manager.uniqueTableSize());
+  ASSERT_EQ(3, manager.uniqueTableSize());
 }
 /**
 * \brief Test for topVar, should return the top variable for a given BDD_ID
