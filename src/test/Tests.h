@@ -10,6 +10,7 @@
 #include <gtest/gtest.h>
 /// Lib header
 #include "Manager.h"
+using namespace ClassProject;
 /** 
 * \brief Test for trueId = 1
 */

@@ -12,6 +12,7 @@
 /// Container
 #include <unordered_map>
 #include <iterator>
+namespace ClassProject {
 /// Manager typedef
 typedef std::unordered_map<BDD_ID, Node*>        uniqueTable_t;
 typedef std::unordered_map<std::string, BDD_ID>  lookUpTable_t;
@@ -20,13 +21,13 @@ typedef std::unordered_map<std::string, BDD_ID>  lookUpTable_t;
 /*!
   This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.
 */
-class Manager : ManagerInterface {
+class Manager : public ManagerInterface {
 public:
     //! Constructor
     /*!
         Initializes uniqueTable
     */
-    Manager(void);
+    Manager();
     //! True
     /*!
      \return the ID of the node representing True
@@ -188,7 +189,6 @@ private:
   struct Key{
 	  BDD_ID id;
   };
-
-
 };
+}
 #endif /* __MANAGER_H__ */

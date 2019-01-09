@@ -6,11 +6,12 @@
 */
 /// Header
 #include "Manager.h"
+//using namespace ClassProject;
 //! Constructor
 /*!
     Initializes uniqueTable
 */
-Manager::Manager(void)
+ClassProject::Manager::Manager()
 {
   uniqueTable = uniqueTable_t();
   lookUpTable = lookUpTable_t();
@@ -27,7 +28,7 @@ Manager::Manager(void)
 /*!
     Returns the ID of the node representing True
 */
-const BDD_ID &Manager::True(void)
+const BDD_ID &ClassProject::Manager::True(void)
 {
   return trueId;
 }
@@ -35,7 +36,7 @@ const BDD_ID &Manager::True(void)
 /*!
     Returns the ID of the node representing False
 */
-const BDD_ID &Manager::False(void)
+const BDD_ID &ClassProject::Manager::False(void)
 {
   return falseId;
 }
@@ -43,7 +44,7 @@ const BDD_ID &Manager::False(void)
 /*!
     Returns true if x is a leaf node
 */
-bool Manager::isConstant(const BDD_ID x)
+bool ClassProject::Manager::isConstant(const BDD_ID x)
 {
   if (x == trueId || x == falseId)
   {
@@ -55,7 +56,7 @@ bool Manager::isConstant(const BDD_ID x)
 /*!
     Returns true if x is a variable
 */
-bool Manager::isVariable(const BDD_ID x)
+bool ClassProject::Manager::isVariable(const BDD_ID x)
 {
   // check if BDD_ID exists and if it's not 0 or 1
   if ((searchUniTable(x) != MANAGER_FAIL) && !isConstant(x))
@@ -71,7 +72,7 @@ bool Manager::isVariable(const BDD_ID x)
 /*! createVar
     Creates a new variable for the BDD
 */
-BDD_ID Manager::createVar(const std::string &label)
+BDD_ID ClassProject::Manager::createVar(const std::string &label)
 {
   lookUpTable_t::const_iterator item = lookUpTable.find(label);
   //when label is not in the hashmap
@@ -87,7 +88,7 @@ BDD_ID Manager::createVar(const std::string &label)
 /*! uniqueTableSize
     Returns the number of the nodes currently exist in the unique table
 */
-std::size_t Manager::uniqueTableSize(void)
+std::size_t ClassProject::Manager::uniqueTableSize(void)
 {
   return uniqueTable.size()-2;
 }
@@ -95,7 +96,7 @@ std::size_t Manager::uniqueTableSize(void)
 /*!
    Returns the ID of top variable of the BDD node f
 */
-BDD_ID Manager::topVar(const BDD_ID f)
+BDD_ID ClassProject::Manager::topVar(const BDD_ID f)
 {
   return uniqueTable[f]->topVar;
 }
@@ -103,7 +104,7 @@ BDD_ID Manager::topVar(const BDD_ID f)
 /*!
   Returns the label of top variable of the BDD node f
 */
-std::string Manager::getTopVarName(const BDD_ID f)
+std::string ClassProject::Manager::getTopVarName(const BDD_ID f)
 {
   if (!isValidID(f))
   {
@@ -116,7 +117,7 @@ std::string Manager::getTopVarName(const BDD_ID f)
  Implements the if-then-else algorithm.
  Returns the new node that represents the ITE.
 */
-BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
+BDD_ID ClassProject::Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
 {
   if (!isValidID(i, t, e))
   {
@@ -190,7 +191,7 @@ BDD_ID Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
 /*!
  Returns the positive cofactor of the function defined by f with respect to function x set to true.
 */
-BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
+BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
 {
   if (!isValidID(f, x))
   {
@@ -255,7 +256,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
 /*!
  Returns the positive cofactor of the function defined by f.
 */
-BDD_ID Manager::coFactorTrue(const BDD_ID f)
+BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f)
 {
   if (!isValidID(f))
   {
@@ -268,7 +269,7 @@ BDD_ID Manager::coFactorTrue(const BDD_ID f)
 /*!
   Returns the negativ cofactor of the function defined by f with respect to function x set to false.
 */
-BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
+BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
 {
   if (!isValidID(f, x))
   {
@@ -331,7 +332,7 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
 /*!
   Returns the negativ cofactor of the function defined by f.
 */
-BDD_ID Manager::coFactorFalse(const BDD_ID f)
+BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f)
 {
   if (!isValidID(f))
   {
@@ -345,7 +346,7 @@ BDD_ID Manager::coFactorFalse(const BDD_ID f)
   Returns the set of BDD nodes which are reachable
   from the BDD node root(including itself).
 */
-void Manager::findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_root)
+void ClassProject::Manager::findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_root)
 {
   if (!isValidID(root))
   {
@@ -371,7 +372,7 @@ void Manager::findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_root)
   Returns the set of variables which are either top variable of the BDD node root
    or the reachable nodes from root.
 */
-void Manager::findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root)
+void ClassProject::Manager::findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root)
 {
   if (!isValidID(root))
   {
@@ -397,7 +398,7 @@ void Manager::findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root)
 /*!
   Returns BDD_ID of the negation of A if needed creats this node
 */
-BDD_ID Manager::neg(const BDD_ID a)
+BDD_ID ClassProject::Manager::neg(const BDD_ID a)
 {
   if (!isValidID(a))
   {
@@ -410,7 +411,7 @@ BDD_ID Manager::neg(const BDD_ID a)
 /*!
   Returns BDD_ID of the Conjunktion of A and B. if needed creates this node
 */
-BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b)
+BDD_ID ClassProject::Manager::and2(const BDD_ID a, const BDD_ID b)
 {
   if (!isValidID(a, b))
   {
@@ -423,7 +424,7 @@ BDD_ID Manager::and2(const BDD_ID a, const BDD_ID b)
 /*!
   Returns BDD_ID of the NAND with A and B. if needed creates this node
 */
-BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b)
+BDD_ID ClassProject::Manager::nand2(const BDD_ID a, const BDD_ID b)
 {
   if (!isValidID(a, b))
   {
@@ -436,7 +437,7 @@ BDD_ID Manager::nand2(const BDD_ID a, const BDD_ID b)
 /*!
   Returns BDD_ID of the disjunction of A and B. if needed creates this node
 */
-BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b)
+BDD_ID ClassProject::Manager::or2(const BDD_ID a, const BDD_ID b)
 {
   if (!isValidID(a, b))
   {
@@ -449,7 +450,7 @@ BDD_ID Manager::or2(const BDD_ID a, const BDD_ID b)
 /*!
   Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
 */
-BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b)
+BDD_ID ClassProject::Manager::xor2(const BDD_ID a, const BDD_ID b)
 {
   if (!isValidID(a, b))
   {
@@ -462,7 +463,7 @@ BDD_ID Manager::xor2(const BDD_ID a, const BDD_ID b)
 /*!
   Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
 */
-BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b)
+BDD_ID ClassProject::Manager::nor2(const BDD_ID a, const BDD_ID b)
 {
   if (!isValidID(a, b))
   {
@@ -474,7 +475,7 @@ BDD_ID Manager::nor2(const BDD_ID a, const BDD_ID b)
 /*!
     Prints unique table
 */
-void Manager::printUniqueTable(void)
+void ClassProject::Manager::printUniqueTable(void)
 {
   for (int i = 0; i < currentId; i++)
   {
@@ -487,7 +488,7 @@ void Manager::printUniqueTable(void)
 }
   //---------------------------------------------------------------------------------------------------------
   //private Methodes
-  bool Manager::isValidID(BDD_ID i, BDD_ID t, BDD_ID e)
+  bool ClassProject::Manager::isValidID(BDD_ID i, BDD_ID t, BDD_ID e)
   {
     //check for corrupted input
     if (i >= currentId || i < 0)
@@ -505,7 +506,7 @@ void Manager::printUniqueTable(void)
     return true;
   }
 
-  BDD_ID Manager::insertInUniquetable(BDD_ID highID, BDD_ID lowID, BDD_ID topVar, std::string label)
+  BDD_ID ClassProject::Manager::insertInUniquetable(BDD_ID highID, BDD_ID lowID, BDD_ID topVar, std::string label)
   {
     Node *newNode = new Node(currentId, highID, lowID, topVar, label);
     // Insert new node to map
@@ -514,7 +515,7 @@ void Manager::printUniqueTable(void)
 
     return currentId++;
   }
-  BDD_ID Manager::searchUniTable(const BDD_ID id)
+  BDD_ID ClassProject::Manager::searchUniTable(const BDD_ID id)
   {
     uniqueTable_t::const_iterator found = uniqueTable.find(id);
     if (found != uniqueTable.end())
@@ -524,7 +525,7 @@ void Manager::printUniqueTable(void)
     return MANAGER_FAIL;
   }
 
-  BDD_ID Manager::searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar)
+  BDD_ID ClassProject::Manager::searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar)
   {
     for (auto it = uniqueTable.begin(); it != uniqueTable.end() && it->first < currentId; ++it)
     {

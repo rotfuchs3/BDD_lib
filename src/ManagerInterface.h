@@ -11,6 +11,7 @@
 #include <string>
 #include <set>
 
+namespace ClassProject {
 /// Typedef Integer representing of the ID for BDD Node
 typedef int BDD_ID;
 
@@ -202,4 +203,5 @@ public:
 	*/
 	virtual BDD_ID nor2(const BDD_ID a,const BDD_ID b) = 0;
 };
+}
 #endif /* __MANAGER_INTERFACE_H__ */

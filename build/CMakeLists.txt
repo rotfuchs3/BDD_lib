@@ -74,7 +74,7 @@ add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
 set_target_properties(
   ${LIBRARY_NAME}
   PROPERTIES
-     SUFFIX "_v${VERSION_MAJOR}_${PKG_VERSION_MAJOR}_${PKG_VERSION_MINOR}.a"
+     SUFFIX "_v${VERSION_MAJOR}_${PKG_VERSION_MAJOR}_${PKG_VERSION_MINOR}.so"
      ARCHIVE_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
      LIBRARY_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
 )
@@ -122,3 +122,42 @@ set_target_properties (
 
 # Link with gtest and bdd lib
 target_link_libraries(${TEST_APP_NAME} gtest gtest_main bddPkg pthread)
+
+############################
+# BUILD THE BENCHMARK TOOL
+############################
+message("${Magenta}BENCHMARK TOOL${ColourReset}")
+
+# Set sources
+set(TOOL_HEADERS 
+	"${TOP_LEVEL}/src/bench/bench_grammar.hpp" 
+	"${TOP_LEVEL}/src/bench/skip_parser.hpp")
+set(TOOL_SOURCES 
+	"${TOP_LEVEL}/src/bench/bench_circuit_manager.cpp"
+	"${TOP_LEVEL}/src/bench/BenchmarkLib.cpp"
+	"${TOP_LEVEL}/src/bench/circuit_to_BDD_manager.cpp"
+	"${TOP_LEVEL}/src/bench/Dumper.cpp"
+)
+
+# Define library
+set(BENCH Benchmark)
+add_library(${BENCH} SHARED ${TOOL_SOURCES})
+
+# Set lib properties
+set_target_properties(
+  ${BENCH}
+  PROPERTIES
+     SUFFIX ".so"
+     ARCHIVE_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
+     LIBRARY_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
+)
+
+#Boost
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+
+#Exectuable
+add_executable(VDSProject_bench ${TOP_LEVEL}/src/bench/main_bench.cpp)
+set(Manager "libbddPkg_v${VERSION_MAJOR}_${PKG_VERSION_MAJOR}_${PKG_VERSION_MINOR}.so")
+target_link_libraries(VDSProject_bench "${Manager}")
+target_link_libraries(VDSProject_bench Benchmark)
+target_link_libraries(VDSProject_bench ${Boost_LIBRARIES})
