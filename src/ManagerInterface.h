@@ -162,32 +162,43 @@ public:
 	virtual void findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root) = 0;
 	//! neg
 	/*!
-	  Returns BDD_ID of the negation of A if needed creats this node
+	  \param the BDD_ID (root of this node) which should be inverted 
+	  \return the BDD_ID of the negation of A if needed creates this node
 	*/
 	virtual BDD_ID neg(const BDD_ID a) = 0;
 	//! and
 	/*!
-	  Returns BDD_ID of the conjunction of A and B. if needed creates this node
+	  \param the BDD_ID of A
+	  \param the BDD_ID of B
+	  \return BDD_ID of the conjunction of A and B. if needed creates this node
 	*/
 	virtual BDD_ID and2(const BDD_ID a,const BDD_ID b) = 0;
-	//! and
+	//! nand
 	/*!
-	  Returns BDD_ID of the NAND with A and B. if needed creates this node
+	  \param the BDD_ID of A
+	  \param the BDD_ID of B
+	  \return the BDD_ID of the NAND with A and B. if needed creates this node
 	*/
 	virtual BDD_ID nand2(const BDD_ID a,const BDD_ID b) = 0;
 	//! or2
 	/*!
-	  Returns BDD_ID of the disjunction of A and B. if needed creates this node
+	  \param the BDD_ID of A
+	  \param the BDD_ID of B
+	  \return the BDD_ID of the disjunction of A and B. if needed creates this node
 	*/
 	virtual BDD_ID or2(const BDD_ID a,const BDD_ID b) = 0;
 	//! xor2
 	/*!
-	  Returns BDD_ID of the exclusivOR of A and B. if needed creates this node
+	  \param the BDD_ID of A
+	  \param the BDD_ID of B
+	  \return the BDD_ID of the exclusivOR of A and B. if needed creates this node
 	*/
 	virtual BDD_ID xor2(const BDD_ID a,const BDD_ID b) = 0;
 	//! nor2
 	/*!
-	  Returns BDD_ID of the negativ disjunction of A and B. if needed creates this node
+	  \param the BDD_ID of A
+	  \param the BDD_ID of B
+	  \return BDD_ID of the negativ disjunction of A and B. if needed creates this node
 	*/
 	virtual BDD_ID nor2(const BDD_ID a,const BDD_ID b) = 0;
 };
