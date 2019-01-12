@@ -13,3 +13,4 @@ Makefile
 CMakeCache.txt
 build_versions.h
 codeBlocks/
+build_log.txt

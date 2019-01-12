@@ -12,11 +12,15 @@
 /// Container
 #include <unordered_map>
 #include <iterator>
+
+/// Add specified namespace
 namespace ClassProject {
+
 /// Manager typedef
 typedef std::unordered_map<BDD_ID, Node*>        uniqueTable_t;
 typedef std::unordered_map<std::string, BDD_ID>  lookUpTable_t;
 #define     MANAGER_FAIL    -1
+
 //!  Manager class
 /*!
   This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.

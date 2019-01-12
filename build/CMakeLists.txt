@@ -46,7 +46,7 @@ if(NOT GTEST_FOUND)
     message("${Yellow}WARNING: ${COLOR_GTEST} ${Yellow}package was not found in your system!")
     message("Running 'git submodule init && git submodule update' ...${ColourReset}")
     execute_process(COMMAND git submodule init
-                                     COMMAND git submodule update)
+                    COMMAND git submodule update)
     add_subdirectory(${TOP_LEVEL}/googletest/googletest gtestbuild)
     set(GTEST_INCLUDE "{TOP_LEVEL}/googletest/googletest/include")
     set(GTEST_LIB "{TOP_LEVEL}/build/lib")
@@ -62,7 +62,7 @@ endif()
 message("${Cyan}BDD PACKAGE v${PKG_VERSION}${ColourReset}")
 
 # Set sources
-set(LIB_HEADERS  "${TOP_LEVEL}/src/ManagerInterface.h"  "${TOP_LEVEL}/src/Manager.h")
+set(LIB_HEADERS "${TOP_LEVEL}/src/ManagerInterface.h"  "${TOP_LEVEL}/src/Manager.h")
 set(LIB_SOURCES "${TOP_LEVEL}/src/Manager.cpp")
 set(APP_SOURCES "${TOP_LEVEL}/src/main.cpp")
 
@@ -128,11 +128,12 @@ target_link_libraries(${TEST_APP_NAME} gtest gtest_main bddPkg pthread)
 ############################
 message("${Magenta}BENCHMARK TOOL${ColourReset}")
 
+# Build the benchmark library
 # Set sources
-set(TOOL_HEADERS 
+set(BENCH_HEADERS 
 	"${TOP_LEVEL}/src/bench/bench_grammar.hpp" 
 	"${TOP_LEVEL}/src/bench/skip_parser.hpp")
-set(TOOL_SOURCES 
+set(BENCH_SOURCES 
 	"${TOP_LEVEL}/src/bench/bench_circuit_manager.cpp"
 	"${TOP_LEVEL}/src/bench/BenchmarkLib.cpp"
 	"${TOP_LEVEL}/src/bench/circuit_to_BDD_manager.cpp"
@@ -140,24 +141,43 @@ set(TOOL_SOURCES
 )
 
 # Define library
-set(BENCH Benchmark)
-add_library(${BENCH} SHARED ${TOOL_SOURCES})
+set(BENCHMARK_LIB Benchmark)
+add_library(${BENCHMARK_LIB} SHARED ${BENCH_SOURCES})
 
 # Set lib properties
 set_target_properties(
-  ${BENCH}
+  ${BENCHMARK_LIB}
   PROPERTIES
      SUFFIX ".so"
      ARCHIVE_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
      LIBRARY_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
 )
 
-#Boost
+# Boost package find
 find_package(Boost COMPONENTS system filesystem REQUIRED)
+if(NOT Boost_FOUND)
+    message("${Yellow}WARNING: Boost package was not found in your system!")
+    message("Please install libboost-all-dev...${ColourReset}")
+    return()
+ else()
+    message("${Green}Found Boost${Green} libraries in: ${Boost_LIBRARIES}${ColourReset}")
+endif()
 
-#Exectuable
-add_executable(VDSProject_bench ${TOP_LEVEL}/src/bench/main_bench.cpp)
-set(Manager "libbddPkg_v${VERSION_MAJOR}_${PKG_VERSION_MAJOR}_${PKG_VERSION_MINOR}.so")
-target_link_libraries(VDSProject_bench "${Manager}")
-target_link_libraries(VDSProject_bench Benchmark)
-target_link_libraries(VDSProject_bench ${Boost_LIBRARIES})
+# Locate Boost lib and includes
+include_directories(${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARIES})
+
+# Define application
+set(BENCH_APP "VDSProject_bench")
+add_executable(${BENCH_APP} ${TOP_LEVEL}/src/bench/main_bench.cpp)
+
+# Set app suffix to .bin
+set_target_properties (
+   ${BENCH_APP}
+   PROPERTIES
+      SUFFIX ".bin"
+      RUNTIME_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/bin"
+)
+
+# Link with benchmark tool, boost, and bdd lib
+target_link_libraries(${BENCH_APP} bddPkg Benchmark ${Boost_LIBRARIES})

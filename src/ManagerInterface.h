@@ -11,8 +11,13 @@
 #include <string>
 #include <set>
 
-namespace ClassProject {
 /// Typedef Integer representing of the ID for BDD Node
+typedef int BDD_ID;
+
+/// Add specified namespace
+namespace ClassProject {
+
+/// Apparantley BDD_ID needs to be defined inside AND outside namespace!
 typedef int BDD_ID;
 
 //!  Node class
