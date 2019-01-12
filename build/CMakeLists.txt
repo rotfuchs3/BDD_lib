@@ -126,7 +126,7 @@ target_link_libraries(${TEST_APP_NAME} gtest gtest_main bddPkg pthread)
 ############################
 # BUILD THE BENCHMARK TOOL
 ############################
-message("${Magenta}BENCHMARK TOOL${ColourReset}")
+message("${Cyan}BENCHMARK TOOL${ColourReset}")
 
 # Build the benchmark library
 # Set sources
@@ -181,3 +181,19 @@ set_target_properties (
 
 # Link with benchmark tool, boost, and bdd lib
 target_link_libraries(${BENCH_APP} bddPkg Benchmark ${Boost_LIBRARIES})
+############################
+# BUILD THE VERIFY TOOL
+############################
+message("${Cyan}VERIFY TOOL${ColourReset}")
+
+# Exectuable
+add_executable(VDSProject_verify ${TOP_LEVEL}/src/verify/main_verify.cpp)
+
+# Set app suffix to .bin
+set_target_properties (
+   VDSProject_verify
+   PROPERTIES
+      SUFFIX ".bin"
+      RUNTIME_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/bin"
+)
+
