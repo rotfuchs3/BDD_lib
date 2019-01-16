@@ -6,15 +6,16 @@
 */
 /// Header
 #include "Manager.h"
-//using namespace ClassProject;
+
 //! Constructor
 /*!
     Initializes uniqueTable
 */
 ClassProject::Manager::Manager()
 {
-  uniqueTable = uniqueTable_t();
-  lookUpTable = lookUpTable_t();
+  uniqueTable 	= uniqueTable_t();
+  lookUpTable 	= lookUpTable_t();
+  computeTable 	= computeTable_t();
 
   // Insert 0 and configure
   createVar("0");
@@ -512,6 +513,8 @@ void ClassProject::Manager::printUniqueTable(void)
     // Insert new node to map
     uniqueTable.insert({currentId, newNode});
     lookUpTable.insert({label, currentId});
+    std::string key = std::to_string(topVar) + std::to_string(highID) + std::to_string(lowID);
+    computeTable.insert({key, currentId});
 
     return currentId++;
   }
@@ -527,6 +530,15 @@ void ClassProject::Manager::printUniqueTable(void)
 
   BDD_ID ClassProject::Manager::searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar)
   {
+    // define new key for compute table
+    std::string key = std::to_string(_topVar) + std::to_string(_highId) + std::to_string(_lowId);
+    computeTable_t::const_iterator found = computeTable.find(key);
+    if(found != computeTable.end())
+    {
+       return found->second;
+    }
+    return MANAGER_FAIL;
+/*
     for (auto it = uniqueTable.begin(); it != uniqueTable.end() && it->first < currentId; ++it)
     {
       Node *iterateNode = it->second;
@@ -541,4 +553,5 @@ void ClassProject::Manager::printUniqueTable(void)
       }
     }
     return MANAGER_FAIL;
+*/
   }

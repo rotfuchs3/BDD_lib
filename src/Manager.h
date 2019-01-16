@@ -17,9 +17,10 @@
 namespace ClassProject {
 
 /// Manager typedef
-typedef std::unordered_map<BDD_ID, Node*>        uniqueTable_t;
-typedef std::unordered_map<std::string, BDD_ID>  lookUpTable_t;
-#define     MANAGER_FAIL    -1
+#define	MANAGER_FAIL	-1
+typedef std::unordered_map<BDD_ID, Node*>	uniqueTable_t;
+typedef std::unordered_map<std::string, BDD_ID>	lookUpTable_t;
+typedef std::unordered_map<std::string, BDD_ID> computeTable_t;
 
 //!  Manager class
 /*!
@@ -56,9 +57,9 @@ public:
     bool isVariable(const BDD_ID x);
     //! createVar
     /*!
-        \brief Creates a new variable for the BDD with string &label in the unique table
-        \param &label the label that got created and inserted in the unique table
-        \return the BDD_ID if it is a new label. When it is inserted before it returns the ID of the first Variable with label &label
+       \brief Creates a new variable for the BDD with string &label in the unique table
+       \param &label the label that got created and inserted in the unique table
+       \return the BDD_ID if it is a new label. When it is inserted before it returns the ID of the first Variable with label &label
     */
     BDD_ID createVar(const std::string &label);
     //! uniqueTableSize
@@ -101,11 +102,11 @@ public:
     */
     BDD_ID coFactorTrue(const BDD_ID f);
     //! coFactorFalse
-	/*!
-	 *\param f is the ID which the negativ coFactor of variable x is requested
-	 *\param x is the ID which f should be the CoFactor in the negativ way
-	  \return the negativ cofactor of the function defined by f with respect to function x set to true.
-	*/
+    /*!
+     * \param f is the ID which the negativ coFactor of variable x is requested
+     * \param x is the ID which f should be the CoFactor in the negativ way
+     * \return the negativ cofactor of the function defined by f with respect to function x set to true.
+     */
     BDD_ID coFactorFalse(const BDD_ID f,BDD_ID x);
     //! coFactorFalse
     /*!
@@ -184,7 +185,8 @@ private:
     /// uniqueTable, hashmap for performance
     uniqueTable_t uniqueTable;
     lookUpTable_t lookUpTable;
-	
+    computeTable_t computeTable;
+
     bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
     BDD_ID searchUniTable(const BDD_ID id);
