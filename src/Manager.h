@@ -26,8 +26,7 @@ namespace ClassProject {
     }
 };
 
-
-/*struct ITE_ID{
+    struct ITE_ID {
         BDD_ID i;
         BDD_ID t;
         BDD_ID e;
@@ -43,14 +42,27 @@ namespace ClassProject {
         }
 
     };
-*/
+    
+    /// Coordinate hashing function
+    struct computeHash
+    {
+        std::size_t operator()(const ITE_ID &iteID) const
+        {
+            // Compute indiviual values
+            std::size_t myhash = 17;
+            myhash = myhash * 31 + std::hash<BDD_ID>()(iteID.i);
+            myhash = myhash * 31 + std::hash<BDD_ID>()(iteID.t);
+            myhash = myhash * 31 + std::hash<BDD_ID>()(iteID.e);
+            return myhash;
+        }
+    };
 
 /// Manager typedef
 #define	MANAGER_FAIL	-1
 typedef std::unordered_map<BDD_ID, Node*>	uniqueTable_t;
 typedef std::unordered_map<std::string, BDD_ID>	lookUpTable_t;
-typedef std::unordered_map<std::tuple<int,int,int>, BDD_ID,HASH> computeTable_t;
-
+//typedef std::unordered_map<std::tuple<int,int,int>, BDD_ID,HASH> computeTable_t;
+typedef std::unordered_map<ITE_ID, BDD_ID, computeHash> computeTable_t;
 
 
 //!  Manager class
