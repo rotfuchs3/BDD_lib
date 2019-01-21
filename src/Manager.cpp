@@ -17,7 +17,6 @@ ClassProject::Manager::Manager()
   lookUpTable 	= lookUpTable_t();
   computeTable 	= computeTable_t();
 
-  std::cout << "max_size: " << computeTable.max_size() << std::endl;
   // Insert 0 and configure
   createVar("0");
   uniqueTable[0]->highId = 0;
@@ -515,7 +514,7 @@ void ClassProject::Manager::printUniqueTable(void)
     uniqueTable.insert({currentId, newNode});
     lookUpTable.insert({label, currentId});
     std::string key = std::to_string(topVar)+"," + std::to_string(highID)+"," + std::to_string(lowID);
-    computeTable.insert({key, currentId});
+    computeTable.insert({std::tuple<int,int,int>(topVar,highID,lowID), currentId});
 
     return currentId++;
   }
@@ -532,7 +531,7 @@ void ClassProject::Manager::printUniqueTable(void)
   BDD_ID ClassProject::Manager::searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar)
   {
     // define new key for compute table
-    std::string key = std::to_string(_topVar) +","+ std::to_string(_highId) +","+ std::to_string(_lowId);
+    std::tuple<int,int,int> key = std::tuple<int,int,int>(_topVar,_highId,_lowId);
     computeTable_t::const_iterator found = computeTable.find(key);
     if(found != computeTable.end())
     {

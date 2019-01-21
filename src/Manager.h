@@ -10,17 +10,48 @@
 #include "ManagerInterface.h"
 #include <iostream>
 /// Container
+#include <tuple>
 #include <unordered_map>
 #include <iterator>
 
+
+
+
 /// Add specified namespace
 namespace ClassProject {
+
+    struct HASH{
+    size_t operator()(const std::tuple<int, int, int >& k) const {
+        return std::hash<long>()(std::get<0>(k) << 20 + std::get<1>(k) << 10 + std::get<2>(k));
+    }
+};
+
+
+/*struct ITE_ID{
+        BDD_ID i;
+        BDD_ID t;
+        BDD_ID e;
+
+        ITE_ID(BDD_ID i,BDD_ID t,BDD_ID e){
+            this->i=i;
+            this->t=t;
+            this->e=e;
+        }
+
+        bool operator==(const ITE_ID &other) const {
+            return (i == other.i && t == other.t && e == other.e);
+        }
+
+    };
+*/
 
 /// Manager typedef
 #define	MANAGER_FAIL	-1
 typedef std::unordered_map<BDD_ID, Node*>	uniqueTable_t;
 typedef std::unordered_map<std::string, BDD_ID>	lookUpTable_t;
-typedef std::unordered_map<std::string, BDD_ID> computeTable_t;
+typedef std::unordered_map<std::tuple<int,int,int>, BDD_ID,HASH> computeTable_t;
+
+
 
 //!  Manager class
 /*!
@@ -197,4 +228,6 @@ private:
   };
 };
 }
+
+
 #endif /* __MANAGER_H__ */
