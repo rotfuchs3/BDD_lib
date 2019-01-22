@@ -60,7 +60,7 @@ bool ClassProject::Manager::isConstant(const BDD_ID x)
 bool ClassProject::Manager::isVariable(const BDD_ID x)
 {
   // check if BDD_ID exists and if it's not 0 or 1
-  if ((searchUniTable(x) != MANAGER_FAIL) && !isConstant(x))
+  if (x>=0 && x < currentId  && !isConstant(x))
   {
     // check highId == 1 and  check lowId == 0
     if ((uniqueTable[x]->highId == True()) && (uniqueTable[x]->lowId == False()))
@@ -519,15 +519,6 @@ void ClassProject::Manager::printUniqueTable(void)
     computeTable.insert({key, currentId});
 
     return currentId++;
-  }
-  BDD_ID ClassProject::Manager::searchUniTable(const BDD_ID id)
-  {
-    uniqueTable_t::const_iterator found = uniqueTable.find(id);
-    if (found != uniqueTable.end())
-    {
-      return found->first;
-    }
-    return MANAGER_FAIL;
   }
 
   BDD_ID ClassProject::Manager::searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar)
