@@ -9,6 +9,7 @@
 
 
 Reachable::BDD_ID Reachable::xnor2(BDD_ID a, BDD_ID b){
-    ClassProject::Manager m;
-    return m.False();
+    BDD_ID negB =this->neg(b);
+    
+    return this->ite(a,b,negB);
 }
