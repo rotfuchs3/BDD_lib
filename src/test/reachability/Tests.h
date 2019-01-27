@@ -12,12 +12,29 @@
 namespace ClassProject {
 
     TEST(xnor2, Equvalenz) {
-        Manager m;
+        //Manager m;
         Reachable r = Reachable(1);
 
-        BDD_ID a = m.createVar("a");
+        BDD_ID a = r.createVar("a");
+        BDD_ID notA = r.neg(a);
 
         ASSERT_TRUE(r.xnor2(a, a));
+        ASSERT_FALSE(r.xnor2(a,notA));
+    }
+
+    TEST(xnor2, NegationToXOR) {
+        //Manager m;
+        Reachable r = Reachable(1);
+
+        BDD_ID a = r.createVar("a");
+        BDD_ID b = r.createVar("b");
+        BDD_ID c = r.createVar("c");
+
+        BDD_ID notA = r.neg(a);
+        BDD_ID AandB = r.and2(a,b);
+        BDD_ID notAorC = r.and2(notA,c);
+
+        ASSERT_EQ(r.xnor2(AandB, notAorC),r.neg(r.xor2(AandB, notAorC)));
     }
 
 /*TEST(managerTest, HowTo_Example) {

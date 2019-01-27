@@ -21,7 +21,7 @@ class Reachable : public ClassProject::ReachableInterface {
 
         BDD_ID xnor2(BDD_ID a, BDD_ID b);
 
-        ~Reachable() ;
+        ~Reachable() {}
     };
 //}
 
