@@ -97,7 +97,51 @@ include_directories(${BDD_INCLUDE})
 link_directories(${BDD_LIBRARY})
 
 # Links target exe (bddpkgMain) with library (bddPkg)
-target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} pthread)
+target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} bddPkg pthread)
+
+##################################
+# BUILD THE BDD Reachability
+##################################
+
+message("${Cyan}BDD Rechablity v${PKG_VERSION}${ColourReset}")
+
+# Set sources
+set(LIB_HEADERS "${TOP_LEVEL}/src/reachability/ReachableInterface.h"  "${TOP_LEVEL}/src/reachability/Reachable.h")
+set(LIB_SOURCES "${TOP_LEVEL}/src/reachability/Reachable.cpp")
+set(APP_SOURCES "${TOP_LEVEL}/src/reachability/main.cpp")
+
+# Define library
+set(LIBRARY_NAME bddReach)
+add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
+
+# Set lib properties
+set_target_properties(
+        ${LIBRARY_NAME}
+        PROPERTIES
+        SUFFIX "_v${VERSION_MAJOR}_${PKG_VERSION_MAJOR}_${PKG_VERSION_MINOR}.so"
+        ARCHIVE_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/lib"
+)
+
+# Define application - main.cpp
+set(APPLICATION_NAME bddReachMain)
+add_executable(${APPLICATION_NAME} ${APP_SOURCES})
+# Set app suffix to .bin
+set_target_properties (
+        ${APPLICATION_NAME}
+        PROPERTIES
+        SUFFIX ".bin"
+        RUNTIME_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/bin"
+)
+
+# Locate BDD reachability and link
+set(BDD_reach_INCLUDE "${TOP_LEVEL}/src/reachability")
+set(BDD_reach_LIBRARY "${TOP_LEVEL}/build/lib")
+include_directories(${BDD_reach_INCLUDE})
+link_directories(${BDD_reach_LIBRARY})
+
+# Links target exe (bddreachMain) with library (bddPkg) and (Reachability)
+target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} bddReach bddPkg pthread)
 
 ############################
 # BUILD THE BDD TEST SUITE
@@ -122,6 +166,27 @@ set_target_properties (
 
 # Link with gtest and bdd lib
 target_link_libraries(${TEST_APP_NAME} gtest gtest_main bddPkg pthread)
+
+############################
+# BUILD THE BDD Reach TEST SUITE
+############################
+
+message("${Cyan}BDD Reach TEST SUITE v${TST_VERSION}${ColourReset}")
+
+# Define application
+set(TEST_APP_NAME bddReachTestSuite)
+add_executable(${TEST_APP_NAME} ${TOP_LEVEL}/src/test/reachability/main_test.cpp)
+
+# Set app suffix to .bin
+set_target_properties (
+        ${TEST_APP_NAME}
+        PROPERTIES
+        SUFFIX "_v${VERSION_MAJOR}_${TST_VERSION_MAJOR}_${TST_VERSION_MINOR}.bin"
+        RUNTIME_OUTPUT_DIRECTORY "${TOP_LEVEL}/build/bin"
+)
+
+# Link with gtest and bdd lib
+target_link_libraries(${TEST_APP_NAME} gtest gtest_main bddReach bddPkg pthread)
 
 ############################
 # BUILD THE BENCHMARK TOOL
