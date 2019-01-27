@@ -9,19 +9,20 @@
 #include <map>
 #include "ReachableInterface.h"
 
-namespace ClassProject {
 
-    class Reachable : public ReachableInterface {
+//namespace ClassProject {
+class Reachable : public ClassProject::ReachableInterface {
     public:
-        Reachable(unsigned int state_variable):ReachableInterface(state_variable){
+        Reachable(unsigned int state_variable) : ReachableInterface(state_variable) {
 
         }
 
+
+
         BDD_ID xnor2(BDD_ID a, BDD_ID b);
 
-        ~Reachable() = default;
+        ~Reachable() ;
     };
+//}
 
-
-}
 #endif //VDSPROJECT_IMGCOMP_H

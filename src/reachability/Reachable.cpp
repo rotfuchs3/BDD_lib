@@ -4,12 +4,11 @@
 
 #include "Reachable.h"
 
-using namespace ClassProject;
 
 
 
 
-/*Reachable::BDD_ID xnor2(BDD_ID a, BDD_ID b){
-    Manager m;
+Reachable::BDD_ID Reachable::xnor2(BDD_ID a, BDD_ID b){
+    ClassProject::Manager m;
     return m.False();
-}*/
+}

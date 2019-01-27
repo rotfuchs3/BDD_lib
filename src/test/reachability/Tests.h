@@ -6,17 +6,19 @@
 #define VDSPROJECT_TESTS_H
 
 #include "Reachable.h"
+#include "Manager.h"
 #include "gtest/gtest.h"
-using namespace ClassProject;
 
-/*TEST(xnor2,Equvalenz){
-    Manager m;
-    Reachable r = Reachable(1);
+namespace ClassProject {
 
-    BDD_ID a=m.createVar("a");
+    TEST(xnor2, Equvalenz) {
+        Manager m;
+        Reachable r = Reachable(1);
 
-    ASSERT_TRUE(r.xnor2(a,a));
-}*/
+        BDD_ID a = m.createVar("a");
+
+        ASSERT_TRUE(r.xnor2(a, a));
+    }
 
 /*TEST(managerTest, HowTo_Example) {
 
@@ -44,5 +46,5 @@ using namespace ClassProject;
 }*/
 
 
-
+}
 #endif //VDSPROJECT_TESTS_H
