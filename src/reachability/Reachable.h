@@ -21,8 +21,15 @@ class Reachable : public ClassProject::ReachableInterface {
 
         BDD_ID xnor2(BDD_ID a, BDD_ID b);
 
+        const std::vector<BDD_ID> &getStates() const;
+
         ~Reachable() {}
-    };
+
+    /*private:
+        std::vector<BDD_ID> states*/
+};
+
+
 //}
 
 #endif //VDSPROJECT_IMGCOMP_H

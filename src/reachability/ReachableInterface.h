@@ -28,7 +28,7 @@ namespace ClassProject{
          * The msb(e.g. "s3") is stored at location size-1.
          * @return vector with the BDD_ID of each state bit
          */
-        //virtual const std::vector<BDD_ID> &getStates() const = 0 ;
+        virtual const std::vector<BDD_ID> &getStates() const = 0 ;
 
         /**
          * Each state variable has a transition function.
