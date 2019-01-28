@@ -39,9 +39,9 @@ namespace ClassProject {
     }
 
     TEST(getStates, amount){
-        Reachable r =Reachable(3);
+        Reachable r = Reachable(3);
 
-        ASSERT_EQ(8,r.getStates().size());
+        ASSERT_EQ(8, r.getStates().size());
     }
 
     TEST(getStates, lsb_msb){
