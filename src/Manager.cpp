@@ -513,6 +513,7 @@ BDD_ID ClassProject::Manager::nor2(const BDD_ID a, const BDD_ID b)
 */
 void ClassProject::Manager::printUniqueTable(void)
 {
+    std::cout << "Start Table"<<std::endl;
   for (int i = 0; i < currentId; i++)
   {
     std::cout << "BDD_ID: " << i << std::endl;

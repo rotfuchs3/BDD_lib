@@ -38,7 +38,7 @@ namespace ClassProject{
          * The next state is defined as XOR of the current values of the state bit s0 and s1
          * @param transitionFunctions provide a transition function exactly for each state bit
          */
-        //virtual void setDelta(const std::vector<BDD_ID> &transitionFunctions)  = 0;
+        virtual void setDelta(const std::vector<BDD_ID> &transitionFunctions)  = 0;
 
         /**
          * Each state machine has an inital state. The inital state is provided as a vector.

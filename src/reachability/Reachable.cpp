@@ -78,3 +78,12 @@ void Reachable::initStates() {
 
     states = allStates;
 }
+
+void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions){
+    if (transitionFunctions.size() == state_var){
+        *transitons=transitionFunctions;
+    }else{
+        throw std::invalid_argument("too few or too many transitions for the amout of state variables");
+    }
+
+}

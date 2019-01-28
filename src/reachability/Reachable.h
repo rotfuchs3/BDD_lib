@@ -18,14 +18,13 @@ class Reachable : public ClassProject::ReachableInterface {
                 state_var=state_variable;
                 initStates();
             }else{
-                state_variable=0;
                 throw std::invalid_argument("number of state variable should at least be 1");
             }
 
             initStates();
         }
 
-
+        void setDelta(const std::vector<BDD_ID> &transitionFunctions);
 
         BDD_ID xnor2(BDD_ID a, BDD_ID b);
 
@@ -36,6 +35,8 @@ class Reachable : public ClassProject::ReachableInterface {
     private:
         unsigned int state_var;
         std::vector<BDD_ID>* states;
+        std::vector<BDD_ID>* transitons;
+
 
         // initialize the vector states for getStates()
         void initStates();
