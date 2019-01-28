@@ -14,7 +14,15 @@
 class Reachable : public ClassProject::ReachableInterface {
     public:
         Reachable(unsigned int state_variable) : ReachableInterface(state_variable) {
+            if (state_variable>0){
+                state_var=state_variable;
+                initStates();
+            }else{
+                state_variable=0;
+                throw std::invalid_argument("number of state variable should at least be 1");
+            }
 
+            initStates();
         }
 
 
@@ -25,8 +33,13 @@ class Reachable : public ClassProject::ReachableInterface {
 
         ~Reachable() {}
 
-    /*private:
-        std::vector<BDD_ID> states*/
+    private:
+        unsigned int state_var;
+        std::vector<BDD_ID>* states;
+
+        // initialize the vector states for getStates()
+        void initStates();
+
 };
 
 

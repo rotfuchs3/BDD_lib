@@ -49,10 +49,13 @@ namespace ClassProject {
 
         const std::vector<BDD_ID> &states = r.getStates();
 
+        /*for (int i = 0; i < states.size(); ++i) {
+            std::cout<<"state: " << i << " = "<< states.at(i)<<std::endl;
+        }*/
+
         BDD_ID lsb,msb;
 
         if(states.size()>0){
-            std::cout<<"hold"<<std::endl;
             lsb=states.at(0);
             msb=states.at(states.size()-1);
         }else{
@@ -60,9 +63,13 @@ namespace ClassProject {
             msb=0;
         }
 
-        ASSERT_EQ(r.False(),r.and2(r.True(),lsb));
+        BDD_ID test_msb =r.and2(r.and2(2,3),4);
+        BDD_ID test_lsb =r.and2(r.and2(5,6),7);
+
+
         // msb is s0=1,s1=1,s2=1
-        ASSERT_EQ(r.True(),r.xor2(msb,lsb));
+        ASSERT_EQ(test_msb,msb);
+        ASSERT_EQ(test_lsb,lsb);
     }
 
 /*TEST(managerTest, HowTo_Example) {
