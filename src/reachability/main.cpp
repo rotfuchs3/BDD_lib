@@ -16,7 +16,7 @@ int main (void)
     //s0' = not(s0)
     functions.push_back(comp.neg(s0));
     //s1' = not(s1)
-    functions.push_back(comp.neg(s0));
+    functions.push_back(comp.neg(s1));
     //Add transition functions
     comp.setDelta(functions);
     // Add init state
@@ -24,7 +24,9 @@ int main (void)
     initialStateBits.push_back(false);
     initialStateBits.push_back(false);
     comp.setInitState(initialStateBits);
-
+    comp.compute_reachable_states();
+    comp.printVectors();
+    comp.printTables();
     ASSERT_EQ(1, comp.is_reachable({true,true}));
     ASSERT_EQ(1, comp.is_reachable({false,false}));
     ASSERT_EQ(0, comp.is_reachable({true,false}));

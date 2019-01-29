@@ -23,15 +23,22 @@ namespace ClassProject {
         /**
         * computeTransitionRelation
         * @brief 
-        *   Computes the translation relation by, c_si = (xnor(si, 0)) * (xnor(si, 0))
+        *   Computes the translation relation (tau) by, POS from i = 1 to states_var of:
+        *       [(s'i * delta(si)) + (~s'i * ~delta(si))]
+        *   Assumes:
+        *       Application provides transition function (delta) for states and finite number of states (si)
+        * @return BDD_ID of transition relation
         */
-        void computeTransitionRelation(void);
+        BDD_ID computeTransitionRelation(void);
         /**
         * computeCharFunction
         * @brief 
-        *   Computes the characteristic function by, c_s0 = and2(s0 == 0, s1 == 1)
+        *   Computes the characteristic function by, c_s0 = and2(s0 == stateBits(0), ..., si == stateBits(i))
+        *   Assumes: 
+        *       Application provides initial state bits for given number of states.
+        * @return BDD_ID of characteristic function
         */
-        void computeCharFunction(void);
+        BDD_ID computeCharFunction(void);
     public:
         /// lsb state should always be s0 location
         BDD_ID lsb;

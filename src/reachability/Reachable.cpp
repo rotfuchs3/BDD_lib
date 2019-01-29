@@ -9,49 +9,61 @@ namespace ClassProject {
     /**
     * computeTransitionRelation
     * @brief 
-    *   Computes the translation relation by, pos from i = 1 to states_var of:
-    *      [(s'_i * delta_i(s,x)) + (~s'_i * ~delta_i(s,x))]
+    *   Computes the translation relation (tau) by, POS from i = 1 to states_var of:
+    *       [(s'i * delta(si)) + (~s'i * ~delta(si))]
+    *   Assumes:
+    *       Application provides transition function (delta) for states and finite number of states (si)
+    * @return BDD_ID of transition relation
     */
-    void Reachable::computeTransitionRelation(void)
+    BDD_ID Reachable::computeTransitionRelation(void)
     {
         BDD_ID tau          = 0;
         BDD_ID tempTau      = 0;
         BDD_ID firstTerm    = 0;
         BDD_ID secndTerm    = 0;
         
-        // Start with s0
-        firstTerm   = and2(states.at(0), delta->at(0));
-        // s'0 is at location state_var
+        // Start with Products
+        // s'0 (located at the end of all non-next state variables
+        // (s'0 * delta(s0)) 
+        firstTerm   = and2(states.at(state_var), delta->at(0));
+        // (~s'0 * ~delta(s0))
         secndTerm   = and2(neg(states.at(state_var)), neg(delta->at(0)));
+        // Sum
         tau         = or2(firstTerm, secndTerm);
         for(uint i = 1; i < state_var; i++)
         {
-            // pos from i = 1 to states_var:
-            //      [(s'_i * delta_i(s,x)) + (~s'_i * ~delta_i(s,x))]
+            // POS from i = 1 to states_var:
+            // Products, (s'i * delta(si)) 
             firstTerm   = and2(states.at(i), delta->at(i));
             secndTerm   = and2(neg(states.at(state_var+i)), neg(delta->at(i)));
-            // Current
+            // Sum
             tempTau     = or2(firstTerm, secndTerm);
+            // New tau
             tau         = and2(tau, tempTau);
         }
-        std::cout << "Transition relation: " << tau << std::endl;
+        std::cout << "Transition relation: BDD_ID[" << tau << "]" << std::endl;
+        return tau;
     }
     /**
     * computeCharFunction
-    *   Computes the characteristic function by, c_s0 = and2(s0 == 0, s1 == 1)
+    * @brief 
+    *   Computes the characteristic function by, c_s0 = and2(s0 == stateBits(0), ..., si == stateBits(i))
+    *   Assumes: 
+    *       Application provides initial state bits for given number of states.
+    * @return BDD_ID of characteristic function
     */
-    void Reachable::computeCharFunction(void)
+    BDD_ID Reachable::computeCharFunction(void)
     {
-        // Compute characteristic function of s0
-        BDD_ID firstTerm = xnor2(states.at(0), stateBits->at(0));
-        BDD_ID secndTerm;
-        BDD_ID c_c0;
+        // Compute characteristic function of initial state s0
+        BDD_ID tmp  = 0;
+        BDD_ID c_s0 = xnor2(states.at(0), stateBits->at(0));
         for(uint i = 1; i < state_var; i++)
         {
-            secndTerm = xnor2(states.at(i), stateBits->at(i));
-            c_c0 = and2(firstTerm, secndTerm);
-            firstTerm = xnor2(states.at(i), stateBits->at(i));;
+            tmp     = xnor2(states.at(i), stateBits->at(i));
+            c_s0    = and2(c_s0, tmp);
         }
+        std::cout << "Char.Function s0: BDD_ID[" << c_s0 << "]" << std::endl;
+        return c_s0;
     }
     /****** PUBLIC ******/
     //! @return returns the XNOR of BDD IDs
@@ -101,7 +113,7 @@ namespace ClassProject {
     {
         /* Given transition function t and intial state S0
         *   {
-        *       Reachable (R_it) = S0;   -> Initial state
+        *       Reachable (R_it) = S0;   -> Initial state charachteristic function
         *       do
         *       {
         *           R = R_it;
@@ -110,9 +122,32 @@ namespace ClassProject {
         *       return R;
         */
         // Compute transition relation
-        computeTransitionRelation();
+        BDD_ID tau  = computeTransitionRelation();
         // Compute characteristic function
-        computeCharFunction();
+        BDD_ID c_s0 = computeCharFunction();
+        // set char.function for Reachable state intial (cR_it) to c_s0
+        BDD_ID cR_it    = c_s0;
+        BDD_ID cR       = MANAGER_FAIL;
+        BDD_ID char_trans_and   = 0;
+        BDD_ID exen_qua         = 0;
+        BDD_ID img      = 0;
+        uint i          = 1;
+        //do
+        //{
+            cR = cR_it;
+            // Now compute the image
+            // and char.function with trans.relation, used to compute img
+            char_trans_and  = and2(cR, tau);
+            // Exenstential qunatification of states
+            exen_qua        = or2( \
+                                coFactorTrue(char_trans_and, states.at(i)), \
+                                coFactorFalse(char_trans_and, states.at(i)));
+            // compute the set of immediate successors
+            img  = 0;
+            // Update the char.function
+            cR_it = or2(cR, img);
+            i++;
+        //} while(cR == cR_it);
         return MANAGER_FAIL;
     }
     /**
