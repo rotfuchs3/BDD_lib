@@ -38,31 +38,20 @@ namespace ClassProject {
     }
     /**
     * computeCharFunction
-    * @return
+    *   Computes the characteristic function by, c_s0 = and2(s0 == 0, s1 == 1)
     */
     void Reachable::computeCharFunction(void)
     {
-        BDD_ID tau          = 0;
-        BDD_ID tempTau      = 0;
-        BDD_ID firstTerm    = 0;
-        BDD_ID secndTerm    = 0;
-        
-        // Start with s0
-        firstTerm   = and2(states.at(0), delta->at(0));
-        // s'0 is at location state_var
-        secndTerm   = and2(neg(states.at(state_var)), neg(delta->at(0)));
-        tau         = or2(firstTerm, secndTerm);
+        // Compute characteristic function of s0
+        BDD_ID firstTerm = xnor2(states.at(0), stateBits->at(0));
+        BDD_ID secndTerm;
+        BDD_ID c_c0;
         for(uint i = 1; i < state_var; i++)
         {
-            // pos from i = 1 to states_var:
-            //      [(s'_i * delta_i(s,x)) + (~s'_i * ~delta_i(s,x))]
-            firstTerm   = and2(states.at(i), delta->at(i));
-            secndTerm   = and2(neg(states.at(state_var+i)), neg(delta->at(i)));
-            // Current
-            tempTau     = or2(firstTerm, secndTerm);
-            tau         = and2(tau, tempTau);
+            secndTerm = xnor2(states.at(i), stateBits->at(i));
+            c_c0 = and2(firstTerm, secndTerm);
+            firstTerm = xnor2(states.at(i), stateBits->at(i));;
         }
-        std::cout << "Transition relation: " << tau << std::endl;
     }
     /****** PUBLIC ******/
     //! @return returns the XNOR of BDD IDs

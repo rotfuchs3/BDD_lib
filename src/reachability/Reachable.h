@@ -29,8 +29,7 @@ namespace ClassProject {
         /**
         * computeCharFunction
         * @brief 
-        *   Computes the characteristic function by, pos from i = 1 to states_var of:
-        *      [(s'_i * delta_i(s,x)) + (~s'_i * ~delta_i(s,x))]
+        *   Computes the characteristic function by, c_s0 = and2(s0 == 0, s1 == 1)
         */
         void computeCharFunction(void);
     public:
