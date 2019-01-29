@@ -507,20 +507,30 @@ BDD_ID ClassProject::Manager::nor2(const BDD_ID a, const BDD_ID b)
 #endif
   return neg(or2(a, b));
 }
-//! printUniqueTable
-/*!
-    Prints unique table
+/**
+* printTables
+*
+* @brief Prints all tables
 */
-void ClassProject::Manager::printUniqueTable(void)
+void ClassProject::Manager::printTables(void)
 {
-  for (int i = 0; i < currentId; i++)
-  {
-    std::cout << "BDD_ID: " << i << std::endl;
-    std::cout << " - Label:  " << uniqueTable[i]->label << std::endl;
-    std::cout << " - High:   " << uniqueTable[i]->highId << std::endl;
-    std::cout << " - Low:    " << uniqueTable[i]->lowId << std::endl;
-    std::cout << " - Top:    " << uniqueTable[i]->topVar << std::endl;
-  }
+    // Unique table
+    std::cout << " --- UNIQUE TABLE --- " << std::endl;
+    for(auto it = uniqueTable.begin(); it != uniqueTable.end(); ++it)
+    {
+        std::cout << *(*it) << std::endl;
+    }  
+    // Compute table
+    std::cout << " --- COMPUTE TABLE --- " << std::endl;
+    for(auto it = computeTable.begin(); it != computeTable.end(); ++it)
+    {
+        std::cout << "BDD_ID[" << it->second << "]: " << it->first << std::endl;
+    }
+    std::cout << " --- LOOKUP TABLE --- " << std::endl;
+    for(auto it = lookUpTable.begin(); it != lookUpTable.end(); ++it)
+    {
+        std::cout << "Label[" << it->first << "], BDD_ID[" << it->second << "]" << std::endl;
+    }
 }
   //---------------------------------------------------------------------------------------------------------
   //private Methodes

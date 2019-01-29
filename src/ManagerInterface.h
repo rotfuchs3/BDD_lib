@@ -10,7 +10,7 @@
 /// Standard Lib
 #include <string>
 #include <set>
-
+#include <iostream> 
 /// Typedef Integer representing of the ID for BDD Node
 typedef int BDD_ID;
 
@@ -65,6 +65,21 @@ public:
     */
     ~Node()
     {}
+    /**
+    * Overload "<<" operator
+    *
+    * @param n Node type
+    *
+    * @return cout
+    */
+    friend std::ostream & operator <<(std::ostream &out, const Node &n) {
+        out << "BDD_ID[" << n.myId << "]: ";
+        out << "label: " << n.label;
+        out << ", highId: " << n.highId;
+        out << ", lowId: " << n.lowId;
+        out << ", topVar: " << n.topVar;
+        return out;
+    }
 };
 //!  ManagerInterface class
 /*!

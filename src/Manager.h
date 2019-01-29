@@ -23,13 +23,6 @@
 
 /// Add specified namespace
 namespace ClassProject {
-
-    struct HASH{
-    size_t operator()(const std::tuple<int, int, int >& k) const {
-        return std::hash<long>()(std::get<0>(k) << 20 + std::get<1>(k) << 10 + std::get<2>(k));
-    }
-};
-
     struct ITE_ID {
         BDD_ID i;
         BDD_ID t;
@@ -44,7 +37,17 @@ namespace ClassProject {
         bool operator==(const ITE_ID &other) const {
             return (i == other.i && t == other.t && e == other.e);
         }
-
+        /**
+        * Overload "<<" operator
+        *
+        * @param t ITE_ID type
+        *
+        * @return cout
+        */
+	    friend std::ostream & operator <<(std::ostream &out, const ITE_ID &t) {
+	        out << "if: " << t.i << ", then: " << t.t << ", else: " << t.e;
+	        return out;
+	    }
     };
     
     /// Coordinate hashing function
@@ -68,7 +71,6 @@ namespace ClassProject {
 #define	MANAGER_FAIL	-1
 typedef std::vector<Node*>	uniqueTable_t;
 typedef std::unordered_map<std::string, BDD_ID>	lookUpTable_t;
-//typedef std::unordered_map<std::tuple<int,int,int>, BDD_ID,HASH> computeTable_t;
 typedef std::unordered_map<ITE_ID, BDD_ID, computeHash> computeTable_t;
 
 
@@ -219,12 +221,14 @@ public:
 	  \return BDD_ID of the negativ disjunction of A and B. if needed creates this node
 	*/
 	BDD_ID nor2(const BDD_ID a,const BDD_ID b);
-  //! printUniqueTable
-  /*!
-      Prints unique table
-  */
-void printUniqueTable(void);
+    /**
+    * printTables
+    *
+    * @brief Prints all tables
+    */
+    void printTables(void);
 private:
+    friend class Reachable;
     /// Terminal true BDD_ID
     const BDD_ID trueId  = 1;
     /// Terminal false BDD_ID
@@ -241,10 +245,6 @@ private:
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
     BDD_ID searchUniTable(const BDD_ID id);
     BDD_ID searchForNode(const BDD_ID _highId,const BDD_ID _lowId, const BDD_ID _topVar);
-
-  struct Key{
-	  BDD_ID id;
-  };
 };
 }
 

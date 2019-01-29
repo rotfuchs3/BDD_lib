@@ -5,10 +5,12 @@
 #ifndef PROJECT_REACHABLEINTERFACE_H
 #define PROJECT_REACHABLEINTERFACE_H
 
-#include "../Manager.h"
-
-namespace ClassProject{
-    class ReachableInterface: public Manager{
+#include <Manager.h>
+/// namespace
+namespace ClassProject 
+{
+    class ReachableInterface: public Manager
+    {
     public:
         ReachableInterface() = delete;
         /// Typedef Integer representing of the ID for BDD Node
@@ -64,6 +66,4 @@ namespace ClassProject{
         unsigned int stateSize;
     };
 }
-
-
 #endif //PROJECT_REACHABLEINTERFACE_H

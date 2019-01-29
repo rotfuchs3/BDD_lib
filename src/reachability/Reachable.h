@@ -4,15 +4,40 @@
 
 #ifndef VDSPROJECT_IMGCOMP_H
 #define VDSPROJECT_IMGCOMP_H
-
-
-#include <map>
+/// STL
+#include <vector>
+#include <math.h>
+/// Header
 #include "ReachableInterface.h"
-
-
-//namespace ClassProject {
-class Reachable : public ClassProject::ReachableInterface {
+/// namespace
+namespace ClassProject {
+    class Reachable : public ReachableInterface {
+    private:
+        unsigned int state_var;
+        /// Vector holding all states
+        std::vector<BDD_ID> states;
+        /// Vector holding the transition functions
+        const std::vector<BDD_ID> *delta;
+        /// Vector holding all state bits
+        const std::vector<bool> *stateBits;
+        /**
+        * computeTransitionRelation
+        * @brief 
+        *   Computes the translation relation by, c_si = (xnor(si, 0)) * (xnor(si, 0))
+        */
+        void computeTransitionRelation(void);
+        /**
+        * computeCharFunction
+        * @brief 
+        *   Computes the characteristic function by, pos from i = 1 to states_var of:
+        *      [(s'_i * delta_i(s,x)) + (~s'_i * ~delta_i(s,x))]
+        */
+        void computeCharFunction(void);
     public:
+        /// lsb state should always be s0 location
+        BDD_ID lsb;
+        /// msb state should always be size-1 of states
+        BDD_ID msb;
         /**
         * Constructor creates stateSize state bits for the user
         * @param stateSize state size
@@ -21,21 +46,28 @@ class Reachable : public ClassProject::ReachableInterface {
         : ReachableInterface(state_variable), state_var(state_variable)
         {
             // Check if state variable is greater than 0
-            if (state_variable <= 0) {
+            if (state_variable <= 0) 
+            {
                 throw std::invalid_argument("In Constructor: number states <= 0\n");
             }
-            /* INITIALIZE STATES */
-            // Increase the vector size by given state input
-            states.reserve(state_var*2);
-            std::cout << "states.capacity: " << states.capacity() << std::endl;
-            // create variables for current and successor states
-            for (int i = 0; i < state_var; ++i) 
+            // Increase the vector size by given state input, memory for all states are then 2^state_var
+            states.reserve(pow(2, state_var));
+            // create variables for current states
+            std::string label;
+            for (uint i = 0; i < state_var; ++i) 
             {
-                states.push_back(createVar("s" + std::to_string(i)));
-                std::cout << states.at(i) << std::endl;
+                label = "s" + std::to_string(i);
+                states.push_back(createVar(label));
             }
-            // Compute delta by negation of state variables
-            std::cout << "states.size: " << states.size() << std::endl;
+            // create variables for next states states
+            for (uint i = 0; i < state_var; ++i) 
+            {
+                label = "s'" + std::to_string(i);
+                states.push_back(createVar(label));
+            }
+            // Set lsb/msb
+            lsb = states.at(0);
+            msb = states.at(state_var-1);
         }
         /// Destructor
         ~Reachable() {}
@@ -76,18 +108,14 @@ class Reachable : public ClassProject::ReachableInterface {
          * @param stateVector 
          * @return
          */
-        bool is_reachable(const std::vector<bool>& stateVector);
-    private:
-        unsigned int state_var;
-        /// Vector holding all states
-        std::vector<BDD_ID> states;
-        /// Vector holding the transition functions
-        std::vector<BDD_ID> delta;
-        /// Vector holding all state bits
-        std::vector<bool> stateBits;
-};
-
-
-//}
+        bool is_reachable(const std::vector<bool>& stateVector); 
+        /**
+        * printVectors
+        *
+        * @brief Prints all vectors
+        */
+        void printVectors(void); 
+    }; // class Reachable
+} // namespace bdd
 
 #endif //VDSPROJECT_IMGCOMP_H
