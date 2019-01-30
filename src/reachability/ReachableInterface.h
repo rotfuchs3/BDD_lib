@@ -46,14 +46,14 @@ namespace ClassProject{
          * otherwhise negated. E.g. initial state not(s0) and not(s1) is transformed into {false,false}.
          * @param stateVector provide the assignemtn for each state bit
          */
-        //virtual void setInitState(const std::vector<bool>& stateVector)  = 0;
+        virtual void setInitState(const std::vector<bool>& stateVector)  = 0;
 
         /**
          * Computes the symbolic representation of the reachable states.
          * Before this method is called it is important to set the transition function and the initial state.
          * @return BDD_ID of the reachable state space
          */
-        //virtual BDD_ID compute_reachable_states() = 0;
+        virtual BDD_ID compute_reachable_states() = 0;
 
         /**
          * This method decides whether a specific state is in the reachable state space or not.

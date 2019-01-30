@@ -87,3 +87,35 @@ void Reachable::setDelta(const std::vector<BDD_ID> &transitionFunctions){
     }
 
 }
+
+void Reachable::setInitState(const std::vector<bool>& stateVector){
+    if (stateVector.size() == state_var){
+        BDD_ID tmp;
+        for (int i = 0; i < state_var; ++i) {
+            if( i==0 ){
+                if (stateVector.at(0)){
+                    tmp = 2 + state_var-1;
+                }else{
+                    tmp = 2 + 2*state_var-1;
+                }
+            }else{
+                if (stateVector.at(i)) {
+                    tmp = and2(tmp, 2 + state_var - 1 - i);
+                }else {
+                    tmp = and2(tmp, 2 + 2*state_var - 1 - i);
+                }
+            }
+
+        }
+        initialstate=tmp;
+    }else{
+        throw std::invalid_argument("too few or too many state vaiable in this initial state");
+    }
+
+}
+
+BDD_ID Reachable::compute_reachable_states(){
+
+
+    return 0;
+}
