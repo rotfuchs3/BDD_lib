@@ -53,10 +53,10 @@ namespace ClassProject {
         std::size_t operator()(const ITE_ID &iteID) const
         {
             // Compute indiviual values
-            std::size_t myhash = 17;
-            myhash = myhash * 15 + std::hash<BDD_ID>()(iteID.i);
-            myhash = myhash * 15 + std::hash<BDD_ID>()(iteID.t);
-            myhash = myhash * 15 + std::hash<BDD_ID>()(iteID.e);
+            std::size_t myhash = 15;
+            myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.i);
+            myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.t);
+            myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.e);
             return myhash;
 
         }

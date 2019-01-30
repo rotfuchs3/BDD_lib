@@ -131,73 +131,80 @@ std::string ClassProject::Manager::getTopVarName(const BDD_ID f)
 BDD_ID ClassProject::Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
 {
 #ifdef inputErrorCheck
-  if (!isValidID(i, t, e))
-  {
-    return MANAGER_FAIL;
-  }
+    if (!isValidID(i, t, e))
+    {
+        return MANAGER_FAIL;
+    }
 #endif
-  //terminal cases
-  if (t == e || i == 1)
-  {
-    return t;
-  }
-  if (i == 0)
-  {
-    return e;
-  }
-  BDD_ID alreadyExist = searchForNode(t, e, i);
-  if (alreadyExist != MANAGER_FAIL)
-    return alreadyExist;
-
-  //termine highest topvariable depending on the variable order
-  BDD_ID topVarI = MANAGER_FAIL, topVarT = MANAGER_FAIL, topVarE = MANAGER_FAIL;
-  //Constant have topVar 1/0 but this is no variable
-  //so it should not be considered by the highest topVariable depending on the variable order
-  //missing this leads to
-  if (!isConstant(i))
-    topVarI = uniqueTable[i]->topVar;
-  if (!isConstant(t))
-    topVarT = uniqueTable[t]->topVar;
-  if (!isConstant(e))
-    topVarE = uniqueTable[e]->topVar;
-
-  //minimal variable are the highest in the variable order
-  BDD_ID min = currentId;
-  if (topVarI != MANAGER_FAIL)
-  {
-    min = topVarI;
-  }
-  if (topVarT != MANAGER_FAIL && topVarT < min)
-  {
-    min = topVarT;
-  }
-  if (topVarE != MANAGER_FAIL && topVarE < min)
-  {
-    min = topVarE;
-  }
-  //new nodes?
-  BDD_ID rHigh = ite(coFactorTrue(i, min), coFactorTrue(t, min), coFactorTrue(e, min));
-  BDD_ID rLow = ite(coFactorFalse(i, min), coFactorFalse(t, min), coFactorFalse(e, min));
-
-  //a new internal node isn't needed
-  if (rHigh == rLow)
-  {
-    return rHigh;
-  }
-  //check if the to return coFactor would be a constant
-  if (rHigh == 1 && rLow == 0)
-  {
-    return min;
-  }
-  else
-  {
-    // check if already an internal node (rHigh,rLow,min) is in the UniqueTable
-    BDD_ID alreadyExist = searchForNode(rHigh, rLow, min);
+    //terminal cases
+    if (t == e || i == 1)
+    {
+        return t;
+    }
+    if (i == 0)
+    {
+        return e;
+    }
+    BDD_ID alreadyExist = searchForNode(t, e, i);
     if (alreadyExist != MANAGER_FAIL)
-      return alreadyExist;
-  }
-  BDD_ID newNode = insertInUniquetable(rHigh, rLow, min, "");
-  return newNode;
+        return alreadyExist;
+
+    //termine highest topvariable depending on the variable order
+    BDD_ID topVarI = MANAGER_FAIL, topVarT = MANAGER_FAIL, topVarE = MANAGER_FAIL;
+    //Constant have topVar 1/0 but this is no variable
+    //so it should not be considered by the highest topVariable depending on the variable order
+    //missing this leads to
+    if (!isConstant(i))
+        topVarI = uniqueTable[i]->topVar;
+    if (!isConstant(t))
+        topVarT = uniqueTable[t]->topVar;
+    if (!isConstant(e))
+        topVarE = uniqueTable[e]->topVar;
+
+    //minimal variable are the highest in the variable order
+    BDD_ID min = currentId;
+    if (topVarI != MANAGER_FAIL)
+    {
+        min = topVarI;
+    }
+    if (topVarT != MANAGER_FAIL && topVarT < min)
+    {
+        min = topVarT;
+    }
+    if (topVarE != MANAGER_FAIL && topVarE < min)
+    {
+        min = topVarE;
+    }
+    //new nodes?
+    BDD_ID rHigh = ite(coFactorTrue(i, min), coFactorTrue(t, min), coFactorTrue(e, min));
+    BDD_ID rLow = ite(coFactorFalse(i, min), coFactorFalse(t, min), coFactorFalse(e, min));
+
+    //a new internal node isn't needed
+    if (rHigh == rLow)
+    {
+        ITE_ID key(i, t, e);
+        computeTable.insert({key,rHigh});
+        return rHigh;
+    }
+    //check if the to return coFactor would be a constant
+    if (rHigh == 1 && rLow == 0)
+    {
+        ITE_ID key(i, t, e);
+        computeTable.insert({key,min});
+        return min;
+    }
+    else
+    {
+        // check if already an internal node (rHigh,rLow,min) is in the UniqueTable
+        BDD_ID alreadyExist = searchForNode(rHigh, rLow, min);
+        if (alreadyExist != MANAGER_FAIL){
+            ITE_ID key(i, t, e);
+            computeTable.insert({key,alreadyExist});
+            return alreadyExist;
+        }
+    }
+    BDD_ID newNode = insertInUniquetable(rHigh, rLow, min, "");
+    return newNode;
 }
 
 //! coFactorTrue
