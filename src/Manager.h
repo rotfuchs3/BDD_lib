@@ -4,22 +4,73 @@
  * \file Manager.h
  * \author vdscp_8
 */
+#define redundantCheck
+#define inputErrorCheck
+
 #ifndef __MANAGER_H__
 #define __MANAGER_H__
 /// Base class
 #include "ManagerInterface.h"
 #include <iostream>
+#include <vector>
 /// Container
+#include <tuple>
 #include <unordered_map>
 #include <iterator>
+
+
+
 
 /// Add specified namespace
 namespace ClassProject {
 
+    struct HASH{
+    size_t operator()(const std::tuple<int, int, int >& k) const {
+        return std::hash<long>()(std::get<0>(k) << 20 + std::get<1>(k) << 10 + std::get<2>(k));
+    }
+};
+
+    struct ITE_ID {
+        BDD_ID i;
+        BDD_ID t;
+        BDD_ID e;
+
+        ITE_ID(BDD_ID i,BDD_ID t,BDD_ID e){
+            this->i=i;
+            this->t=t;
+            this->e=e;
+        }
+
+        bool operator==(const ITE_ID &other) const {
+            return (i == other.i && t == other.t && e == other.e);
+        }
+
+    };
+    
+    /// Coordinate hashing function
+    struct computeHash
+    {
+        std::size_t operator()(const ITE_ID &iteID) const
+        {
+            // Compute indiviual values
+            std::size_t myhash = 15;
+            myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.i);
+            myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.t);
+            myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.e);
+            return myhash;
+
+        }
+    };
+
+
+
 /// Manager typedef
-typedef std::unordered_map<BDD_ID, Node*>        uniqueTable_t;
-typedef std::unordered_map<std::string, BDD_ID>  lookUpTable_t;
-#define     MANAGER_FAIL    -1
+#define	MANAGER_FAIL	-1
+typedef std::vector<Node*>	uniqueTable_t;
+typedef std::unordered_map<std::string, BDD_ID>	lookUpTable_t;
+//typedef std::unordered_map<std::tuple<int,int,int>, BDD_ID,HASH> computeTable_t;
+typedef std::unordered_map<ITE_ID, BDD_ID, computeHash> computeTable_t;
+
 
 //!  Manager class
 /*!
@@ -56,9 +107,9 @@ public:
     bool isVariable(const BDD_ID x);
     //! createVar
     /*!
-        \brief Creates a new variable for the BDD with string &label in the unique table
-        \param &label the label that got created and inserted in the unique table
-        \return the BDD_ID if it is a new label. When it is inserted before it returns the ID of the first Variable with label &label
+       \brief Creates a new variable for the BDD with string &label in the unique table
+       \param &label the label that got created and inserted in the unique table
+       \return the BDD_ID if it is a new label. When it is inserted before it returns the ID of the first Variable with label &label
     */
     BDD_ID createVar(const std::string &label);
     //! uniqueTableSize
@@ -101,11 +152,11 @@ public:
     */
     BDD_ID coFactorTrue(const BDD_ID f);
     //! coFactorFalse
-	/*!
-	 *\param f is the ID which the negativ coFactor of variable x is requested
-	 *\param x is the ID which f should be the CoFactor in the negativ way
-	  \return the negativ cofactor of the function defined by f with respect to function x set to true.
-	*/
+    /*!
+     * \param f is the ID which the negativ coFactor of variable x is requested
+     * \param x is the ID which f should be the CoFactor in the negativ way
+     * \return the negativ cofactor of the function defined by f with respect to function x set to true.
+     */
     BDD_ID coFactorFalse(const BDD_ID f,BDD_ID x);
     //! coFactorFalse
     /*!
@@ -184,7 +235,8 @@ private:
     /// uniqueTable, hashmap for performance
     uniqueTable_t uniqueTable;
     lookUpTable_t lookUpTable;
-	
+    computeTable_t computeTable;
+
     bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
     BDD_ID searchUniTable(const BDD_ID id);
@@ -195,4 +247,6 @@ private:
   };
 };
 }
+
+
 #endif /* __MANAGER_H__ */

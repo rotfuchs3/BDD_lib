@@ -6,15 +6,18 @@
 */
 /// Header
 #include "Manager.h"
-//using namespace ClassProject;
+
 //! Constructor
 /*!
     Initializes uniqueTable
 */
 ClassProject::Manager::Manager()
 {
-  uniqueTable = uniqueTable_t();
-  lookUpTable = lookUpTable_t();
+  uniqueTable 	= uniqueTable_t();
+#ifdef redundantCheck
+  lookUpTable 	= lookUpTable_t();
+#endif
+  computeTable 	= computeTable_t();
 
   // Insert 0 and configure
   createVar("0");
@@ -58,32 +61,40 @@ bool ClassProject::Manager::isConstant(const BDD_ID x)
 */
 bool ClassProject::Manager::isVariable(const BDD_ID x)
 {
+#ifdef inputErrorCheck
   // check if BDD_ID exists and if it's not 0 or 1
-  if ((searchUniTable(x) != MANAGER_FAIL) && !isConstant(x))
+  if (x<0 || x > currentId  || isConstant(x))
   {
+   return false;
+  }
+#endif
+
     // check highId == 1 and  check lowId == 0
     if ((uniqueTable[x]->highId == True()) && (uniqueTable[x]->lowId == False()))
     {
       return true;
     }
-  }
-  return false;
+
 }
 /*! createVar
     Creates a new variable for the BDD
 */
 BDD_ID ClassProject::Manager::createVar(const std::string &label)
 {
-  lookUpTable_t::const_iterator item = lookUpTable.find(label);
+#ifdef redundantCheck
+    lookUpTable_t::const_iterator item = lookUpTable.find(label);
   //when label is not in the hashmap
   if (item == lookUpTable.end())
   {
+#endif
     return insertInUniquetable(True(), False(), currentId, label);
+#ifdef redundantCheck
   }
   else
   {
     return item->second;
   }
+#endif
 }
 /*! uniqueTableSize
     Returns the number of the nodes currently exist in the unique table
@@ -110,7 +121,7 @@ std::string ClassProject::Manager::getTopVarName(const BDD_ID f)
   {
     return "";
   }
-  return uniqueTable.find(topVar(f))->second->label;
+  return uniqueTable[topVar(f)]->label;
 }
 //! ite
 /*!
@@ -119,72 +130,81 @@ std::string ClassProject::Manager::getTopVarName(const BDD_ID f)
 */
 BDD_ID ClassProject::Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e)
 {
-  if (!isValidID(i, t, e))
-  {
-    return MANAGER_FAIL;
-  }
-  //terminal cases
-  if (t == e || i == 1)
-  {
-    return t;
-  }
-  if (i == 0)
-  {
-    return e;
-  }
-  BDD_ID alreadyExist = searchForNode(t, e, i);
-  if (alreadyExist != MANAGER_FAIL)
-    return alreadyExist;
-
-  //termine highest topvariable depending on the variable order
-  BDD_ID topVarI = MANAGER_FAIL, topVarT = MANAGER_FAIL, topVarE = MANAGER_FAIL;
-  //Constant have topVar 1/0 but this is no variable
-  //so it should not be considered by the highest topVariable depending on the variable order
-  //missing this leads to
-  if (!isConstant(i))
-    topVarI = uniqueTable.find(i)->second->topVar;
-  if (!isConstant(t))
-    topVarT = uniqueTable.find(t)->second->topVar;
-  if (!isConstant(e))
-    topVarE = uniqueTable.find(e)->second->topVar;
-
-  //minimal variable are the highest in the variable order
-  BDD_ID min = currentId;
-  if (topVarI != MANAGER_FAIL)
-  {
-    min = topVarI;
-  }
-  if (topVarT != MANAGER_FAIL && topVarT < min)
-  {
-    min = topVarT;
-  }
-  if (topVarE != MANAGER_FAIL && topVarE < min)
-  {
-    min = topVarE;
-  }
-  //new nodes?
-  BDD_ID rHigh = ite(coFactorTrue(i, min), coFactorTrue(t, min), coFactorTrue(e, min));
-  BDD_ID rLow = ite(coFactorFalse(i, min), coFactorFalse(t, min), coFactorFalse(e, min));
-
-  //a new internal node isn't needed
-  if (rHigh == rLow)
-  {
-    return rHigh;
-  }
-  //check if the to return coFactor would be a constant
-  if (rHigh == 1 && rLow == 0)
-  {
-    return min;
-  }
-  else
-  {
-    // check if already an internal node (rHigh,rLow,min) is in the UniqueTable
-    BDD_ID alreadyExist = searchForNode(rHigh, rLow, min);
+#ifdef inputErrorCheck
+    if (!isValidID(i, t, e))
+    {
+        return MANAGER_FAIL;
+    }
+#endif
+    //terminal cases
+    if (t == e || i == 1)
+    {
+        return t;
+    }
+    if (i == 0)
+    {
+        return e;
+    }
+    BDD_ID alreadyExist = searchForNode(t, e, i);
     if (alreadyExist != MANAGER_FAIL)
-      return alreadyExist;
-  }
-  BDD_ID newNode = insertInUniquetable(rHigh, rLow, min, "");
-  return newNode;
+        return alreadyExist;
+
+    //termine highest topvariable depending on the variable order
+    BDD_ID topVarI = MANAGER_FAIL, topVarT = MANAGER_FAIL, topVarE = MANAGER_FAIL;
+    //Constant have topVar 1/0 but this is no variable
+    //so it should not be considered by the highest topVariable depending on the variable order
+    //missing this leads to
+    if (!isConstant(i))
+        topVarI = uniqueTable[i]->topVar;
+    if (!isConstant(t))
+        topVarT = uniqueTable[t]->topVar;
+    if (!isConstant(e))
+        topVarE = uniqueTable[e]->topVar;
+
+    //minimal variable are the highest in the variable order
+    BDD_ID min = currentId;
+    if (topVarI != MANAGER_FAIL)
+    {
+        min = topVarI;
+    }
+    if (topVarT != MANAGER_FAIL && topVarT < min)
+    {
+        min = topVarT;
+    }
+    if (topVarE != MANAGER_FAIL && topVarE < min)
+    {
+        min = topVarE;
+    }
+    //new nodes?
+    BDD_ID rHigh = ite(coFactorTrue(i, min), coFactorTrue(t, min), coFactorTrue(e, min));
+    BDD_ID rLow = ite(coFactorFalse(i, min), coFactorFalse(t, min), coFactorFalse(e, min));
+
+    //a new internal node isn't needed
+    if (rHigh == rLow)
+    {
+        ITE_ID key(i, t, e);
+        computeTable.insert({key,rHigh});
+        return rHigh;
+    }
+    //check if the to return coFactor would be a constant
+    if (rHigh == 1 && rLow == 0)
+    {
+        ITE_ID key(i, t, e);
+        computeTable.insert({key,min});
+        return min;
+    }
+    else
+    {
+        // check if already an internal node (rHigh,rLow,min) is in the UniqueTable
+        BDD_ID alreadyExist = searchForNode(rHigh, rLow, min);
+        if (alreadyExist != MANAGER_FAIL){
+            ITE_ID key(i, t, e);
+            computeTable.insert({key,alreadyExist});
+            return alreadyExist;
+        }
+    }
+    BDD_ID newNode = insertInUniquetable(rHigh, rLow, min, "");
+    return newNode;
 }
 
 //! coFactorTrue
@@ -193,11 +213,13 @@ BDD_ID ClassProject::Manager::ite(const BDD_ID i, const BDD_ID t, const BDD_ID e
 */
 BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
 {
+
+#ifdef inputErrorCheck
   if (!isValidID(f, x))
   {
     return MANAGER_FAIL;
   }
-
+#endif
   if (!isVariable(x))
   {
     x = topVar(x);
@@ -208,7 +230,7 @@ BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
     return f;
   }
 
-  Node *nodeF = uniqueTable.find(f)->second;
+  Node *nodeF = uniqueTable[f];
   BDD_ID topVarF = nodeF->topVar;
 
   //if x> topvariable then x will never be a topVar in f because x is higher in the VarOrder
@@ -245,7 +267,7 @@ BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
         if (alreadyExist != MANAGER_FAIL)
           return alreadyExist;
         //when no node fond
-        std::string newLabel = "coFactorTrue(" + nodeF->label + "," + uniqueTable.find(x)->second->label + ")";
+        std::string newLabel = "coFactorTrue(" + nodeF->label + "," + uniqueTable[f]->label + ")";
         return insertInUniquetable(coFacHigh, coFacLow, topVarF, newLabel);
       }
     }
@@ -258,11 +280,13 @@ BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f, BDD_ID x)
 */
 BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f)
 {
+#ifdef inputErrorCheck
   if (!isValidID(f))
   {
     return MANAGER_FAIL;
   }
-  return uniqueTable.find(f)->second->highId;
+#endif
+  return uniqueTable[f]->highId;
 }
 
 //! coFactorFalse
@@ -271,11 +295,12 @@ BDD_ID ClassProject::Manager::coFactorTrue(const BDD_ID f)
 */
 BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
 {
+#ifdef inputErrorCheck
   if (!isValidID(f, x))
   {
     return MANAGER_FAIL;
   }
-
+#endif
   if (!isVariable(x))
   {
     x = topVar(x);
@@ -286,7 +311,7 @@ BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
     return f;
   }
 
-  Node *nodeF = uniqueTable.find(f)->second;
+  Node *nodeF = uniqueTable[f];
   BDD_ID topVarF = nodeF->topVar;
 
   //if x> topvariable then x will never be a topVar in f because x is higher in the VarOrder
@@ -322,7 +347,7 @@ BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
         if (alreadyExist != MANAGER_FAIL)
           return alreadyExist;
         //when no node found
-        std::string newLabel = "coFactorFalse(" + nodeF->label + "," + uniqueTable.find(x)->second->label + ")";
+        std::string newLabel = "coFactorFalse(" + nodeF->label + "," + uniqueTable[x]->label + ")";
         return insertInUniquetable(coFacHigh, coFacLow, topVarF, newLabel);
       }
     }
@@ -334,11 +359,13 @@ BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f, BDD_ID x)
 */
 BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f)
 {
-  if (!isValidID(f))
+#ifdef inputErrorCheck
+    if (!isValidID(f))
   {
     return MANAGER_FAIL;
   }
-  return uniqueTable.find(f)->second->lowId;
+#endif
+  return uniqueTable[f]->lowId;
 }
 
 //! coFactorFalse
@@ -348,10 +375,12 @@ BDD_ID ClassProject::Manager::coFactorFalse(const BDD_ID f)
 */
 void ClassProject::Manager::findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_root)
 {
+#ifdef inputErrorCheck
   if (!isValidID(root))
   {
-    return;
+    return ;
   }
+#endif
   nodes_of_root.insert(root);
   if (isConstant(root))
   {
@@ -359,7 +388,7 @@ void ClassProject::Manager::findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_ro
   }
   else
   {
-    Node *rootNode = uniqueTable.find(root)->second;
+    Node *rootNode = uniqueTable[root];
     BDD_ID high_of_root = rootNode->highId;
     BDD_ID low_of_root = rootNode->lowId;
     findNodes(high_of_root, nodes_of_root);
@@ -374,10 +403,12 @@ void ClassProject::Manager::findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_ro
 */
 void ClassProject::Manager::findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root)
 {
+#ifdef inputErrorCheck
   if (!isValidID(root))
   {
-    return;
+    return ;
   }
+#endif
   if (isConstant(root))
   {
     vars_of_root.insert(root);
@@ -385,7 +416,7 @@ void ClassProject::Manager::findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root
   }
   else
   {
-    Node *rootNode = uniqueTable.find(root)->second;
+    Node *rootNode = uniqueTable[root];
     vars_of_root.insert(rootNode->topVar);
     BDD_ID high_of_root = rootNode->highId;
     BDD_ID low_of_root = rootNode->lowId;
@@ -400,10 +431,12 @@ void ClassProject::Manager::findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root
 */
 BDD_ID ClassProject::Manager::neg(const BDD_ID a)
 {
+#ifdef inputErrorCheck
   if (!isValidID(a))
   {
     return MANAGER_FAIL;
   }
+#endif
   return ite(a, 0, 1);
 }
 
@@ -413,10 +446,12 @@ BDD_ID ClassProject::Manager::neg(const BDD_ID a)
 */
 BDD_ID ClassProject::Manager::and2(const BDD_ID a, const BDD_ID b)
 {
+#ifdef inputErrorCheck
   if (!isValidID(a, b))
   {
     return MANAGER_FAIL;
   }
+#endif
   return ite(a, b, 0);
 }
 
@@ -426,10 +461,12 @@ BDD_ID ClassProject::Manager::and2(const BDD_ID a, const BDD_ID b)
 */
 BDD_ID ClassProject::Manager::nand2(const BDD_ID a, const BDD_ID b)
 {
+#ifdef inputErrorCheck
   if (!isValidID(a, b))
   {
     return MANAGER_FAIL;
   }
+#endif
   return neg(and2(a, b));
 }
 
@@ -439,10 +476,12 @@ BDD_ID ClassProject::Manager::nand2(const BDD_ID a, const BDD_ID b)
 */
 BDD_ID ClassProject::Manager::or2(const BDD_ID a, const BDD_ID b)
 {
+#ifdef inputErrorCheck
   if (!isValidID(a, b))
   {
     return MANAGER_FAIL;
   }
+#endif
   return ite(a, 1, b);
 }
 
@@ -452,10 +491,12 @@ BDD_ID ClassProject::Manager::or2(const BDD_ID a, const BDD_ID b)
 */
 BDD_ID ClassProject::Manager::xor2(const BDD_ID a, const BDD_ID b)
 {
+#ifdef inputErrorCheck
   if (!isValidID(a, b))
   {
     return MANAGER_FAIL;
   }
+#endif
   return ite(a, neg(b), b);
 }
 
@@ -465,10 +506,12 @@ BDD_ID ClassProject::Manager::xor2(const BDD_ID a, const BDD_ID b)
 */
 BDD_ID ClassProject::Manager::nor2(const BDD_ID a, const BDD_ID b)
 {
+#ifdef inputErrorCheck
   if (!isValidID(a, b))
   {
     return MANAGER_FAIL;
   }
+#endif
   return neg(or2(a, b));
 }
 //! printUniqueTable
@@ -477,6 +520,7 @@ BDD_ID ClassProject::Manager::nor2(const BDD_ID a, const BDD_ID b)
 */
 void ClassProject::Manager::printUniqueTable(void)
 {
+    std::cout << "Start Table"<<std::endl;
   for (int i = 0; i < currentId; i++)
   {
     std::cout << "BDD_ID: " << i << std::endl;
@@ -510,23 +554,31 @@ void ClassProject::Manager::printUniqueTable(void)
   {
     Node *newNode = new Node(currentId, highID, lowID, topVar, label);
     // Insert new node to map
-    uniqueTable.insert({currentId, newNode});
+    uniqueTable.push_back( newNode);
+
+#ifdef redundantCheck
     lookUpTable.insert({label, currentId});
+#endif
+    //std::string key = std::to_string(topVar)+"," + std::to_string(highID)+"," + std::to_string(lowID);
+    //computeTable.insert({std::tuple<int,int,int>(topVar,highID,lowID), currentId});
+    ITE_ID key(topVar, highID, lowID);
+    computeTable.insert({key, currentId});
 
     return currentId++;
-  }
-  BDD_ID ClassProject::Manager::searchUniTable(const BDD_ID id)
-  {
-    uniqueTable_t::const_iterator found = uniqueTable.find(id);
-    if (found != uniqueTable.end())
-    {
-      return found->first;
-    }
-    return MANAGER_FAIL;
   }
 
   BDD_ID ClassProject::Manager::searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar)
   {
+    // define new key for compute table
+    //std::tuple<int,int,int> key = std::tuple<int,int,int>(_topVar,_highId,_lowId);
+    ITE_ID key(_topVar, _highId, _lowId);
+    computeTable_t::const_iterator found = computeTable.find(key);
+    if(found != computeTable.end())
+    {
+       return found->second;
+    }
+    return MANAGER_FAIL;
+/*
     for (auto it = uniqueTable.begin(); it != uniqueTable.end() && it->first < currentId; ++it)
     {
       Node *iterateNode = it->second;
@@ -541,4 +593,5 @@ void ClassProject::Manager::printUniqueTable(void)
       }
     }
     return MANAGER_FAIL;
+*/
   }
