@@ -17,6 +17,10 @@ endif()
 
 # C++11
 set(CMAKE_CXX_STANDARD 11)
+# Compile/Linker flags
+set(CMAKE_CXX_FLAGS "-Wall -g -pg")
+set(CMAKE_EXE_LINKER_FLAGS "-g -pg")
+set(CMAKE_SHARED_LINKER_FLAGS "-g -pg")
 
 # Set top level path
 set(TOP_LEVEL ..)

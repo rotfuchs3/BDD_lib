@@ -44,7 +44,17 @@ namespace ClassProject {
         bool operator==(const ITE_ID &other) const {
             return (i == other.i && t == other.t && e == other.e);
         }
-
+        /**
+        * Overload "<<" operator
+        *
+        * @param t ITE_ID type
+        *
+        * @return cout
+        */
+	    friend std::ostream & operator <<(std::ostream &out, const ITE_ID &t) {
+	        out << "if: " << t.i << ", then: " << t.t << ", else: " << t.e;
+	        return out;
+	    }
     };
     
     /// Coordinate hashing function
@@ -225,6 +235,7 @@ public:
   */
 void printUniqueTable(void);
 private:
+    friend class Reachable;
     /// Terminal true BDD_ID
     const BDD_ID trueId  = 1;
     /// Terminal false BDD_ID
@@ -241,10 +252,6 @@ private:
     BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
     BDD_ID searchUniTable(const BDD_ID id);
     BDD_ID searchForNode(const BDD_ID _highId,const BDD_ID _lowId, const BDD_ID _topVar);
-
-  struct Key{
-	  BDD_ID id;
-  };
 };
 }
 
