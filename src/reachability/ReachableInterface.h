@@ -6,9 +6,11 @@
 #define PROJECT_REACHABLEINTERFACE_H
 
 #include "../Manager.h"
-
-namespace ClassProject{
-    class ReachableInterface: public Manager{
+/// namespace
+namespace ClassProject 
+{
+    class ReachableInterface: public Manager
+    {
     public:
         ReachableInterface() = delete;
         /// Typedef Integer representing of the ID for BDD Node
@@ -17,10 +19,9 @@ namespace ClassProject{
          * Constructor creates stateSize state bits for the user
          * @param stateSize state size
          */
-        explicit ReachableInterface(unsigned int stateSize){};
+        explicit ReachableInterface(unsigned int stateSize):stateSize(stateSize) {};
         virtual ~ReachableInterface() = default;
-
-         //! @return returns the XNOR of BDD IDs
+        //! @return returns the XNOR of BDD IDs
         virtual BDD_ID xnor2(BDD_ID a, BDD_ID b) = 0;
         /**
          * States are generated and stored in a vector.
@@ -29,7 +30,6 @@ namespace ClassProject{
          * @return vector with the BDD_ID of each state bit
          */
         virtual const std::vector<BDD_ID> &getStates() const = 0 ;
-
         /**
          * Each state variable has a transition function.
          * The transition function specifies the value of the state after the transition.
@@ -61,11 +61,9 @@ namespace ClassProject{
          * @param stateVector 
          * @return
          */
-        //virtual bool is_reachable(const std::vector<bool>& stateVector) = 0;
+        virtual bool is_reachable(const std::vector<bool>& stateVector) = 0;
     private:
         unsigned int stateSize;
     };
 }
-
-
 #endif //PROJECT_REACHABLEINTERFACE_H
