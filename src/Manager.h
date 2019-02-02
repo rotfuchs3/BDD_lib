@@ -84,12 +84,11 @@ namespace ClassProject {
         lookUpTable_t   lookUpTable;
 
         /// Checks if given ID is valid
-        const bool isValidID(BDD_ID arg1, BDD_ID arg2=0, BDD_ID arg3=0);
-        /// Inserts into unique table
-        BDD_ID insertInUniquetable(BDD_ID highID, BDD_ID lowID, BDD_ID topVar, std::string label);
-        /// Search unique table for an ID and returns if it does (BDD_ID) or doesn't (MANAGER_FAIL) exists
-        BDD_ID searchUniTable(const BDD_ID id);
-        /// Searches compute table for a given ITE_ID and returns the BDD_ID with corresponding values
+        bool isValidID(BDD_ID arg1, BDD_ID arg2=0, BDD_ID arg3=0);
+        /// Inserts into unique table and returns it's ID
+        BDD_ID insertInUniquetable(BDD_ID highID, BDD_ID lowID, 
+                                   BDD_ID topVar, std::string label);
+        /// Searches compute table for given variables and returns the BDD_ID with corresponding values
         BDD_ID searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar);
     public:
         /// Fail constant
@@ -117,7 +116,7 @@ namespace ClassProject {
         *
         * @return True if x is a leaf/terminal node
         */
-        const bool isConstant(const BDD_ID &x);
+        bool isConstant(const BDD_ID x);
         /**
         * isVariable
         *
@@ -125,7 +124,7 @@ namespace ClassProject {
         *
         * @return True if x is a variable/non-terminal node
         */
-        const bool isVariable(const BDD_ID &x);
+        bool isVariable(const BDD_ID x);
         /**
         * createVar
         *
@@ -133,13 +132,13 @@ namespace ClassProject {
         *
         * @return BDD_ID if it is a new variable, otherewise, BDD_ID of existing node
         */
-        const BDD_ID createVar(const std::string &label);
+        BDD_ID createVar(const std::string &label);
         /**
         * uniqueTableSize
         *
         * @return Number of the nodes currently in the unique table
         */
-        const std::size_t uniqueTableSize(void);
+        std::size_t uniqueTableSize(void);
         /**
         * topVar
         *
@@ -147,7 +146,7 @@ namespace ClassProject {
         *
         * @return BDD_ID of top variable of node f
         */
-        const BDD_ID topVar(const BDD_ID &f);
+        BDD_ID topVar(const BDD_ID f);
         /**
         * getTopVarName
         *
@@ -155,7 +154,7 @@ namespace ClassProject {
         *
         * @return Label of top variable of node f
         */
-        const std::string getTopVarName(const BDD_ID &f);
+        std::string getTopVarName(const BDD_ID f);
         /**
         * ite
         *
@@ -165,32 +164,7 @@ namespace ClassProject {
         *
         * @return ID representation of the ITE operation
         */
-        const BDD_ID ite(const BDD_ID &i, const BDD_ID &t, const BDD_ID &e);
-        /**
-        * coFactorFalse
-        *
-        * @param f ID of the node for a function 'f'
-        *
-        * @return ID representation of the negative cofactor defined by the function 'f'
-        */
-        const BDD_ID coFactorFalse(const BDD_ID &f);        
-        /**
-        * coFactorTrue
-        *
-        * @param f ID of the node for a function 'f'
-        *
-        * @return ID representation of the positive cofactor defined by the function 'f'
-        */        
-        const BDD_ID coFactorTrue(const BDD_ID &f);
-        /**
-        * coFactorFalse
-        *
-        * @param f ID of the node for a function 'f'
-        * @param x ID of the node for a variable in function 'f'
-        *
-        * @return ID representation of the negative cofactor for f(x), x = 0
-        */
-        const BDD_ID coFactorFalse(const BDD_ID &f, BDD_ID &x);        
+        BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
         /**
         * coFactorTrue
         *
@@ -199,7 +173,32 @@ namespace ClassProject {
         *
         * @return ID representation of the positive cofactor for f(x), x = 1
         */
-        const BDD_ID coFactorTrue(const BDD_ID &f, BDD_ID &x);        
+        BDD_ID coFactorTrue(const BDD_ID f, BDD_ID x);
+        /**
+        * coFactorTrue
+        *
+        * @param f ID of the node for a function 'f'
+        *
+        * @return ID representation of the positive cofactor defined by the function 'f'
+        */        
+        BDD_ID coFactorTrue(const BDD_ID f);
+        /**
+        * coFactorFalse
+        *
+        * @param f ID of the node for a function 'f'
+        * @param x ID of the node for a variable in function 'f'
+        *
+        * @return ID representation of the negative cofactor for f(x), x = 0
+        */
+        BDD_ID coFactorFalse(const BDD_ID f, BDD_ID x);
+        /**
+        * coFactorFalse
+        *
+        * @param f ID of the node for a function 'f'
+        *
+        * @return ID representation of the negative cofactor defined by the function 'f'
+        */
+        BDD_ID coFactorFalse(const BDD_ID f);       
         /**
         * findNodes
         *
@@ -208,7 +207,7 @@ namespace ClassProject {
         *
         * @return ID None
         */
-        void findNodes(const BDD_ID &root, std::set<BDD_ID> &nodesOfRoot);
+        void findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_root);
         /**
         * findVars
         *
@@ -217,7 +216,7 @@ namespace ClassProject {
         *
         * @return ID None
         */
-        void findVars(const BDD_ID &root, std::set<BDD_ID> &varsOfRoot);
+        void findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root);
         /**
         * neg
         *
@@ -225,7 +224,7 @@ namespace ClassProject {
         *
         * @return ID of 'a' negation
         */
-	    const BDD_ID neg(const BDD_ID &a);
+	    BDD_ID neg(const BDD_ID a);
         /**
         * and2
         *
@@ -234,7 +233,7 @@ namespace ClassProject {
         *
         * @return ID of 'a' AND 'b' operation
         */
-	    const BDD_ID and2(const BDD_ID &a, const BDD_ID &b);
+	    BDD_ID and2(const BDD_ID a, const BDD_ID b);
         /**
         * nand2
         *
@@ -243,7 +242,7 @@ namespace ClassProject {
         *
         * @return ID of 'a' NAND 'b' operation
         */
-        const BDD_ID nand2(const BDD_ID &a, const BDD_ID &b);
+        BDD_ID nand2(const BDD_ID a, const BDD_ID b);
         /**
         * or2
         *
@@ -252,7 +251,7 @@ namespace ClassProject {
         *
         * @return ID of 'a' OR 'b' operation
         */
-	    const BDD_ID or2(const BDD_ID &a, const BDD_ID &b);
+	    BDD_ID or2(const BDD_ID a, const BDD_ID b);
         /**
         * xor2
         *
@@ -261,7 +260,7 @@ namespace ClassProject {
         *
         * @return ID of 'a' XOR 'b' operation
         */
-	    const BDD_ID xor2(const BDD_ID &a, const BDD_ID &b);
+	    BDD_ID xor2(const BDD_ID a, const BDD_ID b);
         /**
         * nor2
         *
@@ -270,7 +269,7 @@ namespace ClassProject {
         *
         * @return ID of 'a' NOR 'b' operation
         */
-	    const BDD_ID nor2(const BDD_ID &a, const BDD_ID &b);
+	    BDD_ID nor2(const BDD_ID a, const BDD_ID b);
         /**
         * printTables
         *
