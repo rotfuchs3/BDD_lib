@@ -80,6 +80,9 @@ TEST(managerTest, HowTo_Example) {
     initialStateBits.push_back(false);
     comp.setInitState(initialStateBits);
 
+    comp.compute_reachable_states();
+
+
     ASSERT_TRUE(comp.is_reachable({true,true}));
     ASSERT_TRUE(comp.is_reachable({false,false}));
     ASSERT_FALSE(comp.is_reachable({true,false}));

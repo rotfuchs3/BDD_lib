@@ -81,7 +81,7 @@ namespace ClassProject {
             cR_it = or2(cR, formedImg);
             std::cout << "Updated cR_it: " << cR_it << std::endl;
             timeout--;
-        } while((cR == cR_it) && (timeout != 0));
+        } while((cR != cR_it) && (timeout != 0));
         if(timeout == 0)
         {
             std::cout << "FAIL: Timeout in do/while loop" << std::endl;
@@ -98,8 +98,26 @@ namespace ClassProject {
      */
     bool Reachable::is_reachable(const std::vector<bool>& stateVector)
     {
-        
-        return false;
+        if (cR == this->MANAGER_FAIL)
+            return false;
+
+        BDD_ID tmp;
+        BDD_ID c_test = xnor2(s0, stateVector.at(0));
+        for(uint i = 1; i < state_var; i++)
+        {
+            tmp     = xnor2(s0 + i,(int) stateVector.at(i));
+            c_test    = and2(c_test, tmp);
+        }
+
+        //std::cout<<"char func teststate "<<c_test << std::endl;
+        //state c_test included in c_R
+        BDD_ID tmp2 = and2(cR,c_test);
+        //std::cout<<"contain states "<<tmp2 << std::endl;
+        //printTables();
+
+        bool res = (c_test == tmp2);
+
+        return res;
     }
     /**
     * printVectors

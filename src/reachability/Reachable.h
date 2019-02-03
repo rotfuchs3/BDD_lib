@@ -122,7 +122,7 @@ namespace ClassProject {
             /// Holds ID of s'i
             BDD_ID si_next;
             /// Holds symbolic representation of reachable states
-            BDD_ID cR;
+            BDD_ID cR = this->MANAGER_FAIL;
             /**
             * computeTransitionRelation
             * @brief 
