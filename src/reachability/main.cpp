@@ -38,7 +38,7 @@ int main (void)
     comp.setInitState(initialStateBits);
     comp.compute_reachable_states();
     comp.printVectors();
-    comp.printTables();
+    //comp.printTables();
     
     ASSERT_EQ(1, comp.is_reachable({true,true}));
     ASSERT_EQ(1, comp.is_reachable({false,false}));
