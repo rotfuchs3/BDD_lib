@@ -64,7 +64,6 @@ namespace ClassProject {
         BDD_ID c_s0 = computeCharFunction();
         // set char.function for Reachable state intial (cR_it) to c_s0
         BDD_ID cR_it            = c_s0;
-        BDD_ID cR               = MANAGER_FAIL;
         BDD_ID formedImg        = MANAGER_FAIL;
         BDD_ID img_sNext        = MANAGER_FAIL;
         uint timeout            = 1000;
@@ -85,8 +84,10 @@ namespace ClassProject {
         } while((cR == cR_it) && (timeout != 0));
         if(timeout == 0)
         {
+            std::cout << "FAIL: Timeout in do/while loop" << std::endl;
             return MANAGER_FAIL;
         }
+        std::cout << "cR: " << cR << std::endl;
         return cR;
     }
     /**
@@ -97,6 +98,7 @@ namespace ClassProject {
      */
     bool Reachable::is_reachable(const std::vector<bool>& stateVector)
     {
+        
         return false;
     }
     /**
@@ -278,24 +280,3 @@ namespace ClassProject {
         return formedImg;
     }
 } // namespace ClassProject
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

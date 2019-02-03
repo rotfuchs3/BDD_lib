@@ -38,11 +38,23 @@ int main (void)
     comp.setInitState(initialStateBits);
     comp.compute_reachable_states();
     comp.printVectors();
-    //comp.printTables();
+    comp.printTables();
     
-    ASSERT_EQ(1, comp.is_reachable({true,true}));
-    ASSERT_EQ(1, comp.is_reachable({false,false}));
-    ASSERT_EQ(0, comp.is_reachable({true,false}));
-    ASSERT_EQ(0, comp.is_reachable({false,true}));
+    std::vector<bool> reach;
+    reach.push_back(true);
+    reach.push_back(true);
+    ASSERT_EQ(1, comp.is_reachable(reach));
+    reach.clear();
+    reach.push_back(false);
+    reach.push_back(false);
+    ASSERT_EQ(1, comp.is_reachable(reach));
+    reach.clear();
+    reach.push_back(true);
+    reach.push_back(false);
+    ASSERT_EQ(0, comp.is_reachable(reach));
+    reach.clear();
+    reach.push_back(false);
+    reach.push_back(true);
+    ASSERT_EQ(0, comp.is_reachable(reach));
   return 0;
 }

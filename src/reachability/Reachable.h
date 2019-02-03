@@ -121,6 +121,8 @@ namespace ClassProject {
             BDD_ID s0_next;
             /// Holds ID of s'i
             BDD_ID si_next;
+            /// Holds symbolic representation of reachable states
+            BDD_ID cR;
             /**
             * computeTransitionRelation
             * @brief 
