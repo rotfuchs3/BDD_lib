@@ -31,8 +31,6 @@ class Reachable : public ClassProject::ReachableInterface {
             }
             // Increase the vector size by given state input, memory for all states are then 2^state_var
             states.reserve(pow(2, state_var));
-            std::cout << "states.size(): " << states.size() << std::endl;
-            std::cout << "states.capacity(): " << states.capacity() << std::endl;
             // create variables for current states
             std::string label;
             for (uint i = 0; i < state_var; ++i) 
@@ -40,7 +38,6 @@ class Reachable : public ClassProject::ReachableInterface {
                 label = "s" + std::to_string(i);
                 states.push_back(createVar(label));
             }
-            std::cout << "states.size(): " << states.size() << std::endl;
             // create variables for next states states
             for (uint i = 0; i < state_var; ++i) 
             {
@@ -99,18 +96,12 @@ class Reachable : public ClassProject::ReachableInterface {
         void printVectors(void); 
     private:
         unsigned int state_var;
+        /// Vector holding all states
         std::vector<BDD_ID> states;
-        std::vector<BDD_ID>* transitons;
+        /// Vector holding transition function
+        const std::vector<BDD_ID> *transitions;
         /// Vector holding all state bits
         const std::vector<bool> *initialStates;
-        
-        BDD_ID initialstate;
-
-        bool initaliseTransition = false;
-        bool initaliseInitalState = false;
-
-        // initialize the vector states for getStates()
-        void initStates();
         /**
         * computeTransitionRelation
         * @brief 
@@ -130,5 +121,18 @@ class Reachable : public ClassProject::ReachableInterface {
         * @return BDD_ID of characteristic function
         */
         BDD_ID computeCharFunction(void);
+        /**
+        * computeImage
+        * @brief 
+        *   Computes the image for s'i by, imge = E_si * cR * tau.
+        *   E_si refers to the true and false cofactoring of si
+        *   Assumes: 
+        *       Application provides initial state bits for given number of states.
+        *
+        * @param cR Characteristic function of state set
+        * @param tau Transition relation
+        * @return BDD_ID of image computation
+        */
+        BDD_ID computeImage(BDD_ID cR, BDD_ID tau);
 };
 #endif //VDSPROJECT_IMGCOMP_H
