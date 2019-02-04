@@ -99,7 +99,9 @@ namespace ClassProject {
     bool Reachable::is_reachable(const std::vector<bool>& stateVector)
     {
         if (cR == this->MANAGER_FAIL)
-            return false;
+        {
+            compute_reachable_states();
+        }
 
         BDD_ID tmp;
         BDD_ID c_test = xnor2(s0, stateVector.at(0));
