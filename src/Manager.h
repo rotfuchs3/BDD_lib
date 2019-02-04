@@ -4,43 +4,30 @@
  * \file Manager.h
  * \author vdscp_8
 */
-#define redundantCheck
-#define inputErrorCheck
-
 #ifndef __MANAGER_H__
 #define __MANAGER_H__
-/// Base class
+
+/// Code versions
 #include "ManagerInterface.h"
-#include <iostream>
-#include <vector>
-/// Container
-#include <tuple>
+
+/// STL
 #include <unordered_map>
-#include <iterator>
-
-
-
+#include <vector>
 
 /// Add specified namespace
 namespace ClassProject {
-
-    struct HASH{
-    size_t operator()(const std::tuple<int, int, int >& k) const {
-        return std::hash<long>()(std::get<0>(k) << 20 + std::get<1>(k) << 10 + std::get<2>(k));
-    }
-};
-
+    /// ITE_ID is used as key for the compute table hash
     struct ITE_ID {
         BDD_ID i;
         BDD_ID t;
         BDD_ID e;
-
-        ITE_ID(BDD_ID i,BDD_ID t,BDD_ID e){
-            this->i=i;
-            this->t=t;
-            this->e=e;
+        // Create ITE_ID
+        ITE_ID(BDD_ID i,BDD_ID t,BDD_ID e) {
+            this->i = i;
+            this->t = t;
+            this->e = e;
         }
-
+        // Needed hash
         bool operator==(const ITE_ID &other) const {
             return (i == other.i && t == other.t && e == other.e);
         }
@@ -55,9 +42,8 @@ namespace ClassProject {
 	        out << "if: " << t.i << ", then: " << t.t << ", else: " << t.e;
 	        return out;
 	    }
-    };
-    
-    /// Coordinate hashing function
+    }; // struct ITE_ID
+    /// Compute table hashing function
     struct computeHash
     {
         std::size_t operator()(const ITE_ID &iteID) const
@@ -68,192 +54,228 @@ namespace ClassProject {
             myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.t);
             myhash = myhash * 256 + std::hash<BDD_ID>()(iteID.e);
             return myhash;
-
         }
-    };
+    }; // computeHash
+    /// Manager typedef
+    typedef std::vector<Node*>	                            uniqueTable_t;
+    typedef std::unordered_map<ITE_ID, BDD_ID, computeHash> computeTable_t;
+    typedef std::unordered_map<std::string, BDD_ID>	        lookUpTable_t;
+    typedef lookUpTable_t::iterator                         lIter_t;
+    typedef computeTable_t::iterator                        cIter_t;
+   /**
+    * @class Manager
+    *
+    * @brief This class is derived from Interface, it implements all functions and is the main class used by application.
+    */
+    class Manager : public ManagerInterface {
+    private:
+        // Make Reachable a friend
+        friend class Reachable;
+        /// Terminal true BDD_ID
+        const static BDD_ID trueId          = 1;
+        /// Terminal false BDD_ID
+        const static BDD_ID falseId         = 0;
+        /// Keep track of current BDD_ID, start off at 2 since IDs 0 and 1 are for true and false
+        BDD_ID currentId                    = 0;
+        
+        /// uniqueTable, hashmap for performance
+        uniqueTable_t   uniqueTable;
+        computeTable_t  computeTable;
+        lookUpTable_t   lookUpTable;
 
-
-
-/// Manager typedef
-#define	MANAGER_FAIL	-1
-typedef std::vector<Node*>	uniqueTable_t;
-typedef std::unordered_map<std::string, BDD_ID>	lookUpTable_t;
-//typedef std::unordered_map<std::tuple<int,int,int>, BDD_ID,HASH> computeTable_t;
-typedef std::unordered_map<ITE_ID, BDD_ID, computeHash> computeTable_t;
-
-
-//!  Manager class
-/*!
-  This class is derived from MamagerInterface, it implements all virtual functions and is the main class used by application.
-*/
-class Manager : public ManagerInterface {
-public:
-    //! Constructor
-    /*!
-        Initializes uniqueTable
-    */
-    Manager();
-    //! True
-    /*!
-     \return the ID of the node representing True
-    */
-    const BDD_ID &True(void);
-    //! False
-    /*!
-        \return the ID of the node representing False
-    */
-    const BDD_ID &False(void);
-    //! isConstant
-    /*!
-    * 	\param x is the BDD_ID that should be checked
-        \return true if x is a leaf node
-    */
-    bool isConstant(const BDD_ID x);
-    //! isVariable
-    /*!
-    * 	\param x is the BDD_ID that should be checked
-        \return true if x is a leaf node
-    */
-    bool isVariable(const BDD_ID x);
-    //! createVar
-    /*!
-       \brief Creates a new variable for the BDD with string &label in the unique table
-       \param &label the label that got created and inserted in the unique table
-       \return the BDD_ID if it is a new label. When it is inserted before it returns the ID of the first Variable with label &label
-    */
-    BDD_ID createVar(const std::string &label);
-    //! uniqueTableSize
-    /*!
-     *
-        \return the number of the nodes + variables currently exist in the unique table
-    */
-    std::size_t uniqueTableSize(void);
-    //! topVar
-    /*!
-       \param f the ID of the node which topVariable is requested
-       \return the ID of top variable of the BDD node f
-    */
-    BDD_ID topVar(const BDD_ID f);
-    //! getTopVarName
-    /*!
-      \param f the ID of the node which topVariable-label is requested
-      \return the label of top variable of the BDD node f
-    */
-    std::string getTopVarName(const BDD_ID f) ;
-    //! ite
-    /*!
-     *\param i is the ID for the If node of the If-then-else expression
-      \param t is the ID for the Then node of the If-then-else expression
-      \param e is the ID for the Else node of the If-then-else expression
-      \return the new node ID that represents the ITE. If it didn't exist it will be inserted to the uniqueTable
-    */
-    BDD_ID ite(const BDD_ID i,const BDD_ID t, const BDD_ID e);
-    //! coFactorTrue
-    /*!
-     *\param f is the ID which the positive coFactor of variable x is requested
-     *\param x is the ID which f should be the CoFactor in the positiv way
-      \return the positive cofactor of the function defined by f with respect to function x set to true.
-    */
-    BDD_ID coFactorTrue(const BDD_ID f,BDD_ID x);
-    //! coFactorTrue
-    /*!
-    *\param f is the ID which the positive coFactor the topVar of f is requested
-     \return the positive cofactor of the function defined by f.
-    */
-    BDD_ID coFactorTrue(const BDD_ID f);
-    //! coFactorFalse
-    /*!
-     * \param f is the ID which the negativ coFactor of variable x is requested
-     * \param x is the ID which f should be the CoFactor in the negativ way
-     * \return the negativ cofactor of the function defined by f with respect to function x set to true.
-     */
-    BDD_ID coFactorFalse(const BDD_ID f,BDD_ID x);
-    //! coFactorFalse
-    /*!
-	*\param f is the ID which the negativ coFactor the topVar of f is requested
-	 \return the negativ cofactor of the function defined by f.
-	*/
-    BDD_ID coFactorFalse(const BDD_ID f) ;
-    //! findNodes
-    /*!
-	 * \param root is the ID which is the root where all reachable nodes are requested.
-	 * \param the set where all different node IDs should be saved in
-	   \return the set of nodes which are either the root itself or the reachable nodes from root.
-	*/
-	void findNodes(BDD_ID root,std::set<BDD_ID> &nodes_of_root);
-	//! findVars
-	/*!
-	 * \param root is the ID which is the root where all reachable nodes top variable are requested.
-	 * \param the set where all different variable IDs should be saved in
-	   \return the set of variables which are either top variable of the BDD node root or the reachable nodes from root.
-	*/
-	void findVars(BDD_ID root,std::set<BDD_ID> &vars_of_root);
-	//! neg
-	/*!
-	  \param the BDD_ID (root of this node) which should be inverted 
-	  \return the BDD_ID of the negation of A if needed creates this node
-	*/
-	BDD_ID neg(const BDD_ID a);
-	//! and
-	/*!
-	  \param the BDD_ID of A
-	  \param the BDD_ID of B
-	  \return the BDD_ID of the NAND with A and B. if needed creates this node
-	*/
-	BDD_ID and2(const BDD_ID a,const BDD_ID b);
-	//! nand
-	/*!
-	  \param the BDD_ID of A
-	  \param the BDD_ID of B
-	  \return the BDD_ID of the NAND with A and B. if needed creates this node
-	*/
-	BDD_ID nand2(const BDD_ID a,const BDD_ID b);
-	//! or2
-	/*!
-	  \param the BDD_ID of A
-	  \param the BDD_ID of B
-	  \return the BDD_ID of the disjunction of A and B. if needed creates this node
-	*/
-	BDD_ID or2(const BDD_ID a,const BDD_ID b);
-	//! xor2
-	/*!
-	  \param the BDD_ID of A
-	  \param the BDD_ID of B
-	  \return the BDD_ID of the exclusivOR of A and B. if needed creates this node
-	*/
-	BDD_ID xor2(const BDD_ID a,const BDD_ID b);
-	//! nor2
-	/*!
-	  \param the BDD_ID of A
-	  \param the BDD_ID of B
-	  \return BDD_ID of the negativ disjunction of A and B. if needed creates this node
-	*/
-	BDD_ID nor2(const BDD_ID a,const BDD_ID b);
-  //! printUniqueTable
-  /*!
-      Prints unique table
-  */
-void printUniqueTable(void);
-private:
-    friend class Reachable;
-    /// Terminal true BDD_ID
-    const BDD_ID trueId  = 1;
-    /// Terminal false BDD_ID
-    const BDD_ID falseId = 0;
-    /// Keep track of current BDD_ID, start off at 2 since IDs 0 and 1 are for true and false
-    BDD_ID currentId = 0;
-
-    /// uniqueTable, hashmap for performance
-    uniqueTable_t uniqueTable;
-    lookUpTable_t lookUpTable;
-    computeTable_t computeTable;
-
-    bool isValidID(BDD_ID arg1,BDD_ID arg2=0, BDD_ID arg3=0);
-    BDD_ID insertInUniquetable(BDD_ID highID,BDD_ID lowID,BDD_ID topVar,std::string label);
-    BDD_ID searchUniTable(const BDD_ID id);
-    BDD_ID searchForNode(const BDD_ID _highId,const BDD_ID _lowId, const BDD_ID _topVar);
-};
-}
-
-
+        /// Checks if given ID is valid
+        bool isValidID(BDD_ID arg1, BDD_ID arg2=0, BDD_ID arg3=0);
+        /// Inserts into unique table and returns it's ID
+        BDD_ID insertInUniquetable(BDD_ID highID, BDD_ID lowID, 
+                                   BDD_ID topVar, std::string label);
+        /// Searches compute table for given variables and returns the BDD_ID with corresponding values
+        BDD_ID searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar);
+    public:
+        /// Fail constant
+        const static BDD_ID MANAGER_FAIL    = -1;
+        /// Constructor
+        Manager(void);
+        /// Destructor
+        ~Manager(void);
+        /**
+        * True
+        *
+        * @return ID for the node representing "true"
+        */
+        const BDD_ID &True(void);
+        /**
+        * False
+        *
+        * @return ID for the node representing "false"
+        */
+        const BDD_ID &False(void);
+        /**
+        * isConstant
+        *
+        * @param x BDD_ID that should be checked
+        *
+        * @return True if x is a leaf/terminal node
+        */
+        bool isConstant(const BDD_ID x);
+        /**
+        * isVariable
+        *
+        * @param x BDD_ID that should be checked
+        *
+        * @return True if x is a variable/non-terminal node
+        */
+        bool isVariable(const BDD_ID x);
+        /**
+        * createVar
+        *
+        * @param label The label that will be used to create the node and insert to the table
+        *
+        * @return BDD_ID if it is a new variable, otherewise, BDD_ID of existing node
+        */
+        BDD_ID createVar(const std::string &label);
+        /**
+        * uniqueTableSize
+        *
+        * @return Number of the nodes currently in the unique table
+        */
+        std::size_t uniqueTableSize(void);
+        /**
+        * topVar
+        *
+        * @param f ID of the node for top variable request
+        *
+        * @return BDD_ID of top variable of node f
+        */
+        BDD_ID topVar(const BDD_ID f);
+        /**
+        * getTopVarName
+        *
+        * @param f ID of the node for label request of its top variable
+        *
+        * @return Label of top variable of node f
+        */
+        std::string getTopVarName(const BDD_ID f);
+        /**
+        * ite
+        *
+        * @param i ID of the node for the "if" node for the if-then-else operation
+        * @param t ID of the node for the "then" node for the if-then-else operation
+        * @param e ID of the node for the "else" node for the if-then-else operation
+        *
+        * @return ID representation of the ITE operation
+        */
+        BDD_ID ite(const BDD_ID i, const BDD_ID t, const BDD_ID e);
+        /**
+        * coFactorTrue
+        *
+        * @param f ID of the node for a function 'f'
+        * @param x ID of the node for a variable in function 'f'
+        *
+        * @return ID representation of the positive cofactor for f(x), x = 1
+        */
+        BDD_ID coFactorTrue(const BDD_ID f, BDD_ID x);
+        /**
+        * coFactorTrue
+        *
+        * @param f ID of the node for a function 'f'
+        *
+        * @return ID representation of the positive cofactor defined by the function 'f'
+        */        
+        BDD_ID coFactorTrue(const BDD_ID f);
+        /**
+        * coFactorFalse
+        *
+        * @param f ID of the node for a function 'f'
+        * @param x ID of the node for a variable in function 'f'
+        *
+        * @return ID representation of the negative cofactor for f(x), x = 0
+        */
+        BDD_ID coFactorFalse(const BDD_ID f, BDD_ID x);
+        /**
+        * coFactorFalse
+        *
+        * @param f ID of the node for a function 'f'
+        *
+        * @return ID representation of the negative cofactor defined by the function 'f'
+        */
+        BDD_ID coFactorFalse(const BDD_ID f);       
+        /**
+        * findNodes
+        *
+        * @param root ID for 'starting' point of sub-graph request
+        * @param nodesOfRoot Set where all reachable nodes from root, including root, are saved
+        *
+        * @return ID None
+        */
+        void findNodes(BDD_ID root, std::set<BDD_ID> &nodes_of_root);
+        /**
+        * findVars
+        *
+        * @param root ID for 'starting' point of top variable sub-graph request
+        * @param varsOfRoot Set where all reachable nodes' top varaibles from root, including root, are saved
+        *
+        * @return ID None
+        */
+        void findVars(BDD_ID root, std::set<BDD_ID> &vars_of_root);
+        /**
+        * neg
+        *
+        * @param a ID of node to be inverted
+        *
+        * @return ID of 'a' negation
+        */
+	    BDD_ID neg(const BDD_ID a);
+        /**
+        * and2
+        *
+        * @param a ID of first operand
+        * @param b ID of second operand
+        *
+        * @return ID of 'a' AND 'b' operation
+        */
+	    BDD_ID and2(const BDD_ID a, const BDD_ID b);
+        /**
+        * nand2
+        *
+        * @param a ID of first operand
+        * @param b ID of second operand
+        *
+        * @return ID of 'a' NAND 'b' operation
+        */
+        BDD_ID nand2(const BDD_ID a, const BDD_ID b);
+        /**
+        * or2
+        *
+        * @param a ID of first operand
+        * @param b ID of second operand
+        *
+        * @return ID of 'a' OR 'b' operation
+        */
+	    BDD_ID or2(const BDD_ID a, const BDD_ID b);
+        /**
+        * xor2
+        *
+        * @param a ID of first operand
+        * @param b ID of second operand
+        *
+        * @return ID of 'a' XOR 'b' operation
+        */
+	    BDD_ID xor2(const BDD_ID a, const BDD_ID b);
+        /**
+        * nor2
+        *
+        * @param a ID of first operand
+        * @param b ID of second operand
+        *
+        * @return ID of 'a' NOR 'b' operation
+        */
+	    BDD_ID nor2(const BDD_ID a, const BDD_ID b);
+        /**
+        * printTables
+        *
+        * @brief Prints all tables
+        */
+        void printTables(void);
+    }; // class Manager
+} // namespace ClassProject
 #endif /* __MANAGER_H__ */

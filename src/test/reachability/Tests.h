@@ -75,10 +75,7 @@ TEST(managerTest, HowTo_Example) {
     //Add transition functions
     comp.setDelta(functions);
     // Add init state
-    std::vector<bool> initialStateBits;
-    initialStateBits.push_back(false);
-    initialStateBits.push_back(false);
-    comp.setInitState(initialStateBits);
+    comp.setInitState({false, false});
 
     ASSERT_TRUE(comp.is_reachable({true,true}));
     ASSERT_TRUE(comp.is_reachable({false,false}));
