@@ -90,6 +90,9 @@ namespace ClassProject {
                                    BDD_ID topVar, std::string label);
         /// Searches compute table for given variables and returns the BDD_ID with corresponding values
         BDD_ID searchForNode(const BDD_ID _highId, const BDD_ID _lowId, const BDD_ID _topVar);
+        /// returns the BDD_ID of the BDD_ID with these (topvar, highId, lowID) as a root
+        BDD_ID ite_return_logic(const BDD_ID _topVar ,const BDD_ID _highId, const BDD_ID _lowId);
+
     public:
         /// Fail constant
         const static BDD_ID MANAGER_FAIL    = -1;

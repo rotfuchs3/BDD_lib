@@ -72,6 +72,30 @@ namespace ClassProject {
         }
         return MANAGER_FAIL;
     }
+    /// returns the BDD_ID of the BDD_ID with these (topvar, highId, lowID) as a root
+    BDD_ID Manager::ite_return_logic(const BDD_ID _topVar ,const BDD_ID rHigh, const BDD_ID rLow){
+        //a new internal node isn't needed
+        if(rHigh == rLow)
+        {
+            return rHigh;
+        }
+        //check if the to return coFactor would be a constant
+        if(rHigh == 1 && rLow == 0)
+        {
+            return _topVar;
+        }
+        else
+        {
+            // check if already an internal node (rHigh,rLow,min) is in the UniqueTable
+            BDD_ID alreadyExist = searchForNode(rHigh, rLow, _topVar);
+            if (alreadyExist != MANAGER_FAIL)
+            {
+                return alreadyExist;
+            }
+        }
+        BDD_ID newNode = insertInUniquetable(rHigh, rLow, _topVar, "");
+        return newNode;
+    }
     /**
     * True
     *
@@ -238,33 +262,12 @@ namespace ClassProject {
         BDD_ID rHigh = ite(coFactorTrue(i, min), coFactorTrue(t, min), coFactorTrue(e, min));
         BDD_ID rLow  = ite(coFactorFalse(i, min), coFactorFalse(t, min), coFactorFalse(e, min));
 
-        //a new internal node isn't needed
-        if(rHigh == rLow)
-        {
-            ITE_ID key(i, t, e);
-            computeTable.insert({key, rHigh});
-            return rHigh;
-        }
-        //check if the to return coFactor would be a constant
-        if(rHigh == 1 && rLow == 0)
-        {
-            ITE_ID key(i, t, e);
-            computeTable.insert({key, min});
-            return min;
-        }
-        else
-        {
-            // check if already an internal node (rHigh,rLow,min) is in the UniqueTable
-            BDD_ID alreadyExist = searchForNode(rHigh, rLow, min);
-            if (alreadyExist != MANAGER_FAIL)
-            {
-                ITE_ID key(i, t, e);
-                computeTable.insert({key, alreadyExist});
-                return alreadyExist;
-            }
-        }
-        BDD_ID newNode = insertInUniquetable(rHigh, rLow, min, "");
-        return newNode;
+        BDD_ID erg = ite_return_logic(min,rHigh,rLow);
+
+        ITE_ID key(i, t, e);
+        computeTable.insert({key, erg});
+
+        return erg;
     }
     /**
     * coFactorTrue
@@ -306,30 +309,9 @@ namespace ClassProject {
             // topVarF < x so x is more down in the BDD
             BDD_ID coFacHigh = coFactorTrue(nodeF->highId, x);
             BDD_ID coFacLow  = coFactorTrue(nodeF->lowId, x);
-            // same child so the topVar topVarF can be skipped
-            if(coFacHigh == coFacLow)
-            {
-                return coFacHigh;
-            }
-            else
-            {
-                // check if the to return coFactor would be a constant
-                if(coFacHigh == 1 && coFacLow == 0)
-                {
-                    return topVarF;
-                }
-                else
-                {
-                    BDD_ID alreadyExist = searchForNode(coFacHigh, coFacLow, topVarF);
-                    if(alreadyExist != MANAGER_FAIL)
-                    {
-                        return alreadyExist;
-                    }
-                    // when no node fond
-                    std::string newLabel = "coFactorTrue(" + nodeF->label + "," + uniqueTable[f]->label + ")";
-                    return insertInUniquetable(coFacHigh, coFacLow, topVarF, newLabel);
-                }
-            }
+
+            BDD_ID erg = ite_return_logic(topVarF,coFacHigh,coFacLow);
+            return erg;
         }
     }
     /**
@@ -387,30 +369,8 @@ namespace ClassProject {
             BDD_ID coFacHigh = coFactorFalse(nodeF->highId, x);
             BDD_ID coFacLow = coFactorFalse(nodeF->lowId, x);
 
-            //same child so the topVar topVarF can be skipped
-            if(coFacHigh == coFacLow)
-            {
-                return coFacHigh;
-            }
-            else
-            {
-                //check if the to return coFactor would be a constant
-                if(coFacHigh == 1 && coFacLow == 0)
-                {
-                    return topVarF;
-                }
-                else
-                {
-                    BDD_ID alreadyExist = searchForNode(coFacHigh, coFacLow, topVarF);
-                    if(alreadyExist != MANAGER_FAIL)
-                    {
-                        return alreadyExist;
-                    }
-                    // when no node found
-                    std::string newLabel = "coFactorFalse(" + nodeF->label + "," + uniqueTable[x]->label + ")";
-                    return insertInUniquetable(coFacHigh, coFacLow, topVarF, newLabel);
-                }
-            }
+            BDD_ID erg = ite_return_logic(topVarF,coFacHigh,coFacLow);
+            return  erg;
         }
     }
     /**
