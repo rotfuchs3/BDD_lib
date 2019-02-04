@@ -33,8 +33,6 @@ namespace ClassProject {
                 states.reserve(pow(2, state_var));
                 // create variables for current states
                 std::string label;
-                std::cout << "states.size() before init: " << states.size() << std::endl;
-                std::cout << "states.capacity(): " << states.capacity() << std::endl;
                 for (uint i = 0; i < state_var; ++i) 
                 {
                     label = "s" + std::to_string(i);
@@ -46,7 +44,6 @@ namespace ClassProject {
                     label = "s'" + std::to_string(i);
                     states.push_back(createVar(label));
                 }
-                std::cout << "states.size() after init: " << states.size() << std::endl;
                 // Set lsb/msb
                 lsb = states.at(0);
                 msb = states.at(state_var-1);
@@ -54,10 +51,6 @@ namespace ClassProject {
                 si  = msb;
                 s0_next = states.at(state_var);
                 si_next = states.size() + 1;
-                std::cout << "s0: " << s0 << std::endl;
-                std::cout << "s" << state_var - 1 << ": " << si << std::endl;
-                std::cout << "s'0: " << s0_next << std::endl;
-                std::cout << "s'" << state_var - 1 << ": " << si_next << std::endl;
             }
             /// Destructor
             ~Reachable() {}

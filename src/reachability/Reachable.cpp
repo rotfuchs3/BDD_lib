@@ -66,28 +66,16 @@ namespace ClassProject {
         BDD_ID cR_it            = c_s0;
         BDD_ID formedImg        = MANAGER_FAIL;
         BDD_ID img_sNext        = MANAGER_FAIL;
-        uint timeout            = 1000;
-        std::cout << "Start cR_it: " << cR_it << std::endl;
         do
         {
             cR = cR_it;
             // Now compute the image
             img_sNext = computeImage(cR, tau);
-            std::cout << "img_sNext: " << img_sNext << std::endl;
             // Form the image of s by renaming s'i to si
             formedImg = formImage(img_sNext);
-            std::cout << "formedImg: " << formedImg << std::endl;
             // Update the char.function
             cR_it = or2(cR, formedImg);
-            std::cout << "Updated cR_it: " << cR_it << std::endl;
-            timeout--;
-        } while((cR != cR_it) && (timeout != 0));
-        if(timeout == 0)
-        {
-            std::cout << "FAIL: Timeout in do/while loop" << std::endl;
-            return MANAGER_FAIL;
-        }
-        std::cout << "cR: " << cR << std::endl;
+        } while(cR != cR_it);
         return cR;
     }
     /**
@@ -193,7 +181,6 @@ namespace ClassProject {
             // New tau
             tau         = and2(tau, tempTau);
         }
-        std::cout << "Transition relation: BDD_ID[" << tau << "]" << std::endl;
         return tau;
     }
     /**
@@ -214,7 +201,6 @@ namespace ClassProject {
             tmp     = xnor2(s0 + i, initialStates->at(i));
             c_s0    = and2(c_s0, tmp);
         }
-        std::cout << "Char.Function s0: BDD_ID[" << c_s0 << "]" << std::endl;
         return c_s0;
     }
     /**
