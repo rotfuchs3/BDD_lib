@@ -14,11 +14,11 @@ This project implements a minimal Binary Decision Diagram (BDD) package in C++. 
 ---
 
 ## SETUP
-GoogleTest is required for compile and has been added as a submodule.  
+GoogleTest and Boost is required for compile and has been added as a submodule.  
 
 ###### To obtain GoogleTest:
 ```
-sudo apt-get install libgtest-dev
+sudo apt install libgtest-dev
 cd /usr/src/gtest
 sudo cmake CMakeLists.txt
 sudo make
@@ -28,7 +28,14 @@ sudo cp *.a /usr/lib
 ###### OR:
 Run `git submodule init` and `git submodule update` which will fetch GoogleTest source code that will later be compiled in the build step.
 
+
+###### to obtain Boost
+```
+sudo apt install libboost-all-dev
+```
 ---
+
+
 
 ## BUILD
 This also may build GoogleTest source into a library if GoogleTest packages are not found.
@@ -44,4 +51,15 @@ Executables are located in build/bin/ directory.
 ```
 ./bin/EXECUTABLE_NAME.bin
 ```
+For the execution of the benchmarks and reachability verifing the file to test needs to be provided as a argument.
+
+Therefor an example for benchmark call is
+```
+bin/VDSProject_bench.bin ../src/benchmarks/iscas89/s35932.bench
+```
+executed out of the build-Folder.
+
+
+
+
 ---
